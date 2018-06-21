@@ -38,8 +38,8 @@ public class FileHisPanel extends JPanel {
 
 
     public void initialize(){
-        this.setLayout(new FlowLayout(FlowLayout.LEFT,4,0));
-        this.setPreferredSize(new Dimension(ConstantsUI.MAIN_WINDOW_WIDTH*3/10,580));
+        this.setLayout(new FlowLayout(FlowLayout.LEFT,2,0));
+        this.setPreferredSize(new Dimension(ConstantsUI.MAIN_WINDOW_WIDTH*2/5,580));
         this.setBackground(ConstantsUI.COMMAND_BACK_COLOR);
         this.setFont(ConstantsUI.FONT_NORMAL);
         this.setForeground(Color.WHITE);
@@ -49,6 +49,12 @@ public class FileHisPanel extends JPanel {
 
     }
 
+    /**
+     *
+     * @param name
+     * @param b
+     * @param hash58
+     */
     public void appendLog(String name,boolean b,String hash58){
         LogFlowJText timeLabel ,hashLabel;
         StringBuffer sb = new StringBuffer();

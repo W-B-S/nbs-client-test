@@ -25,9 +25,9 @@ public class FileShowPanel extends JPanel {
 
     public static final String[] headers = new String[]{
             PropertyUtil.getProperty("nbs.ui.panel.file.grid.header-col0","Name"),
-            PropertyUtil.getProperty("nbs.ui.panel.file.grid.header-col0","Hash"),
-            PropertyUtil.getProperty("nbs.ui.panel.file.grid.header-col0","Type"),
-            PropertyUtil.getProperty("nbs.ui.panel.file.grid.header-col0","Size")};
+            PropertyUtil.getProperty("nbs.ui.panel.file.grid.header-col1","Hash"),
+            PropertyUtil.getProperty("nbs.ui.panel.file.grid.header-col2","Type"),
+            PropertyUtil.getProperty("nbs.ui.panel.file.grid.header-col3","Size")};
 
     private TableModel tableModel;
     private JScrollPane scrollPane;

@@ -55,7 +55,7 @@ public class LogFlowJText extends JTextArea {
     }
 
     private void initSet(){
-        this.setPreferredSize(new Dimension(ConstantsUI.MAIN_WINDOW_WIDTH*3/10-6,36));
+        this.setPreferredSize(new Dimension(ConstantsUI.MAIN_WINDOW_WIDTH*2/5-2,36));
         this.setEditable(false);
         this.setForeground(ConstantsUI.MAIN_BACK_COLOR);
         this.setBackground(ConstantsUI.COMMAND_BACK_COLOR);
@@ -66,7 +66,7 @@ public class LogFlowJText extends JTextArea {
 
     private void initSet(int height){
         if(height<=10)height=20;
-        this.setPreferredSize(new Dimension(ConstantsUI.MAIN_WINDOW_WIDTH*3/10-6,height));
+        this.setPreferredSize(new Dimension(ConstantsUI.MAIN_WINDOW_WIDTH*2/5-2,height));
         this.setEditable(false);
         this.setForeground(ConstantsUI.MAIN_BACK_COLOR);
         this.setBackground(ConstantsUI.COMMAND_BACK_COLOR);
