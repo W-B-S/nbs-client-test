@@ -178,7 +178,7 @@ public class AboutPanel extends JPanel {
 
         //
         updateClientRootBtn = new NBSIconButton(ConstantsUI.ICON_TEST,ConstantsUI.ICON_TEST,ConstantsUI.ICON_TEST,"TEST");
-        panelBottom.add(updateClientRootBtn);
+        //panelBottom.add(updateClientRootBtn);
 
 
 

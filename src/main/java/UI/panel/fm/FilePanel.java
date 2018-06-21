@@ -177,6 +177,8 @@ public class FilePanel extends NBSAbstractPanel {
                 }
             }
         });
+
+        
     }
 
 
