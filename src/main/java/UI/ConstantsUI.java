@@ -21,6 +21,10 @@ public class ConstantsUI {
     public final static String APP_NAME = "NBS Chain";
     public final static String APP_VERSION = "v0.1";
     public final static String CRLF_PANEL = "\\r\\n";
+
+    public final static String ENTER_CHARACTER = "\n";
+    public final static String WSPACE_CHARACTER4 = "    ";
+
     /**
      * 窗口设置
      */
@@ -163,6 +167,16 @@ public class ConstantsUI {
             AppMainWindow.class.getResource("/icon/about_enabled.png"));
 
     //button icon
+    public final static ImageIcon ICON_SEND = new ImageIcon(
+            AppMainWindow.class.getResource(BUTTON_ICON_ROOT + "send.png"));
+    public final static ImageIcon ICON_SEND_ENABLED = new ImageIcon(
+            AppMainWindow.class.getResource(BUTTON_ICON_ROOT + "send_enabled.png"));
+    public final static ImageIcon ICON_SEND_DISABLED = new ImageIcon(
+            AppMainWindow.class.getResource(BUTTON_ICON_ROOT + "send_disabled.png"));
+
+    /**
+     * im
+     */
     /**
      * check version
      */
