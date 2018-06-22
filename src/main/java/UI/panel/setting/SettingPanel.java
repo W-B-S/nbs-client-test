@@ -1,8 +1,11 @@
 package UI.panel.setting;
 
+import UI.AppMainWindow;
 import UI.ConstantsUI;
 import UI.common.NBSAbstractPanel;
 import UI.common.ToolbarStatsPanel;
+import com.alibaba.fastjson.JSON;
+import com.nbs.ui.components.ColorCnst;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +26,8 @@ public class SettingPanel extends NBSAbstractPanel {
     private static final long serialVersionUID = 1L;
     private static final Logger logger = LoggerFactory.getLogger(SettingPanel.class);
     public static final String PKUI_PANEL_STATUS_LABEL = "nbs.ui.panel.setting.label";
+
+
 
     public SettingPanel(boolean isDoubleBuffered) {
         super(isDoubleBuffered);
@@ -52,9 +57,20 @@ public class SettingPanel extends NBSAbstractPanel {
         center.setBackground(ConstantsUI.MAIN_BACK_COLOR);
         center.setLayout(new BorderLayout());
 
-        JLabel label = new JLabel("ID");
-        JLabel peerID = new JLabel("123");
-
+        JTextArea cfgArea = new JTextArea();
+        cfgArea.setBackground(ColorCnst.WINDOW_BACKGROUND_LIGHT);
+        cfgArea.setForeground(ColorCnst.DARKER);
+        cfgArea.setLineWrap(true);
+        String cfg = "";
+        try {
+            Map configMap = AppMainWindow.ipfs.config.show();
+            cfg = JSON.toJSONString(configMap,true);
+            cfgArea.setText(cfg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        JScrollPane scrollPane = new JScrollPane(cfgArea,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        center.add(scrollPane,BorderLayout.CENTER);
         return center;
     }
 }

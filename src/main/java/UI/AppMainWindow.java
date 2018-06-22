@@ -58,6 +58,8 @@ public class AppMainWindow {
 
     public static boolean SERVER_STAT = false;
 
+    public static String PROFILE_NICKNAME = "lanbery";
+
     /**
      *
      */

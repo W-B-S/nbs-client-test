@@ -23,7 +23,7 @@ public class ConstantsUI {
     public final static String CRLF_PANEL = "\\r\\n";
 
     public final static String ENTER_CHARACTER = "\n";
-    public final static String WSPACE_CHARACTER4 = "    ";
+    public final static String WSPACE_CHARACTER4 = "        ";
 
     /**
      * 窗口设置

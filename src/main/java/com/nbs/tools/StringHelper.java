@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  */
 public class StringHelper {
     public static final Pattern CRLF = Pattern.compile("(\n\t|\n|\t)");
-    public static final String[] units = new String[]{"","KB","GB","TB"};
+    public static final String[] units = new String[]{"","KB","MB","GB","TB"};
     private StringHelper(){}
     private static class StringHolder{
          static final StringHelper instance = new StringHelper();

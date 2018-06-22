@@ -7,8 +7,10 @@ import UI.common.NBSAbstractPanel;
 import UI.common.ToolbarStatsPanel;
 import UI.templete.WihteBackJPanel;
 import com.nbs.entity.PeerInfoBase;
+import com.nbs.tools.DateHelper;
 import com.nbs.ui.components.ColorCnst;
 import io.ipfs.api.IPFS;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,6 +39,10 @@ public class IMPanel extends NBSAbstractPanel {
     private static JScrollPane scrollPane;
 
     private static JTextArea imMSGShow = new JTextArea();
+    /**
+     *
+     */
+    private static JTextPane msgTextPane = new JTextPane();
 
     private static JTextArea inputArea = new JTextArea();
 
@@ -131,7 +137,7 @@ public class IMPanel extends NBSAbstractPanel {
         sendButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                sendMsg();
             }
         });
     }
@@ -156,6 +162,9 @@ public class IMPanel extends NBSAbstractPanel {
         WihteBackJPanel imupContainer = new WihteBackJPanel();
         imupContainer.setLayout(new BorderLayout());
 
+        /**
+         * JTextArea
+         */
         imMSGShow.setBackground(ColorCnst.WINDOW_BACKGROUND_LIGHT);
         imMSGShow.setTabSize(4);
         imMSGShow.setFont(ConstantsUI.FONT_NORMAL);
@@ -164,7 +173,8 @@ public class IMPanel extends NBSAbstractPanel {
         imMSGShow.setWrapStyleWord(true);
         imMSGShow.setPreferredSize(new Dimension(ConstantsUI.MAIN_WINDOW_WIDTH-48-245,upHeight));
         imMSGShow.setEditable(false);
-        testText(300);
+
+        //testText(300);
         JScrollPane imshowScroll = new JScrollPane(imMSGShow,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         imupContainer.add(imshowScroll,BorderLayout.CENTER);
@@ -176,12 +186,11 @@ public class IMPanel extends NBSAbstractPanel {
         WihteBackJPanel imDownContainer = new WihteBackJPanel();
         imDownContainer.setLayout(new BorderLayout());
 
-
         inputArea.setBounds(2,2,400,downHeight-4);
         inputArea.setBackground(ColorCnst.WINDOW_BACKGROUND_LIGHT);
         inputArea.setForeground(ColorCnst.DARKER);
         inputArea.setLineWrap(true);
-        inputArea.setText("Hello NBS.");
+        //inputArea.setText("Hello NBS.");
         imDownContainer.add(inputArea,BorderLayout.CENTER);
 
         /**
@@ -193,7 +202,7 @@ public class IMPanel extends NBSAbstractPanel {
         imOperPanel.setPreferredSize(bd);
         imOperPanel.setLayout(new BorderLayout());
         imOperPanel.add(sendButton,BorderLayout.SOUTH);
-        imOperPanel.add(sendTest,BorderLayout.NORTH);
+        //imOperPanel.add(sendTest,BorderLayout.NORTH);
         imDownContainer.add(imOperPanel,BorderLayout.EAST);
 
         messPanel.add(imupContainer,BorderLayout.CENTER);
@@ -214,6 +223,33 @@ public class IMPanel extends NBSAbstractPanel {
         }
         imMSGShow.revalidate();
         imMSGShow.updateUI();
+
+    }
+
+    /**
+     * 发送消息
+     */
+    private void sendMsg(){
+        String sendContent = inputArea.getText();
+        if(StringUtils.isBlank(sendContent))return;
+
+        try {
+            StringBuffer sb = new StringBuffer();
+            sb.append(AppMainWindow.PROFILE_NICKNAME).append("  ").append(DateHelper.currentTime());
+            sb.append(ConstantsUI.ENTER_CHARACTER);
+            sb.append(ConstantsUI.WSPACE_CHARACTER4).append(sendContent);
+            //send pub
+            AppMainWindow.ipfs.pubsub.pub("nbs",sendContent);
+            inputArea.setText("");
+            sb.append(ConstantsUI.ENTER_CHARACTER);
+            imMSGShow.append(sb.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
+
 
     }
 }
