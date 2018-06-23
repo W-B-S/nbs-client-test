@@ -6,6 +6,7 @@ import UI.panel.fm.FilePanel;
 import UI.panel.im.IMPanel;
 import UI.panel.monitor.ConsolePanel;
 import UI.panel.setting.SettingPanel;
+import com.nbs.ipfs.IPFSHelper;
 import com.nbs.tools.ConfigHelper;
 import io.ipfs.api.IPFS;
 import org.slf4j.Logger;
@@ -58,17 +59,15 @@ public class AppMainWindow {
 
     public static boolean SERVER_STAT = false;
 
-    public static String PROFILE_NICKNAME = "lanbery";
-
+    protected static  IPFSHelper ipfsHelper = IPFSHelper.getInstance();
     /**
      *
      */
-    public static IPFS ipfs = null;
+    public static IPFS ipfs = IPFSHelper.getInstance().getIpfs();
 
-    /**
-     * 运行监控
-     */
-    public static ConsolePanel monitorPanel;
+
+    public static String PROFILE_NICKNAME = "";
+
     /**
      *
      */
@@ -175,7 +174,6 @@ public class AppMainWindow {
      */
     private void loadEnv(){
         Properties props = ConfigHelper.getEnv();
-
         logger.info("ENV ============================>>");
         for(String k : props.stringPropertyNames()){
             String v = props.getProperty(k);
@@ -189,12 +187,14 @@ public class AppMainWindow {
         }
 
         try {
-            ipfs = new IPFS(ConfigHelper.getIpfsAddress());
+            if(ipfs==null)ipfs = new IPFS(ConfigHelper.getIpfsAddress());
             SERVER_STAT = true;
             Map map = ipfs.id();
+            PROFILE_NICKNAME = ipfsHelper.getNickName();
             logger.info(">>>>>>>>>>>>>."+map.get("ID"));
         }catch (Exception e){
             logger.error("ipfs Server is dead.");
+            ipfs = new IPFS(ConfigHelper.getIpfsAddress());
         }
 
     }
