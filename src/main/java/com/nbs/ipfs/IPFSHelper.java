@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -30,6 +29,13 @@ public class IPFSHelper {
     public static String JSON_NICKNAME_KEY = "nickname";
     public static String NICKNAME;
     private IPFS ipfs;
+
+    /**
+     *
+     */
+    private static final String NBSWORLD_CTRL_TOPIC = "$nbs.ctrl|broadcast$";
+    private static final String NBS_IM_TOPIC_PREFFIX = "$nbs.im|";
+    private static final String NBS_TOPIC_SEPRATOR = "$";
 
     public IPFSHelper() {
         ipfs = new IPFS(ConfigHelper.getIpfsAddress());
@@ -99,5 +105,11 @@ public class IPFSHelper {
             ipfs.config.set(JSON_NICKNAME_KEY,nick);
         }
         return nick;
+    }
+
+
+
+    public void getIMPeers(){
+
     }
 }
