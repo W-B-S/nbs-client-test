@@ -6,15 +6,18 @@ import UI.panel.fm.FilePanel;
 import UI.panel.im.IMPanel;
 import UI.panel.monitor.ConsolePanel;
 import UI.panel.setting.SettingPanel;
+import com.alibaba.fastjson.JSON;
 import com.nbs.ipfs.IPFSHelper;
 import com.nbs.tools.ConfigHelper;
 import io.ipfs.api.IPFS;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
 
@@ -190,15 +193,38 @@ public class AppMainWindow {
             if(ipfs==null)ipfs = new IPFS(ConfigHelper.getIpfsAddress());
             SERVER_STAT = true;
             Map map = ipfs.id();
-            PROFILE_NICKNAME = ipfsHelper.getNickName();
+
+            if(map.get("ID")!=null)PEER_ID = (String)map.get("ID");
             logger.info(">>>>>>>>>>>>>."+map.get("ID"));
+            initNick();
         }catch (Exception e){
-            logger.error("ipfs Server is dead.");
+            logger.error("ipfs Server is dead.",e.getCause());
             ipfs = new IPFS(ConfigHelper.getIpfsAddress());
         }
 
     }
 
 
+    public void initNick(){
+        if(StringUtils.isNotBlank(PROFILE_NICKNAME))return;
+        String nick = "";
+        try {
+            Map cfgMap = ipfs.config.show();
+            if(cfgMap.containsKey(IPFSHelper.JSON_NICKNAME_KEY)){
+                nick = (String)cfgMap.get(IPFSHelper.JSON_NICKNAME_KEY);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            nick = ipfsHelper.generateNickName();
+            try {
+                ipfs.config.set(IPFSHelper.JSON_NICKNAME_KEY,nick);
+                String s=JSON.toJSONString(ipfs.config.show(),true);
+                logger.info(s);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+        PROFILE_NICKNAME = nick;
+    }
 
 }

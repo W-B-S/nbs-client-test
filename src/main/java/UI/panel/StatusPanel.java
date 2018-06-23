@@ -6,6 +6,7 @@ import UI.button.AvatarIconButton;
 
 import UI.templete.WihteBackJPanel;
 import com.alibaba.fastjson.JSON;
+import com.nbs.ipfs.IPFSHelper;
 import com.nbs.tools.PropertyUtil;
 import com.nbs.tools.StringHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +16,9 @@ import org.slf4j.LoggerFactory;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
@@ -30,8 +34,6 @@ import java.util.Map;
 public class StatusPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private static final Logger logger = LoggerFactory.getLogger(StatusPanel.class);
-
-    public static boolean isRunning = false;
 
     public static final String AVATAR_IMAGE_PATH = ConstantsUI.PROFILE_ROOT+"avatars"+File.separator;
 
@@ -101,19 +103,18 @@ public class StatusPanel extends JPanel {
         JPanel cell11 = new WihteBackJPanel();
         cell11.setLayout(new FlowLayout(FlowLayout.LEFT,ConstantsUI.MAIN_H_GAP,5));
 
-        String peerId = "";
-        try {
-            if(AppMainWindow.SERVER_STAT){
-                Map m =AppMainWindow.ipfs.id();
-                if(m.containsKey("ID"))peerId= (String) m.get("ID");
-                AppMainWindow.PEER_ID = peerId;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String nickVal = PropertyUtil.getProperty("nbs.ui.panel.status.default-nickname");
+        //头像
+        String nickVal = StringUtils.isBlank(AppMainWindow.PROFILE_NICKNAME) ?
+                PropertyUtil.getProperty("nbs.ui.panel.status.default-nickname") : AppMainWindow.PROFILE_NICKNAME;
         ImageIcon icon = new ImageIcon(AVATAR_IMAGE_PATH + PropertyUtil.getProperty("nbs.ui.panel.status.default-avatar"));
         AvatarIconButton avatar = new AvatarIconButton(icon,nickVal);
+        //
+        avatar.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(AppMainWindow.frame,"暂时不能设置头像");
+            }
+        });
         cell11.add(avatar);
 
         firstRow.add(cell11);
@@ -125,11 +126,30 @@ public class StatusPanel extends JPanel {
         WihteBackJPanel peerInfo = new WihteBackJPanel();
         peerInfo.setLayout(new GridLayout(2,1));
         //
-        JLabel nickname = new ContentJLabel(nickVal);
-        nickname.setFont(ConstantsUI.FONT_LABEL);
-        peerInfo.add(nickname);
 
-        JLabel peerIDLabel = new ContentJLabel(PropertyUtil.getProperty("nbs.ui.panel.status.label.peer-id","PeerID:")+peerId);
+        JLabel nickLabel = new ContentJLabel(AppMainWindow.PROFILE_NICKNAME);
+        nickLabel.setFont(ConstantsUI.FONT_LABEL);
+        nickLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String newNick = JOptionPane.showInputDialog(AppMainWindow.frame,"昵称",nickLabel.getText());
+                if(StringUtils.isNotBlank(newNick.trim())&&newNick.trim().length()<=40){
+                    try {
+                        String res = IPFSHelper.getInstance().updateNick(newNick);
+                        if(res!=null)AppMainWindow.PROFILE_NICKNAME = res;
+                        nickLabel.setText(res);
+                        nickLabel.updateUI();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                        JOptionPane.showMessageDialog(AppMainWindow.frame,"修改失败.");
+                    }
+                }
+                super.mouseClicked(e);
+            }
+        });
+        peerInfo.add(nickLabel);
+
+        JLabel peerIDLabel = new ContentJLabel(PropertyUtil.getProperty("nbs.ui.panel.status.label.peer-id","PeerID:")+AppMainWindow.PEER_ID);
         peerIDLabel.setFont(ConstantsUI.FONT_NORMAL);
         peerInfo.add(peerIDLabel);
         cell11.add(peerInfo,BorderLayout.CENTER);
@@ -137,7 +157,7 @@ public class StatusPanel extends JPanel {
         /**
          * Peer 详细信息
          */
-        JScrollPane scrollPane = new JScrollPane(getPeerIdInfo(peerId),JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        JScrollPane scrollPane = new JScrollPane(getPeerIdInfo(AppMainWindow.PEER_ID),JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         //scrollPane.setLayout(new BorderLayout());
         scrollPane.setBackground(ConstantsUI.MAIN_BACK_COLOR);
         scrollPane.setSize(ConstantsUI.MAIN_WINDOW_WIDTH-85,ConstantsUI.MAIN_WINDOW_HEIGHT-136);

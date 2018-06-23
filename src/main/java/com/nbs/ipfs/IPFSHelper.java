@@ -27,7 +27,7 @@ public class IPFSHelper {
     private ConcurrentHashMap secMap = new ConcurrentHashMap();
     public static String CLIENT_PEERID;
     public static String JSON_NICKNAME_KEY = "nickname";
-    public static String NICKNAME;
+
     private IPFS ipfs;
 
     /**
@@ -71,7 +71,7 @@ public class IPFSHelper {
         return ipfs;
     }
 
-    private String generateNickName(){
+    public String generateNickName(){
         String[] sources = new String[]{
                 "8","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
                 "a","b","c","d","e","f","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
@@ -98,7 +98,7 @@ public class IPFSHelper {
      * @throws IOException
      */
     public String getNickName() throws IOException {
-        if(StringUtils.isNotBlank(NICKNAME))return NICKNAME;
+
         String nick = ipfs.config.get(JSON_NICKNAME_KEY);
         if(StringUtils.isBlank(nick)){
             nick = generateNickName();
@@ -107,6 +107,18 @@ public class IPFSHelper {
         return nick;
     }
 
+    /**
+     *
+     * @param nick
+     * @return
+     * @throws IOException
+     */
+    public String updateNick(String nick) throws IOException {
+        if(ipfs==null||StringUtils.isBlank(nick))return null;
+        nick = nick.trim();
+        ipfs.config.set(JSON_NICKNAME_KEY,nick);
+        return nick;
+    }
 
 
     public void getIMPeers(){
