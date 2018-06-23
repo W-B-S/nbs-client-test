@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nbs.biz.dao.NBSTableDao">
+
+    <select id="tableExist" resultType="java.lang.Integer">
+		select count(1) AS c from sqlite_master where type = 'table' and name = #{name}
+	</select>
+
+    <update id="createNbsContacts">
+        create table nbs_contacts (
+        id varchar(64) primary key,
+        nick varchar(64),
+        avatar varchar(64),
+        avatar_suffix varchar(10),
+        remark varchar(100),
+        ext_json text,
+        seckey varchar (256),
+        ctime TIMESTAMP  default (datetime('now','localtime')),
+        lmtime integer
+        );
+    </update>
+
+    <select id="findAll" resultType="com.nbs.biz.model.NBSTest">
+        SELECT id,name,ctime,lmtime from nbs_test
+    </select>
+</mapper>   

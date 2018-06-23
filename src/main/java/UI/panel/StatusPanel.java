@@ -129,11 +129,13 @@ public class StatusPanel extends JPanel {
 
         JLabel nickLabel = new ContentJLabel(AppMainWindow.PROFILE_NICKNAME);
         nickLabel.setFont(ConstantsUI.FONT_LABEL);
+
+
         nickLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String newNick = JOptionPane.showInputDialog(AppMainWindow.frame,"昵称",nickLabel.getText());
-                if(StringUtils.isNotBlank(newNick.trim())&&newNick.trim().length()<=40){
+                if(StringUtils.isNotBlank(newNick)&&newNick.trim().length()<=40){
                     try {
                         String res = IPFSHelper.getInstance().updateNick(newNick);
                         if(res!=null)AppMainWindow.PROFILE_NICKNAME = res;
@@ -145,6 +147,19 @@ public class StatusPanel extends JPanel {
                     }
                 }
                 super.mouseClicked(e);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                nickLabel.setToolTipText("点击修改昵称");
+                setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                super.mouseEntered(e);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                setCursor(Cursor.getDefaultCursor());
+                super.mouseExited(e);
             }
         });
         peerInfo.add(nickLabel);
