@@ -29,6 +29,15 @@ public class TableService {
         }
     }
 
+    public void initNBSMessage(Boolean clear){
+        String tbNBSMessage = "nbs_message";
+        boolean b = dao.tableExist(tbNBSMessage);
+        if(b&&clear){
+            //清空表数据
+        }else {
+            dao.createNbsMessage();
+        }
+    }
     public List<NBSTest> getAll(){
         return dao.findAll();
     }

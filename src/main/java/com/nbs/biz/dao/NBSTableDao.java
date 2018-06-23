@@ -29,6 +29,10 @@ public class NBSTableDao {
         session.update("createNbsContacts");
     }
 
+    public void createNbsMessage(){
+        session.update("createNbsMessage");
+    }
+
 
     public List<NBSTest> findAll(){
         return session.selectList("findAll");

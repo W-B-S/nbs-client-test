@@ -24,8 +24,14 @@ public class TableServiceTest {
     public static void main(String[] agrs){
 
         TableServiceTest tt = new TableServiceTest();
-        tt.createNbsContacts();
+        //tt.createNbsContacts();
+        tt.crateTest();
 
+    }
+
+    public void crateTest(){
+        TableService service = new TableService(DbUtil.getSqlSession());
+        service.initNBSMessage(true);
     }
 
     public void createNbsContacts(){

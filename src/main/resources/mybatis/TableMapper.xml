@@ -20,6 +20,21 @@
         );
     </update>
 
+    <update id="createNbsMessage">
+        CREATE table nbs_message (
+        id varchar(20) PRIMARY KEY,
+        formid varchar (100),
+        formhash varchar (100),
+        self integer default 0,
+        topic varchar (100),
+        roomid varchar(36),
+        msg text,
+        creator varchar (100),
+        recvtime INTEGER ,
+        deleted boolean
+        );
+    </update>
+
     <select id="findAll" resultType="com.nbs.biz.model.NBSTest">
         SELECT id,name,ctime,lmtime from nbs_test
     </select>
