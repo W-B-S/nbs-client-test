@@ -168,6 +168,7 @@ public class AppMainWindow {
         aboutPanel = new AboutPanel();
         settingPanel = new SettingPanel(true);
         imPanel = new IMPanel(true);
+        imPanel.receiverRun(200);
         filePanel = new FilePanel(true);
 
         //TODO other panel init
@@ -423,5 +424,21 @@ public class AppMainWindow {
                 }
             }
         }).start();
+    }
+
+    /**
+     * 在缓存中查找
+     * @param from
+     * @return
+     */
+    public static ContactsItem findContactsItemByFrom(String from){
+        ContactsItem item = null;
+        for(Map.Entry<String,ContactsItem> entry : peerItems.entrySet()){
+            item = entry.getValue();
+            if(item.getFormid().equals(from)){
+                return item;
+            }
+        }
+        return null;
     }
 }

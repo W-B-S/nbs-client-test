@@ -6,18 +6,27 @@ import UI.button.NBSIconButton;
 import UI.common.NBSAbstractPanel;
 import UI.common.ToolbarStatsPanel;
 import UI.templete.WihteBackJPanel;
+import com.alibaba.fastjson.JSON;
 import com.nbs.entity.ContactsItem;
 import com.nbs.entity.PeerInfoBase;
+import com.nbs.ipfs.IPFSHelper;
+import com.nbs.ipfs.entity.IpfsMessage;
 import com.nbs.tools.DateHelper;
 import com.nbs.ui.components.ColorCnst;
 import com.nbs.utils.Base64CodecUtil;
 import io.ipfs.api.IPFS;
+import io.ipfs.api.JSONParser;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @Package : UI.panel.im
@@ -245,7 +254,7 @@ public class IMPanel extends NBSAbstractPanel {
             sb.append(ConstantsUI.WSPACE_CHARACTER4).append(sendContent);
 
             //send pub
-            AppMainWindow.ipfs.pubsub.pub(topic,Base64CodecUtil.encodeIPFSMsg(sendContent));
+            AppMainWindow.ipfs.pubsub.pub(topic,Base64CodecUtil.encodeByCtrlType(sendContent,Base64CodecUtil.CtrlTypes.normal));
             inputArea.setText("");
             sb.append(ConstantsUI.ENTER_CHARACTER);
             imMSGShow.append(sb.toString());
@@ -259,11 +268,61 @@ public class IMPanel extends NBSAbstractPanel {
 
     /**
      *
-     * @param content
-     * @param item
+     * @param
+     * @param
      */
-    public void recvMsg(String content,ContactsItem item){
+    public void receiverRun(long sleepSec){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if(sleepSec>=1){
+                        TimeUnit.MILLISECONDS.sleep(sleepSec);
+                    }
+                    if(AppMainWindow.self==null){
+                        TimeUnit.SECONDS.sleep(30);
+                        receiverRun(sleepSec);
+                        return;
+                    }
+                    Stream<Map<String,Object>> sub = IPFSHelper.getInstance().getIpfs().pubsub.sub(AppMainWindow.self.getId());
 
+                    List<Map> lst = sub.limit(1).collect(Collectors.toList());
+                    String json = JSONParser.toString(lst.get(0));
+                    logger.info(System.currentTimeMillis()+"-revc : "+json);
+                    appenRevcMsg(json);
+                    receiverRun(10);
+                }  catch (Exception e) {
+                    e.printStackTrace();
+                    try {
+                        TimeUnit.SECONDS.sleep(2);
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+                    receiverRun(2000);
+                }
+            }
+        }).start();
+    }
+
+    /**
+     *
+     * @param json
+     */
+    private void appenRevcMsg(String json){
+        IpfsMessage message = JSON.parseObject(json,IpfsMessage.class);
+        ContactsItem item = AppMainWindow.findContactsItemByFrom(message.getFrom());
+        String nick = (item==null||item.getName()==null) ? message.getFrom() : item.getName();
+        message = Base64CodecUtil.parseIpmsMessageCtrlType(message);
+        if(message==null||message.getTypes()!=Base64CodecUtil.CtrlTypes.normal){
+            logger.info("message is null");
+            return;
+        }
+        String msg = message.getContents();
+        StringBuffer sb = new StringBuffer();
+        sb.append(nick).append("  ").append(DateHelper.currentTime()).append(ConstantsUI.ENTER_CHARACTER);
+        sb.append(ConstantsUI.WSPACE_CHARACTER4).append(msg).append(ConstantsUI.ENTER_CHARACTER);
+        imMSGShow.append(sb.toString());
+        //TODO save SQLite
     }
 
     public static void setCurrentToPeer(ContactsItem item){

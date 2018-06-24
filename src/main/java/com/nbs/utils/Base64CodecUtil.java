@@ -5,10 +5,9 @@ import com.nbs.ipfs.entity.IpfsMessage;
 import io.ipfs.multihash.Multihash;
 import org.apache.commons.codec.CharEncoding;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.UnsupportedEncodingException;
-import java.sql.Struct;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,10 +21,10 @@ import java.util.regex.Pattern;
  */
 public class Base64CodecUtil {
     private static final Base64 base64 = new Base64();
-    public static final String REGX_BASE64_MSG = "^\\$BASE64\\|\\w+\\|$";
+    public static final String REGX_BASE64_MSG = "^\\$BASE64\\$\\w+\\$$";
 
-    public static final String BASE64_START = "$BASE64|";
-    public static final String BASE64_END = "|";
+    public static final String BASE64_START = "$BASE64$";
+    public static final String BASE64_END = "$";
     /**
      *
      * @param origin
@@ -111,21 +110,70 @@ public class Base64CodecUtil {
         return mSb.toString();
     }
 
+    /**
+     *
+     * @param message
+     * @param types
+     * @return
+     */
+    public static String encodeByCtrlType(Object message,CtrlTypes types){
+        if(message==null)return null;
+        StringBuffer sb = new StringBuffer();
+        if(types==null)types = CtrlTypes.normal;
+        switch (types){
+            case online:
+                sb.append(types.sperator).append(types.starter).append(types.sperator);
+                sb.append(encode(JSON.toJSONString(message)));
+                sb.append(types.sperator+"");
+                return sb.toString();
+            case normal:
+                sb.append(types.sperator).append(types.starter).append(types.sperator);
+                sb.append(encode(message.toString()));
+                sb.append(types.sperator+"");
+                return sb.toString();
+            default:
+                sb.append(types.sperator).append(types.starter).append(types.sperator);
+                sb.append(encode(message.toString()));
+                sb.append(types.sperator+"");
+                return sb.toString();
+        }
+    }
+
+    /**
+     *
+     * @param m
+     * @return
+     */
     public static IpfsMessage parseIpmsMessageCtrlType(IpfsMessage m){
         if(m==null||m.getData()==null||m.getData().length()<1)return null;
         String decode64 = decode(m.getData());
-        if(decode64
-                .startsWith(CtrlTypes.online.sperator+CtrlTypes.online.starter+CtrlTypes.online.sperator)
-                && decode64.endsWith(CtrlTypes.online.sperator+"")){
-            int len = decode64.length();
-            m.setContents(decode(decode64.substring(CtrlTypes.online.starter.length()+2,len-2)));
-            m.setTypes(CtrlTypes.online);
-            return m;
-        }else {
-            m.setContents(decode64);
-            m.setTypes(CtrlTypes.normal);
-            return m;
+        CtrlTypes t = null;
+        int len = decode64.length();
+        for(CtrlTypes types : CtrlTypes.values()){
+            if(decode64
+                    .startsWith(types.sperator + types.starter + types.sperator)
+                    && decode64.endsWith(types.sperator+"")){
+                t = types;
+                m.setContents(decode64.substring(types.starter.length()+2,len-2));
+                m.setTypes(t);
+                return m;
+            }
         }
+        if(t==null){
+            //无效消息
+            return null;
+        }
+        //处理content
+        switch (t){
+            case online:
+                //json base64
+                m.setContents(decode(m.getContents()));
+                break;
+            case normal:
+                break;
+        }
+
+        return m;
     }
 
 
@@ -156,8 +204,9 @@ public class Base64CodecUtil {
         online("ON.B64.J",'$'),
         /**
          * 正常消息
+         * $IM.B64.S$xxx$
          */
-        normal("",'$');
+        normal("IM.B64.S",'$');
 
         private String starter;
         private char sperator;
