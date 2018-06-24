@@ -6,6 +6,7 @@ import UI.button.NBSIconButton;
 import UI.common.NBSAbstractPanel;
 import UI.common.ToolbarStatsPanel;
 import UI.templete.WihteBackJPanel;
+import com.nbs.entity.ContactsItem;
 import com.nbs.entity.PeerInfoBase;
 import com.nbs.tools.DateHelper;
 import com.nbs.ui.components.ColorCnst;
@@ -28,17 +29,24 @@ import java.io.File;
 public class IMPanel extends NBSAbstractPanel {
     private static final long serialVersionUID = 1L;
     public static final String PKUI_PANEL_IM_LABEL = "nbs.ui.panel.im.label";
+    private static IMPanel context;
 
     /**
      * 在线peers
      */
-    private static JPanel peersJPanel;
-
     private static JPanel peerList;
+    /**
+     * 左侧IM peers
+     */
+    private ImLeftPanel leftPanel;
 
     private static JScrollPane scrollPane;
 
     private static JTextArea imMSGShow = new JTextArea();
+    /**
+     * 顶部显示
+     */
+    private static ToolbarStatsPanel toolbarStatsPanel = new ToolbarStatsPanel(PKUI_PANEL_IM_LABEL);;
     /**
      *
      */
@@ -47,6 +55,10 @@ public class IMPanel extends NBSAbstractPanel {
     private static JTextArea inputArea = new JTextArea();
 
     private PeerInfoBase currentContactPeer = null;
+    /**
+     *
+     */
+    private static ContactsItem CURRENT_TO_CONTACTS_ITEM = null;
 
 
 
@@ -64,6 +76,7 @@ public class IMPanel extends NBSAbstractPanel {
 
     public IMPanel(boolean isDoubleBuffered) {
         super(isDoubleBuffered);
+        context = this;
     }
 
     @Override
@@ -73,13 +86,11 @@ public class IMPanel extends NBSAbstractPanel {
 
     @Override
     protected void addComponent() {
-        ToolbarStatsPanel toolbarStatsPanel = new ToolbarStatsPanel(PKUI_PANEL_IM_LABEL);
         this.add(toolbarStatsPanel,BorderLayout.NORTH);
         /**
          *
          */
         this.add(getCenterPanel(),BorderLayout.CENTER);
-
     }
 
 
@@ -97,13 +108,18 @@ public class IMPanel extends NBSAbstractPanel {
         WihteBackJPanel centerPanel = new WihteBackJPanel();
         centerPanel.setLayout(new BorderLayout());
 
+        /**
+         *
+         */
         peerList = new JPanel();
-        peerList.setBackground(new Color(221,221,221));
-        Dimension leftDimsnsion = new Dimension(245,ConstantsUI.MAIN_WINDOW_HEIGHT);
+        Dimension leftDimsnsion = new Dimension(260,ConstantsUI.MAIN_WINDOW_HEIGHT);
         peerList.setPreferredSize(leftDimsnsion);
         peerList.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
 
-        centerPanel.add(peerList,BorderLayout.WEST);
+        leftPanel = new ImLeftPanel();
+        leftPanel.setPreferredSize(leftDimsnsion);
+
+        centerPanel.add(leftPanel,BorderLayout.WEST);
 
         /**
          * 聊天主窗口
@@ -246,10 +262,28 @@ public class IMPanel extends NBSAbstractPanel {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    public static void setCurrentToPeer(ContactsItem item){
+        CURRENT_TO_CONTACTS_ITEM = item;
+    }
 
+    /**
+     * 切换聊天peer
+     */
+    public void contactsItemChanged(ContactsItem item){
+        //TODO
+        CURRENT_TO_CONTACTS_ITEM = item;
+        if(item==null)return;
+        toolbarStatsPanel.resetContacts(item.getName());
 
+    }
 
-
+    /**
+     *
+     * @return
+     */
+    public static IMPanel getContext() {
+        return context;
     }
 }

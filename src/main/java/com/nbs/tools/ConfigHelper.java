@@ -28,7 +28,7 @@ public class ConfigHelper {
      * 系统当前路径
      */
     public final static String CURRENT_DIR = System.getProperty("user.dir");
-    private static final String CONF_ROOT = CURRENT_DIR + File.separator+"config" + File.separator;
+    public static final String CONF_ROOT = CURRENT_DIR + File.separator+"config" + File.separator;
     private static final String CONF_FILE = "nbs-conf.properties";
     public static final String PK_SERVER_STATS = "ipfs.server.stats";
     public static final String PK_CFG_IPFS_ADDR = "nbs.server.address";

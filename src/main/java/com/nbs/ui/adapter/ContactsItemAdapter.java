@@ -1,5 +1,7 @@
 package com.nbs.ui.adapter;
 
+import UI.AppMainWindow;
+import UI.panel.im.IMPanel;
 import com.nbs.entity.ContactsItem;
 import com.nbs.ui.AvatarViewHolder;
 import com.nbs.ui.ContactsItemViewHolder;
@@ -34,6 +36,10 @@ public class ContactsItemAdapter extends BaseAdapter<ContactsItemViewHolder> {
      */
     private ContactsItemViewHolder selectedViewHolder;
 
+    /**
+     *
+     * @param contactsItems
+     */
     public ContactsItemAdapter(List<ContactsItem> contactsItems) {
         this.contactsItems = contactsItems;
         if(contactsItems != null){
@@ -66,6 +72,11 @@ public class ContactsItemAdapter extends BaseAdapter<ContactsItemViewHolder> {
         return null;
     }
 
+    /**
+     *
+     * @param viewHolder
+     * @param position
+     */
     @Override
     public void onBindHeaderViewHolder(AvatarViewHolder viewHolder, int position) {
         ContactsAvatarViewHolder holder = (ContactsAvatarViewHolder) viewHolder;
@@ -82,6 +93,11 @@ public class ContactsItemAdapter extends BaseAdapter<ContactsItemViewHolder> {
         holder.add(holder.letterLabel, BorderLayout.WEST);
     }
 
+    /**
+     *
+     * @param viewHolder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(ContactsItemViewHolder viewHolder, int position) {
         viewHolders.add(position, viewHolder);
@@ -89,7 +105,7 @@ public class ContactsItemAdapter extends BaseAdapter<ContactsItemViewHolder> {
 
         ImageIcon icon = new ImageIcon();
         icon.setImage(AvatarUtil.createOrLoadUserAvatar(item.getName())
-                .getScaledInstance(30, 30, Image.SCALE_SMOOTH));
+                .getScaledInstance(32, 32, Image.SCALE_SMOOTH));
         viewHolder.avatar.setIcon(icon);
 
         viewHolder.roomName.setText(item.getName());
@@ -99,6 +115,10 @@ public class ContactsItemAdapter extends BaseAdapter<ContactsItemViewHolder> {
             @Override
             public void mouseClicked(MouseEvent e)
             {
+                //JOptionPane.showMessageDialog(AppMainWindow.frame,item.getName());
+                System.out.println(this.getClass().getName()+">>>>>>>>>>>>"+item.getName());
+                IMPanel.getContext().contactsItemChanged(item);
+
                 //TODO  右侧聊天面板加载切换
  /*               RightPanel.getContext().getUserInfoPanel().setUsername(item.getName());
                 RightPanel.getContext().showPanel(RightPanel.USER_INFO);

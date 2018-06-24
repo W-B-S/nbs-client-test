@@ -55,7 +55,9 @@ public class ContactsPanel extends ParentAvailablePanel {
         initComponent();
         initView();
         initData();
-        //TODO initView data
+        contactsListView.setAdapter(new ContactsItemAdapter(peerItems));
+        //TODO 从服务器获取通讯录后，调用下面方法更新UI
+        notifyDataSetChanged();
     }
 
     /**
@@ -66,8 +68,8 @@ public class ContactsPanel extends ParentAvailablePanel {
     }
 
     private void initView(){
-        setLayout(new GridLayout());
-        contactsListView.setContentPanelBackground(ColorCnst.DARK);
+        setLayout(new GridBagLayout());
+        contactsListView.setContentPanelBackground(ColorCnst.MAIN_COLOR);
         add(contactsListView,new GBC(0,0).setFill(GBC.BOTH).setWeight(1,1));
     }
 
@@ -100,8 +102,6 @@ public class ContactsPanel extends ParentAvailablePanel {
             logger.warn("No IPFS Server Connection");
             return;
         }
-
-
     }
 
 

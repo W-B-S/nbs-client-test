@@ -50,7 +50,6 @@ public class ConstantsUI {
      */
     public final static String CURRENT_DIR = System.getProperty("user.dir");
 
-    public final static String IPFS_PATH = CURRENT_DIR + File.separator + ".nbs_local"+ File.separator;
 
     public final static String PROFILE_ROOT = CURRENT_DIR + File.separator + "profile"+ File.separator;
 

@@ -18,6 +18,8 @@ import java.util.Properties;
  */
 public class PropertyUtil {
 
+
+
     /**
      * @Date    : 2018/6/13 15:49
      * @Author  : lanbery
@@ -30,8 +32,9 @@ public class PropertyUtil {
     public static String getProperty(String key){
         Properties props = new Properties();
         try{
+
             InputStream in = new BufferedInputStream(
-                    new FileInputStream(CnstTools.PROPS_ROOT_PATH+"zh-cn.properties"));
+                    new FileInputStream(ConfigHelper.CONF_ROOT+"zh-cn.properties"));
             props.load(in);
             String v = props.getProperty(key);
             return v;

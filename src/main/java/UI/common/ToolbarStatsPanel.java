@@ -1,6 +1,7 @@
 package UI.common;
 
 import UI.ConstantsUI;
+import com.nbs.entity.ContactsItem;
 import com.nbs.tools.PropertyUtil;
 import org.apache.commons.lang3.StringUtils;
 
@@ -18,15 +19,20 @@ import java.awt.*;
 public class ToolbarStatsPanel extends JPanel {
 
     private final JLabel titleLabel = new JLabel();
+    private final JLabel contactsToLabel = new JLabel();
     public ToolbarStatsPanel(String key){
         titleLabel.setFont(ConstantsUI.FONT_TITLE);
         titleLabel.setForeground(ConstantsUI.PANEL_TITILE_COLOR);
+        contactsToLabel.setFont(ConstantsUI.FONT_LABEL);
+        contactsToLabel.setForeground(ConstantsUI.PANEL_TITILE_COLOR);
+        contactsToLabel.setHorizontalAlignment(JLabel.HORIZONTAL);
         if(StringUtils.isNoneBlank(key)&& null != PropertyUtil.getProperty(key)){
             titleLabel.setText(PropertyUtil.getProperty(key));
         }
         this.setBackground(ConstantsUI.MAIN_BACK_COLOR);
-        this.setLayout(new FlowLayout(FlowLayout.LEFT,ConstantsUI.MAIN_H_GAP,5));
+        this.setLayout(new FlowLayout(FlowLayout.LEFT,4,5));
         this.add(titleLabel);
+        this.add(contactsToLabel);
     }
 
     /**
@@ -39,4 +45,14 @@ public class ToolbarStatsPanel extends JPanel {
         this.updateUI();
     }
 
+    /**
+     *
+     * @param contents
+     */
+    public void resetContacts(String contents){
+        if(StringUtils.isBlank(contents))contents = "";
+        contactsToLabel.setText(contents);
+        contactsToLabel.updateUI();
+        contactsToLabel.validate();
+    }
 }

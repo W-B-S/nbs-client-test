@@ -171,6 +171,8 @@ public class NbsListView extends JScrollPane {
                 super.mouseReleased(e);
             }
 
+
+
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
                 if(System.currentTimeMillis()-lastWeelTime <1000){

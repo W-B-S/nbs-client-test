@@ -190,8 +190,8 @@ public class AppMainWindow {
             logger.info(k+"="+v);
         }
         logger.info("ENV ============================<<");
-        NBS_FILES_ROOT_PATH = ConfigHelper.CURRENT_DIR + ConfigHelper.getNbsFilesRoot();
-        NBS_FILES_IPFS_ROOT = NBS_FILES_ROOT_PATH + File.separator +"ipfs";
+        NBS_FILES_ROOT_PATH = ConfigHelper.CURRENT_DIR +File.separator+ ConfigHelper.getNbsFilesRoot()+File.separator;
+        NBS_FILES_IPFS_ROOT = NBS_FILES_ROOT_PATH  +"ipfs" + File.separator;
         File ipfsDir = new File(NBS_FILES_IPFS_ROOT);
         if(ipfsDir.isDirectory()&& !ipfsDir.exists()){
             ipfsDir.mkdirs();

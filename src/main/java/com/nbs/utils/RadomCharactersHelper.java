@@ -60,7 +60,7 @@ public class RadomCharactersHelper {
         result.append(prefix);
         for(int i =0 ;i <len;i++){
             int c = getRadom(sources.length);
-            if(c<0||c>sources.length)c = 1;
+            if(c<1||c>=sources.length)c = 1;
             result.append(sources[c-1]);
         }
         return result.toString();
