@@ -6,13 +6,17 @@ import UI.panel.fm.FilePanel;
 import UI.panel.im.IMPanel;
 import UI.panel.setting.SettingPanel;
 import com.alibaba.fastjson.JSON;
+import com.nbs.entity.ContactsItem;
 import com.nbs.entity.PeerBoradcastInfo;
 import com.nbs.ipfs.IPFSHelper;
+import com.nbs.ipfs.entity.IpfsMessage;
 import com.nbs.tools.ConfigHelper;
 import com.nbs.utils.Base64CodecUtil;
 import io.ipfs.api.IPFS;
+import io.ipfs.api.JSONParser;
 import io.ipfs.api.MerkleNode;
 import io.ipfs.api.NamedStreamable;
+import io.ipfs.multihash.Multihash;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,9 +24,15 @@ import org.slf4j.LoggerFactory;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @Package : UI
@@ -42,6 +52,8 @@ public class AppMainWindow {
      *
      */
     private static final Logger logger = LoggerFactory.getLogger(AppMainWindow.class);
+
+    private static boolean boradcastSuccess = false;
 
     public static JFrame frame;
     /**
@@ -73,15 +85,7 @@ public class AppMainWindow {
      */
     public static IPFS ipfs = IPFSHelper.getInstance().getIpfs();
 
-
     public static String PROFILE_NICKNAME = "";
-
-    /**
-     *
-     */
-    public static String NBS_FILES_ROOT_PATH ;
-
-    public static String NBS_FILES_IPFS_ROOT;
 
     /**
      *
@@ -91,6 +95,10 @@ public class AppMainWindow {
      * 关于面板
      */
     public static AboutPanel aboutPanel;
+    /**
+     * 联系人缓存
+     */
+    public static Map<String,ContactsItem> peerItems = new HashMap<>();
 
     public static void main(String[] args){
 
@@ -123,6 +131,7 @@ public class AppMainWindow {
     public AppMainWindow(){
         initialize();
         broadcastOnline();
+        subSelf(400);
     }
     /**
      * 初始化frame内容
@@ -195,9 +204,11 @@ public class AppMainWindow {
             logger.info(k+"="+v);
         }
         logger.info("ENV ============================<<");
-        NBS_FILES_ROOT_PATH = ConfigHelper.CURRENT_DIR +File.separator+ ConfigHelper.getNbsFilesRoot()+File.separator;
-        NBS_FILES_IPFS_ROOT = NBS_FILES_ROOT_PATH  +"ipfs" + File.separator;
-        File ipfsDir = new File(NBS_FILES_IPFS_ROOT);
+        /**
+         *
+         */
+
+        File ipfsDir = new File(ConfigHelper.NBS_FILES_IPFS_ROOT);
         if(ipfsDir.isDirectory()&& !ipfsDir.exists()){
             ipfsDir.mkdirs();
         }
@@ -286,18 +297,131 @@ public class AppMainWindow {
     }
 
     /**
-     *
+     * 上线广播
      */
     private void broadcastOnline(){
-        if(self==null)return;
-        String ctrlMsg = Base64CodecUtil.encodeCtrlMsg(self,Base64CodecUtil.CtrlTypes.online);
+        if(boradcastSuccess)return;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if(self==null||self.getNick()==null){
+                        TimeUnit.SECONDS.sleep(30);
+                        broadcastOnline();
+                    }else {
+                        String ctrlMsg = Base64CodecUtil.encodeCtrlMsg(self,Base64CodecUtil.CtrlTypes.online);
+                        logger.info("Send CTRL MSG : "+ctrlMsg);
+                        ipfs.pubsub.pub(IPFSHelper.NBSWORLD_CTRL_TOPIC,ctrlMsg);
+                        logger.info(IPFSHelper.NBSWORLD_CTRL_TOPIC+"Send CTRL MSG : "+ctrlMsg);
+                        boradcastSuccess = true;
+                    }
+                } catch (InterruptedException e) {
+                    broadcastOnline();
+                } catch (Exception e) {
+                    logger.info(e.getMessage());
+                    broadcastOnline();
+                }
+            }
+        }).start();
+    }
 
-        try {
-            logger.info("Send CTRL MSG : "+ctrlMsg);
-            ipfs.pubsub.pub(IPFSHelper.NBSWORLD_CTRL_TOPIC,ctrlMsg);
-            logger.info(IPFSHelper.NBSWORLD_CTRL_TOPIC+"Send CTRL MSG : "+ctrlMsg);
-        } catch (Exception e) {
-            e.printStackTrace();
+    /**
+     * See yourself
+     */
+    private void subSelf(long sleepTimes){
+       new Thread(new Runnable() {
+           @Override
+           public void run() {
+               try {
+                   if(StringUtils.isBlank(PEER_ID)){
+                       TimeUnit.SECONDS.sleep(30);
+                   }
+                   if(sleepTimes>0l){ TimeUnit.MILLISECONDS.sleep(sleepTimes); }
+                   logger.info("SUB SEFL :"+self.getId());
+                   Stream<Map<String,Object>> sub = ipfs.pubsub.sub(self.getId());
+                   List<Map> lst = sub.limit(1).collect(Collectors.toList());
+                   String json = JSONParser.toString(lst.get(0));
+                   logger.info(System.currentTimeMillis()+"-revc : "+json);
+                   IpfsMessage message = JSON.parseObject(json,IpfsMessage.class);
+                   //TODO 处理
+                   updateContactsCache(message);
+                   subSelf(sleepTimes);
+               } catch (Exception e) {
+                   e.printStackTrace();
+                   logger.info(e.getMessage());
+                   subSelf(sleepTimes);
+               }
+           }
+       }).start();
+    }
+
+    public void updateContactsCache(IpfsMessage m){
+        if(m==null)return;
+        m = Base64CodecUtil.parseIpmsMessageCtrlType(m);
+        switch (m.getTypes()){
+            case online:
+
+                //更新缓存
+                updatePeerItem(m);
+                break;
+             default:
+                break;
         }
+    }
+
+    public void updatePeerItem (IpfsMessage m){
+        logger.info(m.getContents());
+        PeerBoradcastInfo info = JSON.parseObject(m.getContents(),PeerBoradcastInfo.class);
+        ContactsItem item = null;
+        if(info.getId().equals(self.getId())){
+            //自己不处理
+            return;
+        }
+        if(peerItems.containsKey(info.getId())){
+            item = peerItems.get(info.getId());
+            item.setFormid(m.getFrom());
+            if(info.getAvatarHash()!=null)item.setAvatar(info.getAvatarHash());
+            if(info.getAvatarSuffix()!=null)item.setAvatarSuffix(info.getAvatarSuffix());
+            item.setName(info.getNick());
+        }else {
+            item = new ContactsItem(info.getId(),info.getNick(),m.getFrom());
+            item.setAvatar(info.getAvatarHash());
+            item.setAvatarSuffix(info.getAvatarSuffix());
+            peerItems.put(info.getId(),item);
+        }
+        safeAndFreshIM(item);
+    }
+
+    /**
+     * 启用新线程下载头像，并存储
+     * @param item
+     */
+    private void safeAndFreshIM(ContactsItem item){
+        //TODO 通知
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //TODO save sqlite
+                String headRootPath = ConfigHelper.NBS_CACHE_AVATAR_ROOT_PATH;
+                try {
+                    if(StringUtils.isNotBlank(item.getAvatar())){
+                        FileOutputStream fos ;
+                        File headImage = new File(headRootPath,item.getAvatar()+item.getAvatarSuffix());
+                        if(headImage.exists()){
+                            headImage.delete();
+                        }
+                        headImage.createNewFile();
+                        Multihash multihash = Multihash.fromBase58(item.getAvatar());
+                        byte[] bytes = ipfs.get(multihash);
+                        fos = new FileOutputStream(headImage);
+                        fos.write(bytes);
+                        fos.flush();
+                        fos.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 }

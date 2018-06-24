@@ -1,5 +1,6 @@
 package com.nbs.entity;
 
+import com.nbs.utils.Base64CodecUtil;
 import com.nbs.utils.CharacterParser;
 
 /**
@@ -20,17 +21,52 @@ public class ContactsItem implements Comparable<ContactsItem> {
 
     private String type;
 
+    private String formid;
+    /**
+     *
+     */
+    private String avatar;
+
+    private String avatarSuffix;
+
     public ContactsItem() { }
 
+    /**
+     *
+     * @param id
+     * @param name
+     */
     public ContactsItem(String id, String name) {
         this.id = id;
         this.name = name;
+        this.type = TYPE.P.toString();
     }
 
-    public ContactsItem(String id, String name, String type) {
+    /**
+     *
+     * @param id
+     * @param name
+     * @param formid
+     */
+    public ContactsItem(String id, String name, String formid) {
+        this.id = id;
+        this.name = name;
+        this.formid = formid;
+        this.type = TYPE.P.toString();
+    }
+
+    /**
+     *
+     * @param id
+     * @param name
+     * @param formid
+     * @param type
+     */
+    public ContactsItem(String id, String name,String formid, String type ) {
         this.id = id;
         this.name = name;
         this.type = type;
+        this.formid = formid;
     }
 
     public String getId() {
@@ -75,6 +111,30 @@ public class ContactsItem implements Comparable<ContactsItem> {
         String oc = CharacterParser.getSelling(o.name).toUpperCase();
         int r = tc.compareTo(oc);
         return 0==r ? this.id.compareTo(o.getId()) : r;
+    }
+
+    public String getFormid() {
+        return formid;
+    }
+
+    public void setFormid(String formid) {
+        this.formid = formid;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getAvatarSuffix() {
+        return avatarSuffix;
+    }
+
+    public void setAvatarSuffix(String avatarSuffix) {
+        this.avatarSuffix = avatarSuffix;
     }
 
     /**

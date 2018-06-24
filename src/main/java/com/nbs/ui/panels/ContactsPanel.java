@@ -96,6 +96,9 @@ public class ContactsPanel extends ParentAvailablePanel {
         getPeerAvatar();
     }
 
+    /**
+     *
+     */
     private void getPeerAvatar(){
         IPFS ipfs = IPFSHelper.getInstance().getIpfs();
         if(ipfs==null){

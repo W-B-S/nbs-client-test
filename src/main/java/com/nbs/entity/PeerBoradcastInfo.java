@@ -15,6 +15,13 @@ public class PeerBoradcastInfo {
     private String avatarHash;
     private String avatarSuffix;
 
+    /**
+     *
+     * @param id
+     * @param nick
+     * @param avatarHash
+     * @param avatarSuffix
+     */
     public PeerBoradcastInfo(String id, String nick, String avatarHash, String avatarSuffix) {
         this.id = id;
         this.nick = nick;
@@ -22,6 +29,11 @@ public class PeerBoradcastInfo {
         this.avatarSuffix = avatarSuffix;
     }
 
+    /**
+     *
+     * @param id
+     * @param nick
+     */
     public PeerBoradcastInfo(String id, String nick) {
         this.id = id;
         this.nick = nick;

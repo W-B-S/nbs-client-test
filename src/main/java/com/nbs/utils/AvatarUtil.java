@@ -1,6 +1,7 @@
 package com.nbs.utils;
 
 import UI.AppMainWindow;
+import com.nbs.tools.ConfigHelper;
 import com.nbs.ui.cnst.FontUtil;
 import com.nbs.ui.components.ColorCnst;
 
@@ -58,7 +59,7 @@ public class AvatarUtil {
 
     static
     {
-        AVATAR_CACHE_ROOT = AppMainWindow.NBS_FILES_ROOT_PATH + "/cache/avatar";
+        AVATAR_CACHE_ROOT = ConfigHelper.NBS_CACHE_AVATAR_ROOT_PATH ;
 
         File file = new File(AVATAR_CACHE_ROOT);
         if (!file.exists())

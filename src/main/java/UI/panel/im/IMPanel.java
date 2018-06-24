@@ -154,7 +154,7 @@ public class IMPanel extends NBSAbstractPanel {
         messPanel = new WihteBackJPanel();
         messPanel.setLayout(new BorderLayout());
         int downHeight = 116;
-        int upHeight = ConstantsUI.MAIN_WINDOW_HEIGHT -downHeight-4;
+        int upHeight = ConstantsUI.MAIN_WINDOW_HEIGHT -downHeight-24;
 
         /**
          * 上部
@@ -287,4 +287,5 @@ public class IMPanel extends NBSAbstractPanel {
     public static IMPanel getContext() {
         return context;
     }
+
 }

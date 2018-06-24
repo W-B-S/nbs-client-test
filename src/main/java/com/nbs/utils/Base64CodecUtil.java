@@ -1,10 +1,14 @@
 package com.nbs.utils;
 
 import com.alibaba.fastjson.JSON;
+import com.nbs.ipfs.entity.IpfsMessage;
+import io.ipfs.multihash.Multihash;
 import org.apache.commons.codec.CharEncoding;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.StringUtils;
 
 import java.io.UnsupportedEncodingException;
+import java.sql.Struct;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -107,6 +111,24 @@ public class Base64CodecUtil {
         return mSb.toString();
     }
 
+    public static IpfsMessage parseIpmsMessageCtrlType(IpfsMessage m){
+        if(m==null||m.getData()==null||m.getData().length()<1)return null;
+        String decode64 = decode(m.getData());
+        if(decode64
+                .startsWith(CtrlTypes.online.sperator+CtrlTypes.online.starter+CtrlTypes.online.sperator)
+                && decode64.endsWith(CtrlTypes.online.sperator+"")){
+            int len = decode64.length();
+            m.setContents(decode(decode64.substring(CtrlTypes.online.starter.length()+2,len-2)));
+            m.setTypes(CtrlTypes.online);
+            return m;
+        }else {
+            m.setContents(decode64);
+            m.setTypes(CtrlTypes.normal);
+            return m;
+        }
+    }
+
+
     /**
      *
      * @param baseStr
@@ -128,9 +150,14 @@ public class Base64CodecUtil {
 
     public static enum CtrlTypes{
         /**
-         *
+         * $ON.B64.J$xxxxxsssds$
+         * 在线通知
          */
-        online("ONLINE",'$');
+        online("ON.B64.J",'$'),
+        /**
+         * 正常消息
+         */
+        normal("",'$');
 
         private String starter;
         private char sperator;
@@ -170,5 +197,15 @@ public class Base64CodecUtil {
         System.out.println(enMsg);
         String dec = decodeIPFSMsg(enMsg);
         System.out.println(dec);
+        String h = "Hello!";
+        String res = "";
+        res = Base64CodecUtil.encode(h);
+        System.out.println(res);
+
+
+        Multihash multihash = Multihash.fromHex("EiBCOcWflebcLfrIFDlcWTMFG+2sQ6dGv2BKlop/JjrRmA==");
+
+        System.out.println(Base64CodecUtil.decode("EiBCOcWflebcLfrIFDlcWTMFG+2sQ6dGv2BKlop/JjrRmA=="));
+
     }
 }
