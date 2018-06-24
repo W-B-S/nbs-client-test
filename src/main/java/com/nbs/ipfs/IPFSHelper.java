@@ -1,6 +1,7 @@
 package com.nbs.ipfs;
 
 import com.nbs.tools.ConfigHelper;
+import com.nbs.utils.Base64CodecUtil;
 import io.ipfs.api.IPFS;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -26,16 +27,15 @@ public class IPFSHelper {
      */
     private ConcurrentHashMap secMap = new ConcurrentHashMap();
     public static String CLIENT_PEERID;
-    public static String JSON_NICKNAME_KEY = "nickname";
 
     private IPFS ipfs;
 
     /**
      *
      */
-    private static final String NBSWORLD_CTRL_TOPIC = "$nbs.ctrl|broadcast$";
-    private static final String NBS_IM_TOPIC_PREFFIX = "$nbs.im|";
-    private static final String NBS_TOPIC_SEPRATOR = "$";
+    public static final String NBSWORLD_CTRL_TOPIC = Base64CodecUtil.encode("$nbs.ctrl|broadcast$");
+    public static final String NBS_IM_TOPIC_PREFFIX = "$nbs.im|";
+    public static final String NBS_TOPIC_SEPRATOR = "$";
 
     public IPFSHelper() {
         ipfs = new IPFS(ConfigHelper.getIpfsAddress());
@@ -94,21 +94,6 @@ public class IPFSHelper {
 
     /**
      *
-     * @return
-     * @throws IOException
-     */
-    public String getNickName() throws IOException {
-
-        String nick = ipfs.config.get(JSON_NICKNAME_KEY);
-        if(StringUtils.isBlank(nick)){
-            nick = generateNickName();
-            ipfs.config.set(JSON_NICKNAME_KEY,nick);
-        }
-        return nick;
-    }
-
-    /**
-     *
      * @param nick
      * @return
      * @throws IOException
@@ -116,12 +101,10 @@ public class IPFSHelper {
     public String updateNick(String nick) throws IOException {
         if(ipfs==null||StringUtils.isBlank(nick))return null;
         nick = nick.trim();
-        ipfs.config.set(JSON_NICKNAME_KEY,nick);
+        ipfs.config.set(ConfigHelper.JSON_NICKNAME_KEY,nick);
         return nick;
     }
 
 
-    public void getIMPeers(){
 
-    }
 }

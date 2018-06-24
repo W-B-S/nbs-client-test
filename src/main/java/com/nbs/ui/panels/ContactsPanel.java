@@ -106,7 +106,7 @@ public class ContactsPanel extends ParentAvailablePanel {
 
 
     /**
-     * 初始化Demo
+     * 初始化Demo TODO
      * @return
      */
     private List<ContactsModel> getContacts(){
@@ -119,7 +119,7 @@ public class ContactsPanel extends ParentAvailablePanel {
             String id = charactersHelper.generated(hashPre,20);
 
             String name = charactersHelper.generated("NBS_",6);
-            ContactsModel model = new ContactsModel(id,name);
+            ContactsModel model = new ContactsModel(name,name);
 
             contacts.add(model);
         }

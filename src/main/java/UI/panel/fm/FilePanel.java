@@ -185,7 +185,7 @@ public class FilePanel extends NBSAbstractPanel {
     private void addFile2Ipfs(File file) {
         if(file==null||AppMainWindow.ipfs==null)return;
         String name = file.getName();
-        NamedStreamable namedStreamable;
+
         List<MerkleNode> nodes;
         try {
             if(file.isDirectory()){

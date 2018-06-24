@@ -19,13 +19,13 @@ import java.awt.*;
 public class ToolbarStatsPanel extends JPanel {
 
     private final JLabel titleLabel = new JLabel();
-    private final JLabel contactsToLabel = new JLabel();
+    private final JTextPane contactsToLabel = new JTextPane();
     public ToolbarStatsPanel(String key){
         titleLabel.setFont(ConstantsUI.FONT_TITLE);
         titleLabel.setForeground(ConstantsUI.PANEL_TITILE_COLOR);
         contactsToLabel.setFont(ConstantsUI.FONT_LABEL);
         contactsToLabel.setForeground(ConstantsUI.PANEL_TITILE_COLOR);
-        contactsToLabel.setHorizontalAlignment(JLabel.HORIZONTAL);
+       // contactsToLabel.set
         if(StringUtils.isNoneBlank(key)&& null != PropertyUtil.getProperty(key)){
             titleLabel.setText(PropertyUtil.getProperty(key));
         }

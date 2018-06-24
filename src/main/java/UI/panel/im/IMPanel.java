@@ -10,6 +10,7 @@ import com.nbs.entity.ContactsItem;
 import com.nbs.entity.PeerInfoBase;
 import com.nbs.tools.DateHelper;
 import com.nbs.ui.components.ColorCnst;
+import com.nbs.utils.Base64CodecUtil;
 import io.ipfs.api.IPFS;
 import org.apache.commons.lang3.StringUtils;
 
@@ -133,21 +134,6 @@ public class IMPanel extends NBSAbstractPanel {
 
     }
 
-    private void refreshPeers(){
-
-    }
-
-    /**
-     * 加载在线节点
-     * @return
-     */
-    public boolean loadOnlinePeers(){
-        if(!AppMainWindow.SERVER_STAT)return false;
-        IPFS ipfs = AppMainWindow.ipfs;
-
-        return true;
-    }
-
     @Override
     protected void addListener() {
         sendButton.addActionListener(new AbstractAction() {
@@ -158,9 +144,7 @@ public class IMPanel extends NBSAbstractPanel {
         });
     }
 
-    private void buildLeftPeerContainer(){
 
-    }
 
     /**
      * 上下结构
@@ -248,20 +232,38 @@ public class IMPanel extends NBSAbstractPanel {
     private void sendMsg(){
         String sendContent = inputArea.getText();
         if(StringUtils.isBlank(sendContent))return;
+        if(CURRENT_TO_CONTACTS_ITEM == null){
+            JOptionPane.showMessageDialog(AppMainWindow.frame,"请选中联系人");
+            return;
+        }
+        String topic = CURRENT_TO_CONTACTS_ITEM.getId();
 
         try {
             StringBuffer sb = new StringBuffer();
             sb.append(AppMainWindow.PROFILE_NICKNAME).append("  ").append(DateHelper.currentTime());
             sb.append(ConstantsUI.ENTER_CHARACTER);
             sb.append(ConstantsUI.WSPACE_CHARACTER4).append(sendContent);
+
             //send pub
-            AppMainWindow.ipfs.pubsub.pub("nbs",sendContent);
+            AppMainWindow.ipfs.pubsub.pub(topic,Base64CodecUtil.encodeIPFSMsg(sendContent));
             inputArea.setText("");
             sb.append(ConstantsUI.ENTER_CHARACTER);
             imMSGShow.append(sb.toString());
         } catch (Exception e) {
             e.printStackTrace();
+            logger.error(e.getMessage());
+            String error = ConstantsUI.WSPACE_CHARACTER4+"发送失败....."+ConstantsUI.ENTER_CHARACTER;
+            imMSGShow.append(error);
         }
+    }
+
+    /**
+     *
+     * @param content
+     * @param item
+     */
+    public void recvMsg(String content,ContactsItem item){
+
     }
 
     public static void setCurrentToPeer(ContactsItem item){
@@ -276,7 +278,6 @@ public class IMPanel extends NBSAbstractPanel {
         CURRENT_TO_CONTACTS_ITEM = item;
         if(item==null)return;
         toolbarStatsPanel.resetContacts(item.getName());
-
     }
 
     /**

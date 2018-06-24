@@ -4,12 +4,15 @@ import UI.panel.*;
 import UI.panel.about.AboutPanel;
 import UI.panel.fm.FilePanel;
 import UI.panel.im.IMPanel;
-import UI.panel.monitor.ConsolePanel;
 import UI.panel.setting.SettingPanel;
 import com.alibaba.fastjson.JSON;
+import com.nbs.entity.PeerBoradcastInfo;
 import com.nbs.ipfs.IPFSHelper;
 import com.nbs.tools.ConfigHelper;
+import com.nbs.utils.Base64CodecUtil;
 import io.ipfs.api.IPFS;
+import io.ipfs.api.MerkleNode;
+import io.ipfs.api.NamedStreamable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +62,8 @@ public class AppMainWindow {
     public static FilePanel filePanel;
 
     public static String PEER_ID = "";
+
+    public static PeerBoradcastInfo self = null;
 
     public static boolean SERVER_STAT = false;
 
@@ -117,7 +122,7 @@ public class AppMainWindow {
      */
     public AppMainWindow(){
         initialize();
-
+        broadcastOnline();
     }
     /**
      * 初始化frame内容
@@ -209,7 +214,10 @@ public class AppMainWindow {
 
             if(map.get("ID")!=null)PEER_ID = (String)map.get("ID");
             logger.info(">>>>>>>>>>>>>."+map.get("ID"));
-            initNick();
+            String n = initNick();
+            self = new PeerBoradcastInfo((String)map.get("ID"),n);
+            //avatar must below init nick
+            initAvatar();
         }catch (Exception e){
             logger.error("ipfs Server is dead.",e.getCause());
             ipfs = new IPFS(ConfigHelper.getIpfsAddress());
@@ -218,19 +226,20 @@ public class AppMainWindow {
     }
 
 
-    public void initNick(){
-        if(StringUtils.isNotBlank(PROFILE_NICKNAME))return;
+    public String initNick(){
+        if(StringUtils.isNotBlank(PROFILE_NICKNAME))return PROFILE_NICKNAME;
         String nick = "";
+
         try {
             Map cfgMap = ipfs.config.show();
-            if(cfgMap.containsKey(IPFSHelper.JSON_NICKNAME_KEY)){
-                nick = (String)cfgMap.get(IPFSHelper.JSON_NICKNAME_KEY);
+            if(cfgMap.containsKey(ConfigHelper.JSON_NICKNAME_KEY)){
+                nick = (String)cfgMap.get(ConfigHelper.JSON_NICKNAME_KEY);
             }
         } catch (IOException e) {
             e.printStackTrace();
             nick = ipfsHelper.generateNickName();
             try {
-                ipfs.config.set(IPFSHelper.JSON_NICKNAME_KEY,nick);
+                ipfs.config.set(ConfigHelper.JSON_NICKNAME_KEY,nick);
                 String s=JSON.toJSONString(ipfs.config.show(),true);
                 logger.info(s);
             } catch (IOException e1) {
@@ -238,6 +247,57 @@ public class AppMainWindow {
             }
         }
         PROFILE_NICKNAME = nick;
+        return PROFILE_NICKNAME;
     }
 
+    /**
+     * 初始化头像
+     */
+    public void initAvatar(){
+        try {
+            String avatarHash,suffix,fileName;
+            Map cfgMap = ipfs.config.show();
+            if(cfgMap.containsKey(ConfigHelper.JSON_AVATAR_KEY)&&cfgMap.containsKey(ConfigHelper.JSON_AVATAR_SUFFIX_KEY)){
+                //
+            }else {
+                File defaultAvatarImage = new File(ConfigHelper.PROFILE_ROOT+"nbs.png");
+                if(!defaultAvatarImage.exists()||defaultAvatarImage.isDirectory())return;
+                fileName = defaultAvatarImage.getName();
+                suffix = fileName.substring(fileName.lastIndexOf("."));
+                logger.info(suffix);
+                NamedStreamable.FileWrapper file = new NamedStreamable.FileWrapper(defaultAvatarImage);
+                java.util.List<MerkleNode> merkleNodes= ipfs.add(file);
+                avatarHash = merkleNodes.get(0).hash.toBase58();
+
+                //存入config
+                try{
+                    ipfs.config.set(ConfigHelper.JSON_AVATAR_KEY,avatarHash);
+                    ipfs.config.set(ConfigHelper.JSON_AVATAR_SUFFIX_KEY,suffix);
+                    ipfs.config.set(ConfigHelper.JSON_AVATAR_NAME_KEY,fileName);
+                }catch (Exception ioe){
+                    logger.error(ioe.getMessage());
+                }
+                self.setAvatarHash(avatarHash);
+                self.setAvatarSuffix(suffix);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *
+     */
+    private void broadcastOnline(){
+        if(self==null)return;
+        String ctrlMsg = Base64CodecUtil.encodeCtrlMsg(self,Base64CodecUtil.CtrlTypes.online);
+
+        try {
+            logger.info("Send CTRL MSG : "+ctrlMsg);
+            ipfs.pubsub.pub(IPFSHelper.NBSWORLD_CTRL_TOPIC,ctrlMsg);
+            logger.info(IPFSHelper.NBSWORLD_CTRL_TOPIC+"Send CTRL MSG : "+ctrlMsg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -29,13 +29,18 @@ public class ConfigHelper {
      */
     public final static String CURRENT_DIR = System.getProperty("user.dir");
     public static final String CONF_ROOT = CURRENT_DIR + File.separator+"config" + File.separator;
+    public static final String PROFILE_ROOT = CURRENT_DIR + File.separator+"profile" + File.separator;
     private static final String CONF_FILE = "nbs-conf.properties";
-    public static final String PK_SERVER_STATS = "ipfs.server.stats";
+
     public static final String PK_CFG_IPFS_ADDR = "nbs.server.address";
     private static final String CLIENT_ADD_FILE_ROOT = "nbs.client.merkle.root";
     private static final String CLIENT_ADD_FILE_ROOT_HASH = "nbs.client.merkle.root.hash";
     private static final String IPFS_ADDR_DEFAULT = "/ip4/127.0.0.1/tcp/5001";
 
+    public static String JSON_NICKNAME_KEY = "nickname";
+    public static String JSON_AVATAR_KEY = "avatar";
+    public static String JSON_AVATAR_NAME_KEY = "avatar-name";
+    public static String JSON_AVATAR_SUFFIX_KEY = "suffix";
 
 
     private static Properties env = new Properties();
