@@ -21,6 +21,9 @@ import java.util.List;
  */
 public class NbsListView extends JScrollPane {
 
+    /**
+     *
+     */
     private BaseAdapter adapter;
     private JPanel contentPanel;
 
@@ -91,19 +94,10 @@ public class NbsListView extends JScrollPane {
         if(!scrollAttachMouseListener){
             getVerticalScrollBar().addMouseListener(scrollMouseListener);
             scrollAttachMouseListener = true;
-            jComponent.addMouseListener(scrollMouseListener);
         }
+
+        jComponent.addMouseListener(scrollMouseListener);
     }
-
-    /**
-     * 滚动到top
-     *
-     */
-    public interface Scroll2TopListener{
-        void onScroll2Top();
-    }
-
-
 
     /**
      * 设置滚动条的颜色 TODO
@@ -121,7 +115,7 @@ public class NbsListView extends JScrollPane {
     }
 
     /**
-     *
+     * 初始化控件
      */
     private void initComponent(){
         contentPanel = new JPanel();
@@ -139,6 +133,10 @@ public class NbsListView extends JScrollPane {
      */
     private void setListeners(){
         adjustmentListener = new AdjustmentListener() {
+            /**
+             *
+             * @param e
+             */
             @Override
             public void adjustmentValueChanged(AdjustmentEvent e) {
                 if(e.getValue() == 0 && e.getValue() != lastScrollValue
@@ -192,7 +190,9 @@ public class NbsListView extends JScrollPane {
                 }
 
                 scrollToBottom = false;
+
                 lastWeelTime = System.currentTimeMillis();
+
                 super.mouseWheelMoved(e);
             }
         };
@@ -242,6 +242,7 @@ public class NbsListView extends JScrollPane {
 
     public void setAdapter(BaseAdapter adapter) {
         this.adapter = adapter;
+        fillComponents();
     }
 
     public  void setContentPanelBackground(Color color){
@@ -253,6 +254,10 @@ public class NbsListView extends JScrollPane {
 
     }
 
+    /**
+     * 获取滚动条在底部时显示的条目数
+     * @return
+     */
     private  int getLastVisibleItemCount(){
         int height = getHeight();
 
@@ -292,7 +297,6 @@ public class NbsListView extends JScrollPane {
         contentPanel.repaint();
         fillComponents();
         contentPanel.revalidate();
-
     }
 
     /**
@@ -349,8 +353,10 @@ public class NbsListView extends JScrollPane {
         return contentPanel;
     }
 
-
-
+    public void setScrollToTopListener(ScrollToTopListener listener)
+    {
+        this.scrollToTopListener = listener;
+    }
 
     /**
      *
@@ -376,7 +382,7 @@ public class NbsListView extends JScrollPane {
     }
 
     /**
-     * 获取列表中所有的ViewHolder项目，不包括HeaderViewHolder
+     * 获取列表中所有的ViewHolder项目，不包括AvatarViewHolder
      * @return
      */
     public java.util.List<Component> getItems()
@@ -393,10 +399,7 @@ public class NbsListView extends JScrollPane {
 
         return viewHolders;
     }
-    public void setScrollToTopListener(ScrollToTopListener listener)
-    {
-        this.scrollToTopListener = listener;
-    }
+
     public interface ScrollToTopListener
     {
         void onScrollToTop();

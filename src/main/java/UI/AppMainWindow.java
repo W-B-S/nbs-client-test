@@ -74,6 +74,13 @@ public class AppMainWindow {
     /**
      *
      */
+    public static String NBS_FILES_ROOT_PATH ;
+
+    public static String NBS_FILES_IPFS_ROOT;
+
+    /**
+     *
+     */
     public static SettingPanel settingPanel;
     /**
      * 关于面板
@@ -183,6 +190,12 @@ public class AppMainWindow {
             logger.info(k+"="+v);
         }
         logger.info("ENV ============================<<");
+        NBS_FILES_ROOT_PATH = ConfigHelper.CURRENT_DIR + ConfigHelper.getNbsFilesRoot();
+        NBS_FILES_IPFS_ROOT = NBS_FILES_ROOT_PATH + File.separator +"ipfs";
+        File ipfsDir = new File(NBS_FILES_IPFS_ROOT);
+        if(ipfsDir.isDirectory()&& !ipfsDir.exists()){
+            ipfsDir.mkdirs();
+        }
 
         File f = new File(ConstantsUI.PROFILE_ROOT);
         if(!f.exists()){

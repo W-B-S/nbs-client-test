@@ -24,7 +24,11 @@ import java.util.Properties;
  */
 public class ConfigHelper {
     private static final Logger logger = LoggerFactory.getLogger(ConfigHelper.class);
-    private static final String CONF_ROOT = ConstantsUI.CURRENT_DIR + File.separator+"config" + File.separator;
+    /**
+     * 系统当前路径
+     */
+    public final static String CURRENT_DIR = System.getProperty("user.dir");
+    private static final String CONF_ROOT = CURRENT_DIR + File.separator+"config" + File.separator;
     private static final String CONF_FILE = "nbs-conf.properties";
     public static final String PK_SERVER_STATS = "ipfs.server.stats";
     public static final String PK_CFG_IPFS_ADDR = "nbs.server.address";
@@ -61,6 +65,16 @@ public class ConfigHelper {
     public static String getProperty(String key){
         if(key==null||"".equals(key.trim()))throw new IllegalArgumentException("key must a string");
         return env.getProperty(key);
+    }
+
+    /**
+     *
+     * @param key
+     * @param defaultVal
+     * @return
+     */
+    public static String getProperty(String key,String defaultVal){
+        return env.getProperty(key,defaultVal);
     }
 
     /**
@@ -114,6 +128,13 @@ public class ConfigHelper {
         return v;
     }
 
+    /**
+     *
+     * @return
+     */
+    public static String getNbsFilesRoot(){
+        return env.getProperty("nbs.client.files.root","nbs");
+    }
     /**
      *
      * @return

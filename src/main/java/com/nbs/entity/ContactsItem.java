@@ -1,41 +1,44 @@
 package com.nbs.entity;
 
+import com.nbs.utils.CharacterParser;
+
 /**
  * @Package : com.nbs.entity
  * @Description : <p></p>
  * @Author : lambor.c
- * @Date : 2018/6/23-22:44
+ * @Date : 2018/6/24-9:13
  * Copyright (c) 2018, NBS , lambor.c<lanbery@gmail.com>.
  * All rights reserved.
  */
-public class ContactsItem  implements Comparable<ContactsItem>{
-    private String hash;
+public class ContactsItem implements Comparable<ContactsItem> {
+    /**
+     * hash58
+     */
+    private String id;
+
     private String name;
+
     private String type;
 
-    private ContactsItem(String hash) {
-        this.hash = hash;
-        this.type = TYPE.p.toString();
-    }
+    public ContactsItem() { }
 
-    public ContactsItem(String hash, String name) {
-        this.hash = hash;
+    public ContactsItem(String id, String name) {
+        this.id = id;
         this.name = name;
-        this.type = TYPE.p.toString();
     }
 
-    public ContactsItem(String hash, String name, String type) {
-        this.hash = hash;
+    public ContactsItem(String id, String name, String type) {
+        this.id = id;
         this.name = name;
         this.type = type;
     }
 
-    public String getHash() {
-        return hash;
+    public String getId() {
+        return id;
     }
 
-    public void setHash(String hash) {
-        this.hash = hash;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -55,14 +58,29 @@ public class ContactsItem  implements Comparable<ContactsItem>{
     }
 
     @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("ContactsItem : {");
+        sb.append("id : ").append(this.id==null ? "" : this.id).append(",");
+        sb.append("name : ").append(this.name==null ? "" : this.name).append(",");
+        sb.append("type : ").append(this.type==null ? "" : this.type);
+        sb.append("}");
+        return sb.toString();
+    }
+
+    @Override
     public int compareTo(ContactsItem o) {
-        return 0;
+        if(o==null)return -1;
+        String tc = CharacterParser.getSelling(this.name).toUpperCase();
+        String oc = CharacterParser.getSelling(o.name).toUpperCase();
+        int r = tc.compareTo(oc);
+        return 0==r ? this.id.compareTo(o.getId()) : r;
     }
 
     /**
-     * 群、点
+     *
      */
     public static enum TYPE{
-        p,q;
+        Q,P;
     }
 }

@@ -21,7 +21,7 @@ public abstract class BaseAdapter<T extends ViewHolder> {
     public abstract T onCreateViewHolder(int viewType);
 
 
-    public AvatarViewHolder onCreateHeaderViewHolder(int viewType,int postion){
+    public AvatarViewHolder onCreateHeaderViewHolder(int viewType,int position){
         return null;
     }
 
