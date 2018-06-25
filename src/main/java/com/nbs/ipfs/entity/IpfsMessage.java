@@ -21,6 +21,8 @@ public class IpfsMessage {
     private String contents;
     private String peerId;
 
+    private String time;
+
     private Base64CodecUtil.CtrlTypes types;
 
     public String getFrom() {
@@ -77,5 +79,13 @@ public class IpfsMessage {
 
     public void setTypes(Base64CodecUtil.CtrlTypes types) {
         this.types = types;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

@@ -42,29 +42,19 @@ public class IMPanel extends NBSAbstractPanel {
     private static IMPanel context;
 
     /**
-     * 在线peers
-     */
-    private static JPanel peerList;
-    /**
      * 左侧IM peers
      */
     private ImLeftPanel leftPanel;
 
-    private static JScrollPane scrollPane;
 
     private static JTextArea imMSGShow = new JTextArea();
     /**
      * 顶部显示
      */
     private static ToolbarStatsPanel toolbarStatsPanel = new ToolbarStatsPanel(PKUI_PANEL_IM_LABEL);;
-    /**
-     *
-     */
-    private static JTextPane msgTextPane = new JTextPane();
 
     private static JTextArea inputArea = new JTextArea();
 
-    private PeerInfoBase currentContactPeer = null;
     /**
      *
      */
@@ -121,12 +111,9 @@ public class IMPanel extends NBSAbstractPanel {
         /**
          *
          */
-        peerList = new JPanel();
         Dimension leftDimsnsion = new Dimension(260,ConstantsUI.MAIN_WINDOW_HEIGHT);
-        peerList.setPreferredSize(leftDimsnsion);
-        peerList.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
-
         leftPanel = new ImLeftPanel();
+        //leftPanel.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
         leftPanel.setPreferredSize(leftDimsnsion);
 
         centerPanel.add(leftPanel,BorderLayout.WEST);
@@ -152,8 +139,6 @@ public class IMPanel extends NBSAbstractPanel {
             }
         });
     }
-
-
 
     /**
      * 上下结构
@@ -236,16 +221,17 @@ public class IMPanel extends NBSAbstractPanel {
     }
 
     /**
+     *
      * 发送消息
      */
     private void sendMsg(){
         String sendContent = inputArea.getText();
         if(StringUtils.isBlank(sendContent))return;
-        if(CURRENT_TO_CONTACTS_ITEM == null){
+/*        if(CURRENT_TO_CONTACTS_ITEM == null){
             JOptionPane.showMessageDialog(AppMainWindow.frame,"请选中联系人");
             return;
-        }
-        String topic = CURRENT_TO_CONTACTS_ITEM.getId();
+        }*/
+        String topic = IPFSHelper.NBSWORLD_CTRL_TOPIC;
 
         try {
             StringBuffer sb = new StringBuffer();
@@ -279,12 +265,12 @@ public class IMPanel extends NBSAbstractPanel {
                     if(sleepSec>=1){
                         TimeUnit.MILLISECONDS.sleep(sleepSec);
                     }
-                    if(AppMainWindow.self==null){
+                    if(AppMainWindow.SEFL_BASE==null){
                         TimeUnit.SECONDS.sleep(30);
                         receiverRun(sleepSec);
                         return;
                     }
-                    Stream<Map<String,Object>> sub = IPFSHelper.getInstance().getIpfs().pubsub.sub(AppMainWindow.self.getId());
+                    Stream<Map<String,Object>> sub = IPFSHelper.getInstance().getIpfs().pubsub.sub(AppMainWindow.SEFL_BASE.getPeerID());
 
                     List<Map> lst = sub.limit(1).collect(Collectors.toList());
                     String json = JSONParser.toString(lst.get(0));
@@ -337,6 +323,26 @@ public class IMPanel extends NBSAbstractPanel {
         CURRENT_TO_CONTACTS_ITEM = item;
         if(item==null)return;
         toolbarStatsPanel.resetContacts(item.getName());
+    }
+
+    public static void appendMsgShow(List<ContactsItem> items,IpfsMessage ipfsMessage){
+        if(ipfsMessage==null)return;
+        String formid = ipfsMessage.getFrom();
+        String nick = formid;
+        //
+        if(items!=null&&items.size()>0){
+            for(ContactsItem item : items){
+                if(item.getFormid().equals(formid)){
+                    nick = item.getName();
+                    break;
+                }
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(nick).append(">>").append(ipfsMessage.getTime()).append(ConstantsUI.ENTER_CHARACTER);
+        sb.append(ipfsMessage.getContents()).append(ConstantsUI.ENTER_CHARACTER);
+        imMSGShow.append(sb.toString());
     }
 
     /**

@@ -150,29 +150,21 @@ public class Base64CodecUtil {
         CtrlTypes t = null;
         int len = decode64.length();
         for(CtrlTypes types : CtrlTypes.values()){
-            if(decode64
+            if(types != CtrlTypes.unkonw &&
+                    decode64
                     .startsWith(types.sperator + types.starter + types.sperator)
                     && decode64.endsWith(types.sperator+"")){
                 t = types;
                 m.setContents(decode64.substring(types.starter.length()+2,len-2));
                 m.setTypes(t);
-                return m;
+                break;
             }
         }
-        if(t==null){
+        if(m.getTypes()==null){
             //无效消息
-            return null;
+            m.setTypes(CtrlTypes.unkonw);
+            m.setContents(decode64);
         }
-        //处理content
-        switch (t){
-            case online:
-                //json base64
-                m.setContents(decode(m.getContents()));
-                break;
-            case normal:
-                break;
-        }
-
         return m;
     }
 
@@ -206,7 +198,11 @@ public class Base64CodecUtil {
          * 正常消息
          * $IM.B64.S$xxx$
          */
-        normal("IM.B64.S",'$');
+        normal("IM.B64.S",'$'),
+        /**
+         * 未知
+         */
+        unkonw("",'$');
 
         private String starter;
         private char sperator;

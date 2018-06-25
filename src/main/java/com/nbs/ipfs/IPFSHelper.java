@@ -26,7 +26,7 @@ public class IPFSHelper {
      *
      */
     private ConcurrentHashMap secMap = new ConcurrentHashMap();
-    public static String CLIENT_PEERID;
+    public static String CLIENT_PEERID = null;
 
     private IPFS ipfs;
 

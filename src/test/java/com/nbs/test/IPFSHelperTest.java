@@ -8,6 +8,7 @@ import io.ipfs.api.JSONParser;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -32,9 +33,24 @@ public class IPFSHelperTest {
 
     public static void main(String[] args){
         IPFSHelperTest t = new IPFSHelperTest();
-        t.subThread(2);
-        System.out.println("OKKKKKK");
+
+        new Thread(() -> {
+            while (true){
+                try {
+                    System.out.println("--------------begin-------------");
+                    TimeUnit.MILLISECONDS.sleep(100);
+                    Stream<Map<String, Object>> maps = helper.getIpfs().pubsub.sub(TOPIC);
+                    List<Map<String, Object>> res = maps.limit(1).collect(Collectors.toList());
+                    String json = JSONParser.toString(res.get(0));
+                    System.out.println(json);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
+
+
 
     public void subThread(int sleepTimes){
 

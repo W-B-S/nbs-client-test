@@ -31,9 +31,7 @@ public class ImLeftPanel extends JPanel {
     }
 
     private void initComponents(){
-
         searchPanel = new SearchPanel(this);
-
         listPanel = new ListPanel(this);
         listPanel.setBackground(ColorCnst.FONT_GRAY);
     }

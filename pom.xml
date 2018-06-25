@@ -68,6 +68,13 @@
     </dependencies>
 
     <build>
+        <finalName>nbs-client4j1.0</finalName>
+        <resources>
+<!--            <resource>
+                <directory>${project.basedir}/config/**</directory>
+                <targetPath>${project.build.outputDirectory}/config</targetPath>
+            </resource>-->
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -111,6 +118,91 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- 打jar包 -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <version>2.0.0</version>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>assemble</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <assembleDirectory>${project.build.directory}/</assembleDirectory>
+                    <repositoryLayout>flat</repositoryLayout>
+                    <configurationSourceDirectory>src/main/resources</configurationSourceDirectory>
+                    <configurationSourceDirectory>config</configurationSourceDirectory>
+                    <configurationDirectory>true</configurationDirectory>
+                    <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
+                    <extraJvmArguments>-Xms256m</extraJvmArguments>
+                    <binFileExtensions><unix>.sh</unix></binFileExtensions>
+                    <platforms>
+                        <platform>windows</platform>
+                        <platform>unix</platform>
+                    </platforms>
+                    <repositoryName>lib</repositoryName>
+                    <programs>
+                        <program>
+                            <mainClass>UI.AppMainWindow</mainClass>
+                            <name>nbs-client4j</name>
+                            <jvmSettings>
+                                <extraArguments>
+                                    <extraArgument>-server</extraArgument>
+                                    <extraArgument>-Xms256m</extraArgument>
+                                </extraArguments>
+                            </jvmSettings>
+                        </program>
+                    </programs>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <!--&lt;!&ndash; ${project.build.directory} 构建目录，缺省为target &ndash;&gt; -->
+                            <outputDirectory>
+                                ${project.build.directory}/lib
+                            </outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- The configuration of maven-assembly-plugin -->
+           <!-- <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.4</version>
+                &lt;!&ndash; The configuration of the plugin &ndash;&gt;
+                <configuration>
+                    &lt;!&ndash; Specifies the configuration file of the assembly plugin &ndash;&gt;
+                    <descriptors>
+                        <descriptor>src/main/assembly/assembly.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>-->
 
         </plugins>
     </build>

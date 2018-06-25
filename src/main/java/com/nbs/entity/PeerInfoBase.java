@@ -12,6 +12,12 @@ public class PeerInfoBase {
     private String peerID;
     private String nick;
     private String avatarHash;
+    private String from;
+    private String avatarSuffix;
+
+    public PeerInfoBase(String peerID) {
+        this.peerID = peerID;
+    }
 
     public PeerInfoBase(String peerID, String nick, String avatarHash) {
         this.peerID = peerID;
@@ -41,5 +47,21 @@ public class PeerInfoBase {
 
     public void setAvatarHash(String avatarHash) {
         this.avatarHash = avatarHash;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public String getAvatarSuffix() {
+        return avatarSuffix;
+    }
+
+    public void setAvatarSuffix(String avatarSuffix) {
+        this.avatarSuffix = avatarSuffix;
     }
 }
