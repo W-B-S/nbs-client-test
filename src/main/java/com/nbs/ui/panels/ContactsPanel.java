@@ -191,6 +191,7 @@ public class ContactsPanel extends ParentAvailablePanel {
                     if( diff > 1){
                         for(int j =size.intValue() ;j<currSize;j++ ){
                             String json = JSONParser.toString(resList.get(j));
+                            i++;
                             logger.info(i+">>收到世界消息："+json);
                             IpfsMessage imessage = JSON.parseObject(json,IpfsMessage.class);
                             if(imessage.getFrom().equals(AppMainWindow.SEFL_BASE.getFrom())){
@@ -206,6 +207,7 @@ public class ContactsPanel extends ParentAvailablePanel {
                         size.set(currSize);
                     }else if(diff==1){
                         String json = JSONParser.toString(resList.get(currSize-1));
+                        i++;
                         logger.info(i+">>收到世界消息："+json);
                         IpfsMessage imessage = JSON.parseObject(json,IpfsMessage.class);
                         if(imessage.getFrom().equals(AppMainWindow.SEFL_BASE.getFrom())){
