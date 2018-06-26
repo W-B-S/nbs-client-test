@@ -15,6 +15,7 @@ import com.nbs.ipfs.entity.IpfsMessage;
 import com.nbs.tools.ConfigHelper;
 
 import com.nbs.tools.DateHelper;
+import com.nbs.ui.frames.MainFrame;
 import com.nbs.utils.Base64CodecUtil;
 import com.nbs.utils.RadomCharactersHelper;
 import io.ipfs.api.IPFS;
@@ -59,7 +60,7 @@ public class AppMainWindow {
 
     private static boolean boradcastSuccess = false;
 
-    public static JFrame frame;
+    public static MainFrame frame;
     /**
      * 主窗口
      */
@@ -212,7 +213,7 @@ public class AppMainWindow {
             e.printStackTrace();
         }
 
-        frame = new JFrame();
+        frame = new MainFrame();
         //set window Size
         frame.setBounds(ConstantsUI.MAIN_WINDOW_X,ConstantsUI.MAIN_WINDOW_Y
                 ,ConstantsUI.MAIN_WINDOW_WIDTH,ConstantsUI.MAIN_WINDOW_HEIGHT);

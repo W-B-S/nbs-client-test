@@ -13,6 +13,7 @@ import com.nbs.ipfs.IPFSHelper;
 import com.nbs.ipfs.entity.IpfsMessage;
 import com.nbs.tools.DateHelper;
 import com.nbs.ui.components.ColorCnst;
+import com.nbs.ui.panels.ChatPanel;
 import com.nbs.utils.Base64CodecUtil;
 import io.ipfs.api.IPFS;
 import io.ipfs.api.JSONParser;
@@ -87,7 +88,7 @@ public class IMPanel extends NBSAbstractPanel {
 
     @Override
     protected void addComponent() {
-        this.add(toolbarStatsPanel,BorderLayout.NORTH);
+       // this.add(toolbarStatsPanel,BorderLayout.NORTH);
         /**
          *
          */
@@ -122,7 +123,9 @@ public class IMPanel extends NBSAbstractPanel {
         /**
          * 聊天主窗口
          */
-        centerPanel.add(buildMessMainPanel(),BorderLayout.CENTER);
+        //centerPanel.add(buildMessMainPanel(),BorderLayout.CENTER);
+        ChatPanel chatPanel = new ChatPanel(this);
+        centerPanel.add(chatPanel,BorderLayout.CENTER);
         return centerPanel;
     }
 
