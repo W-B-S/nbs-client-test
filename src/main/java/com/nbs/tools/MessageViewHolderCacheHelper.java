@@ -1,5 +1,12 @@
 package com.nbs.tools;
 
+import com.nbs.ui.holder.MessageLeftTextViewHolder;
+import com.nbs.ui.holder.MessageRightTextViewHolder;
+import com.nbs.ui.holder.MessageSystemMessageViewHolder;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @Package : com.nbs.tools
  * @Description :
@@ -13,5 +20,42 @@ package com.nbs.tools;
  * All rights reserved.
  */
 public class MessageViewHolderCacheHelper {
-    private final int CACHE_CAPACITY = 10;
+    private final int CACHE_CAPACITY = 20;
+    private List<MessageRightTextViewHolder> rightTextViewHolders = new ArrayList<>();
+
+    private List<MessageLeftTextViewHolder> leftTextViewHolders = new ArrayList<>();
+
+    private List<MessageSystemMessageViewHolder> systemMessageViewHolders = new ArrayList<>();
+
+    private int rightTextPosition = 0;
+    private int rightImagePosition = 0;
+    private int rightAttachmentPosition = 0;
+    private int leftTextPosition = 0;
+    private int leftImagePosition = 0;
+    private int leftAttachmentPosition = 0;
+    private int systemMessagePosition = 0;
+
+    public MessageViewHolderCacheHelper() {
+        initHolders();
+    }
+
+    private void initHolders(){
+        new Thread(()->{
+            long startTime = System.currentTimeMillis();
+            initLeftTextViewHolder();
+            initRightTextViewHolder();
+        }).start();
+    }
+
+    private void initRightTextViewHolder(){
+        for(int i=0;i<CACHE_CAPACITY;i++){
+            rightTextViewHolders.add(new MessageRightTextViewHolder());
+        }
+    }
+
+    private void initLeftTextViewHolder(){
+        for(int i=0;i<CACHE_CAPACITY;i++){
+            leftTextViewHolders.add(new MessageLeftTextViewHolder());
+        }
+    }
 }

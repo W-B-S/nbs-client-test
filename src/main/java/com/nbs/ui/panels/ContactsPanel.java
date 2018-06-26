@@ -96,14 +96,15 @@ public class ContactsPanel extends ParentAvailablePanel {
      */
     private void initData(){
         peerItems.clear();
-/*        List<ContactsModel> contacts = getContacts();
+        List<ContactsModel> contacts = getContacts();
         for(ContactsModel contactsUser : contacts){
             ContactsItem item = new ContactsItem(
                     contactsUser.getId(),
                     contactsUser.getNick(),
                     ContactsItem.TYPE.P.toString());
             peerItems.add(item);
-        }*/
+        }
+
     }
 
     public void notifyDataSetChanged(){
@@ -127,6 +128,7 @@ public class ContactsPanel extends ParentAvailablePanel {
 
 
     /**
+     * lanbery
      * 初始化Demo TODO
      * @return
      */
@@ -271,7 +273,16 @@ public class ContactsPanel extends ParentAvailablePanel {
         //刷新UI
 
         //显示信息
+        String nick;
+        for(int i=0;i<30;i++){
+            nick = RadomCharactersHelper.getInstance().generated(8);
+            ContactsItem item = new ContactsItem();
+            item.setName(nick);
+            item.setId("kskdf"+i);
+            peerItems.add(item);
+        }
 
+        contactsListView.notifyDataSetChanged(false);
 
     }
 

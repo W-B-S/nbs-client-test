@@ -49,7 +49,7 @@ public class MessageRightTextViewHolder extends  BaseMessageViewHolder{
         time.setForeground(ColorCnst.FONT_GRAY);
         time.setFont(FontUtil.getDefaultFont(12));
 
-        ImageIcon resendIcon = new ImageIcon(AppMainWindow.class.getResource("/icon/resend.png"));
+        ImageIcon resendIcon = new ImageIcon(AppMainWindow.class.getResource("/icon/zh_cn/resend.png"));
 
         resendIcon.setImage(resendIcon.getImage().getScaledInstance(20,20,Image.SCALE_SMOOTH));
         resend.setIcon(resendIcon);
