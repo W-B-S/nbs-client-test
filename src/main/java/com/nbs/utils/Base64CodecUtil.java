@@ -75,7 +75,7 @@ public class Base64CodecUtil {
     public static String decodeIPFSMsg(String encodeStr){
         if(isBase64encode(encodeStr)){
             int len = encodeStr.length();
-            encodeStr = encodeStr.substring(BASE64_START.length(),len-2);
+            encodeStr = encodeStr.substring(BASE64_START.length(),len-1);
             return decode(encodeStr);
         }else {
             return encodeStr;
@@ -99,7 +99,7 @@ public class Base64CodecUtil {
                 throw new IllegalIPFSMessageException("message data not online type message");
             }
             int len = jsonData.length();
-            message.setContents(jsonData.substring(CtrlTypes.online.getPreffixLength(),len-2));
+            message.setContents(jsonData.substring(CtrlTypes.online.getPreffixLength(),len-1));
         }
         PeerBoradcastInfo res = JSON.parseObject(message.getContents(),PeerBoradcastInfo.class);
         return res;
@@ -137,17 +137,15 @@ public class Base64CodecUtil {
             case pctrl:
                 sb.append(types.sperator).append(types.starter).append(types.sperator);
                 sb.append(encode(JSON.toJSONString(message)));
-                sb.append(types.sperator+"");
+                sb.append(types.sperator);
                 return sb.toString();
             case normal:
                 sb.append(types.sperator).append(types.starter).append(types.sperator);
                 sb.append(encode(message.toString()));
-                sb.append(types.sperator+"");
+                sb.append(types.sperator);
                 return sb.toString();
             default:
-                sb.append(types.sperator).append(types.starter).append(types.sperator);
                 sb.append(encode(message.toString()));
-                sb.append(types.sperator+"");
                 return sb.toString();
         }
     }
@@ -167,9 +165,9 @@ public class Base64CodecUtil {
             if(types != CtrlTypes.unkonw &&
                     decode64
                     .startsWith(types.sperator + types.starter + types.sperator)
-                    && decode64.endsWith(types.sperator+"")){
+                    && decode64.endsWith(types.sperator)){
                 t = types;
-                m.setContents(decode64.substring(types.starter.length()+2,len-2));
+                m.setContents(decode64.substring(types.starter.length()+2,len-1));
                 m.setTypes(t);
                 break;
             }
@@ -194,7 +192,7 @@ public class Base64CodecUtil {
         if(type==null)type=CtrlTypes.online;
         if(baseStr.startsWith(type.sperator+type.starter+type.sperator)&&baseStr.endsWith(type.sperator+"")){
             int len = baseStr.length();
-            baseStr = baseStr.substring(type.starter.length()+2,len-2);
+            baseStr = baseStr.substring(type.starter.length()+2,len-1);
             return decode(baseStr);
         }else {
             return decode(baseStr);

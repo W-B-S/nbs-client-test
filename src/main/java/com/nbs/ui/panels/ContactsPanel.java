@@ -205,11 +205,11 @@ public class ContactsPanel extends ParentAvailablePanel {
                             logger.info("消息为自己所发消息："+json+">>>>>"+AppMainWindow.currentPeerInfo().getPeerID());
                             //不处理
                         }else {
-                            imessage.setTime(DateHelper.currentTime());
-                            //处理消息
-                            proccessIpfsMessage(imessage);
-                        }
 
+                        }
+                        imessage.setTime(DateHelper.currentTime());
+                        //处理消息
+                        proccessIpfsMessage(imessage);
                         size.set(currSize);
                     }else {
 
@@ -235,6 +235,7 @@ public class ContactsPanel extends ParentAvailablePanel {
         im = Base64CodecUtil.parseIpmsMessageCtrlType(im);
         switch (types){
             case online:
+
                 /**
                  * $ON.B64.J$eyJpZCI6IlFtU29BaURTR1g0dnFaZWcyS29ESHNKcEZTR1AyU21hRXQxM05CUFJGZ3BRZnkiLCJuaWNrIjoiTkJTQ2hhaW5fbGFuYmVyeSJ9$
                  * 解析更新列表
@@ -246,9 +247,9 @@ public class ContactsPanel extends ParentAvailablePanel {
                 }
                 parseOnline(peerInfo,im.getFrom());
                 break;
-            case normal:
-
+            case pctrl:
                 break;
+            case normal:
             case unkonw:
             default:
                 im.setContents(Base64CodecUtil.decode(im.getContents()));
