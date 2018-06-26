@@ -19,6 +19,11 @@ public class PeerInfoBase {
         this.peerID = peerID;
     }
 
+    public PeerInfoBase(String peerID, String nick) {
+        this.peerID = peerID;
+        this.nick = nick;
+    }
+
     public PeerInfoBase(String peerID, String nick, String avatarHash) {
         this.peerID = peerID;
         this.nick = nick;

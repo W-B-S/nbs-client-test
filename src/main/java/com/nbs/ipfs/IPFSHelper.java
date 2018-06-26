@@ -33,9 +33,8 @@ public class IPFSHelper {
     /**
      *
      */
-    public static final String NBSWORLD_CTRL_TOPIC = Base64CodecUtil.encode("$nbs.ctrl|broadcast$");
-    public static final String NBS_IM_TOPIC_PREFFIX = "$nbs.im|";
-    public static final String NBS_TOPIC_SEPRATOR = "$";
+    public static final String NBSWORLD_CTRL_TOPIC = Base64CodecUtil.encode("$NBS.CTRL.J$");
+    public static final String NBSWORLD_IMS_TOPIC = Base64CodecUtil.encode("nbsio.net");
 
     public IPFSHelper() {
         ipfs = new IPFS(ConfigHelper.getIpfsAddress());

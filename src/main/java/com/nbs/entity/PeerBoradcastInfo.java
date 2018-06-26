@@ -14,6 +14,7 @@ public class PeerBoradcastInfo {
     private String nick;
     private String avatarHash;
     private String avatarSuffix;
+    private String from;
 
     /**
      *
@@ -71,4 +72,11 @@ public class PeerBoradcastInfo {
         this.avatarSuffix = avatarSuffix;
     }
 
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
 }

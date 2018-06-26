@@ -6,12 +6,14 @@ import UI.panel.fm.FilePanel;
 import UI.panel.im.IMPanel;
 import UI.panel.setting.SettingPanel;
 import com.alibaba.fastjson.JSON;
+import com.nbs.biz.ImPeersService;
 import com.nbs.entity.ContactsItem;
 import com.nbs.entity.PeerBoradcastInfo;
 import com.nbs.entity.PeerInfoBase;
 import com.nbs.ipfs.IPFSHelper;
 import com.nbs.ipfs.entity.IpfsMessage;
 import com.nbs.tools.ConfigHelper;
+
 import com.nbs.tools.DateHelper;
 import com.nbs.utils.Base64CodecUtil;
 import com.nbs.utils.RadomCharactersHelper;
@@ -21,7 +23,6 @@ import io.ipfs.api.MerkleNode;
 import io.ipfs.api.NamedStreamable;
 import io.ipfs.multihash.Multihash;
 import org.apache.commons.lang3.StringUtils;
-import org.omg.CORBA.TIMEOUT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +34,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -79,20 +81,22 @@ public class AppMainWindow {
     public static String IPFS_MSG_FROM = null;
 
     public static boolean SERVER_STAT = false;
-
+    /**
+     * 在线peer缓存
+     */
+    List<ContactsItem> contactsItems = new ArrayList<>();
     /**
      * 当前信息
      *
      */
-    public static PeerInfoBase SEFL_BASE = null;
+    private static PeerInfoBase SEFL_BASE = null;
+   // public static String CURRENT_NICK = "";
 
     protected static  IPFSHelper ipfsHelper = IPFSHelper.getInstance();
     /**
      *
      */
     public static IPFS ipfs = IPFSHelper.getInstance().getIpfs();
-
-    public static String PROFILE_NICKNAME = "";
 
     /**
      *
@@ -138,10 +142,62 @@ public class AppMainWindow {
 
         initialize();
         //订阅世界消息
-        subWorld();
+        subCtrlWorld();
         //广播自己上线
         broadcastOnline();
+        ImPeersService imPeersService = new ImPeersService();
+        /**
+         * 加载在线缓存
+         */
+        loadWorldControllerListener(imPeersService);
+
     }
+
+
+
+    /**
+     *
+     */
+    private void loadWorldControllerListener(ImPeersService service){
+
+        List<Map<String,Object>> ctrlMSGSub = Collections.synchronizedList(new ArrayList<>());
+        AtomicInteger size = new AtomicInteger(0);
+        new Thread(()->{
+            logger.info("Start up the World Controller Message........");
+            IPFS worldIpfs = new IPFS(ConfigHelper.getIpfsAddress());
+            while (true){
+                try{
+                    TimeUnit.MILLISECONDS.sleep(100);
+                    ipfs.pubsub.sub(IPFSHelper.NBSWORLD_CTRL_TOPIC,ctrlMSGSub::add,t->t.printStackTrace());
+                }catch (Exception e){
+                    logger.error(e.getMessage());
+                }
+            }
+        }).start();
+        //处理消息
+        new Thread(()->{
+            int i = 0;
+            while (true){
+                try {
+                    TimeUnit.MILLISECONDS.sleep(1000);
+                    int currentSize = ctrlMSGSub.size();
+                    int diff = currentSize-size.intValue();
+                    if(diff>1){
+                        for(int j = size.intValue();j<currentSize;j++){
+                            //处理用户列表
+                        }
+                        size.set(currentSize);
+                    }else if(diff==1){
+
+                        size.set(currentSize);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
     /**
      * 初始化frame内容
      */
@@ -199,7 +255,6 @@ public class AppMainWindow {
         //frame.pack();
         logger.info("NBS initialized ...");
 
-
     }
 
     /**
@@ -226,99 +281,16 @@ public class AppMainWindow {
             f.mkdirs();
         }
 
-        //
-        try {
-            if(ipfs==null)ipfs = new IPFS(ConfigHelper.getIpfsAddress());
-            SERVER_STAT = true;
-            Map map = ipfs.id();
-            logger.info(JSON.toJSONString(map));
-            if(map.get("ID")!=null)PEER_ID = (String)map.get("ID");
-            SEFL_BASE = new PeerInfoBase(PEER_ID);
-            String n = initNick();
-            SEFL_BASE.setNick(n);
-            //avatar must below init nick
-            initAvatar();
-        }catch (Exception e){
-            logger.error("ipfs Server is dead.",e.getCause());
-            ipfs = new IPFS(ConfigHelper.getIpfsAddress());
+        /**
+         * 构造id SELF
+         */
+        while (SEFL_BASE==null){
+            SEFL_BASE = initCurrentPeerInfo();
         }
-        String topic = RadomCharactersHelper.getInstance().generated("$SELF.N.S",8);
-        subFillForm(topic);
-        pubFillFrom(topic,SEFL_BASE.getPeerID());
-
+        SERVER_STAT = true;
+        logger.info("NBS Client Start success.");
     }
 
-    /**
-     * 线程设置 from
-     * @param topic
-     */
-    private void subFillForm(String topic){
-        if(StringUtils.isNotBlank(SEFL_BASE.getFrom()))return;
-        new Thread(()->{
-            try {
-                logger.info(topic);
-                Stream<Map<String,Object>> subs = ipfs.pubsub.sub(topic);
-                List<Map<String,Object>> m = subs.limit(1).collect(Collectors.toList());
-                String json = JSONParser.toString(m.get(0));
-                IpfsMessage ipfsMessage = JSON.parseObject(json,IpfsMessage.class);
-                if(SEFL_BASE != null ){
-                    SEFL_BASE.setFrom(ipfsMessage.getFrom());
-                }
-            } catch (Exception e) {
-
-            }
-            if(StringUtils.isBlank(SEFL_BASE.getFrom())){
-                subFillForm(topic);
-            }
-        }).start();
-
-    }
-
-    /**
-     * 发送设置消息
-     * @param topic
-     * @param id
-     */
-    private void pubFillFrom(String topic,String id){
-        new Thread(()->{
-            try {
-                TimeUnit.MILLISECONDS.sleep(500);
-                logger.info(DateHelper.currentTime()+"SEND ...");
-                for(int i =0;i<3;i++){
-                    ipfs.pubsub.pub(topic,id);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
-
-    /**
-     * 构造Nickname
-     * @return
-     */
-    public String initNick(){
-        if(StringUtils.isNotBlank(PROFILE_NICKNAME))return PROFILE_NICKNAME;
-        String nick = "";
-        try {
-            Map cfgMap = ipfs.config.show();
-            if(cfgMap.containsKey(ConfigHelper.JSON_NICKNAME_KEY)){
-                nick = (String)cfgMap.get(ConfigHelper.JSON_NICKNAME_KEY);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            nick = ipfsHelper.generateNickName();
-            try {
-                ipfs.config.set(ConfigHelper.JSON_NICKNAME_KEY,nick);
-                String s=JSON.toJSONString(ipfs.config.show(),true);
-                logger.info(s);
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
-        PROFILE_NICKNAME = nick;
-        return PROFILE_NICKNAME;
-    }
 
     /**
      * 初始化头像
@@ -369,9 +341,8 @@ public class AppMainWindow {
                         broadcastOnline();
                     }else {
                         String ctrlMsg = Base64CodecUtil.encodeCtrlMsg(SEFL_BASE,Base64CodecUtil.CtrlTypes.online);
-                        //logger.info("Send CTRL MSG : "+ctrlMsg);
-                        Object o = ipfs.pubsub.pub(IPFSHelper.NBSWORLD_CTRL_TOPIC,ctrlMsg);
-                        logger.info("TOPIC["+IPFSHelper.NBSWORLD_CTRL_TOPIC+" ]Send CTRL MSG : "+ctrlMsg);
+                        Object o = ipfs.pubsub.pub(IPFSHelper.NBSWORLD_IMS_TOPIC,ctrlMsg);
+                        logger.info("TOPIC["+IPFSHelper.NBSWORLD_IMS_TOPIC+" ]Send CTRL MSG : "+ctrlMsg);
                         boradcastSuccess = true;
                     }
                 } catch (InterruptedException e) {
@@ -384,49 +355,9 @@ public class AppMainWindow {
         }).start();
     }
 
-    /**
-     * See yourself
-     */
-    private void subSelf(long sleepTimes){
-       new Thread(new Runnable() {
-           @Override
-           public void run() {
-               try {
-                   if(StringUtils.isBlank(PEER_ID)){
-                       TimeUnit.SECONDS.sleep(30);
-                   }
-                   if(sleepTimes>0l){ TimeUnit.MILLISECONDS.sleep(sleepTimes); }
-                   logger.info("SUB SEFL :"+SEFL_BASE.getPeerID());
-                   Stream<Map<String,Object>> sub = ipfs.pubsub.sub(SEFL_BASE.getPeerID());
-                   List<Map> lst = sub.limit(1).collect(Collectors.toList());
-                   String json = JSONParser.toString(lst.get(0));
-                   logger.info(System.currentTimeMillis()+"-revc : "+json);
-                   IpfsMessage message = JSON.parseObject(json,IpfsMessage.class);
-                   //TODO 处理
-                   updateContactsCache(message);
-                   subSelf(sleepTimes);
-               } catch (Exception e) {
-                   e.printStackTrace();
-                   logger.info(e.getMessage());
-                   subSelf(sleepTimes);
-               }
-           }
-       }).start();
-    }
 
-    public void updateContactsCache(IpfsMessage m){
-        if(m==null)return;
-        m = Base64CodecUtil.parseIpmsMessageCtrlType(m);
-        switch (m.getTypes()){
-            case online:
 
-                //更新缓存
-                updatePeerItem(m);
-                break;
-             default:
-                break;
-        }
-    }
+
 
     /**
      *
@@ -504,15 +435,126 @@ public class AppMainWindow {
         return null;
     }
 
+
+    /**
+     *
+     * @return
+     */
+    public static PeerInfoBase currentPeerInfo(){
+        if(SEFL_BASE!=null)return SEFL_BASE;
+        SEFL_BASE = initCurrentPeerInfo();
+        return SEFL_BASE;
+    }
+
+    /**
+     * 获取当前的nick
+     * @return
+     */
+    public static String selfNick(){
+        if(SEFL_BASE==null){
+            SEFL_BASE = initCurrentPeerInfo();
+        }
+        return SEFL_BASE.getNick();
+    }
+
+    /**
+     * 获取当前用户信息
+     * @return
+     */
+    private static PeerInfoBase initCurrentPeerInfo(){
+        if(SEFL_BASE!=null &&
+                StringUtils.isNotBlank(SEFL_BASE.getNick()) &&
+                StringUtils.isNotBlank(SEFL_BASE.getFrom()))return SEFL_BASE;
+        String peerid = getPeerId();
+        if(peerid==null)return null;
+
+        String _nick = _getNickName();
+        if(_nick==null)return null;
+
+        SEFL_BASE  = new PeerInfoBase(peerid,_nick);
+        //未来增加本地SQLite读取
+        while (StringUtils.isBlank(SEFL_BASE.getFrom())){
+            _buildFrom(SEFL_BASE);
+        }
+        return SEFL_BASE;
+    }
+
+    /**
+     *
+     * @param base
+     */
+    private static void _buildFrom(PeerInfoBase base){
+        /**
+         *
+         */
+        String topic = Base64CodecUtil.encode("$SELF.FROM.ID$GET");
+                //RadomCharactersHelper.getInstance().generated("$SELF.N.S",8);
+        new Thread(()->{
+            try {
+                Stream<Map<String, Object>> checkSelf = ipfs.pubsub.sub(topic);
+                List<Map<String, Object>> res = checkSelf.limit(1).collect(Collectors.toList());
+                IpfsMessage ipfsMessage = JSON.parseObject(JSONParser.toString(res.get(0)),IpfsMessage.class);
+                SEFL_BASE.setFrom(ipfsMessage.getFrom());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+        try {
+            ipfs.pubsub.pub(topic,SEFL_BASE.getPeerID());
+        } catch (Exception e) {
+        }
+    }
+
+    private static String _getNickName(){
+        String tempNick = RadomCharactersHelper.getInstance().generated("NBSChain_",6);
+        try {
+            Map cfgMap = ipfs.config.show();
+            if(cfgMap.containsKey(ConfigHelper.JSON_NICKNAME_KEY)){
+                Object no = cfgMap.get(ConfigHelper.JSON_NICKNAME_KEY);
+                if(no!=null&&no.toString().trim().length()<=0){
+                    Map res = ipfs.config.set(ConfigHelper.JSON_NICKNAME_KEY,tempNick);
+                    return tempNick;
+                }else {
+                    return no.toString();
+                }
+            }else {
+                Map res = ipfs.config.set(ConfigHelper.JSON_NICKNAME_KEY,tempNick);
+                return tempNick;
+            }
+        } catch (IOException e) {
+            logger.error("GET NICKNAME ERROR :",e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * 获取PEER ID
+     * @return
+     */
+    private static String getPeerId(){
+        try {
+            Map map = ipfs.id();
+            if(map.containsKey("ID")){
+                return (String)map.get("ID");
+            }
+        } catch (IOException e) {
+            logger.error("获取 PEER ID ：",e.getMessage());
+        }
+        return null;
+    }
+
+
+    /**-------------------------------------------------*/
     /**
      * 订阅世界主题
+     * 控制
      */
-    private void subWorld(){
+    private void subCtrlWorld(){
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Stream<Map<String,Object>> subs = ipfs.pubsub.sub(IPFSHelper.NBSWORLD_CTRL_TOPIC);
+                    Stream<Map<String,Object>> subs = ipfs.pubsub.sub(IPFSHelper.NBSWORLD_IMS_TOPIC);
                     List<Map<String,Object>> messages = subs.limit(1).collect(Collectors.toList());
                     logger.info(JSONParser.toString(messages));
                     //TODO
@@ -522,6 +564,4 @@ public class AppMainWindow {
             }
         }).start();
     }
-
-
 }

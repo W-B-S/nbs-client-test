@@ -1,6 +1,8 @@
 package com.nbs.utils;
 
 import com.alibaba.fastjson.JSON;
+import com.nbs.entity.PeerBoradcastInfo;
+import com.nbs.exceptions.IllegalIPFSMessageException;
 import com.nbs.ipfs.entity.IpfsMessage;
 import io.ipfs.multihash.Multihash;
 import org.apache.commons.codec.CharEncoding;
@@ -21,7 +23,6 @@ import java.util.regex.Pattern;
  */
 public class Base64CodecUtil {
     private static final Base64 base64 = new Base64();
-    public static final String REGX_BASE64_MSG = "^\\$BASE64\\$\\w+\\$$";
 
     public static final String BASE64_START = "$BASE64$";
     public static final String BASE64_END = "$";
@@ -58,25 +59,13 @@ public class Base64CodecUtil {
     }
 
 
-    public static boolean isBase64(String string){
-        Pattern pattern = Pattern.compile(REGX_BASE64_MSG);
-        Matcher matcher = pattern.matcher(string);
-        return matcher.matches();
-    }
+
 
     public static boolean isBase64encode(String base64Str){
         return base64Str.startsWith(BASE64_START)&&base64Str.endsWith(BASE64_END);
     }
 
-    /**
-     *
-     * @param origin
-     * @return
-     */
-    public static String encodeIPFSMsg(String origin){
-        String rs = encode(origin);
-        return BASE64_START+rs+BASE64_END;
-    }
+
 
     /**
      * IPFS 消息解码
@@ -91,6 +80,29 @@ public class Base64CodecUtil {
         }else {
             return encodeStr;
         }
+    }
+
+    /**
+     *
+     * @param message
+     * @return
+     * @throws IllegalIPFSMessageException
+     */
+    public PeerBoradcastInfo parseFromIm(IpfsMessage message) throws IllegalIPFSMessageException {
+        if(message==null
+                ||message.getTypes()!=CtrlTypes.online
+                ||(StringUtils.isBlank(message.getContents())&&StringUtils.isBlank(message.getData())))
+            return null;
+        if(StringUtils.isBlank(message.getContents())){
+            String jsonData = decode(message.getData());
+            if(!jsonData.startsWith(CtrlTypes.online.getPreffix())||!jsonData.endsWith(CtrlTypes.online.sperator)){
+                throw new IllegalIPFSMessageException("message data not online type message");
+            }
+            int len = jsonData.length();
+            message.setContents(jsonData.substring(CtrlTypes.online.getPreffixLength(),len-2));
+        }
+        PeerBoradcastInfo res = JSON.parseObject(message.getContents(),PeerBoradcastInfo.class);
+        return res;
     }
 
     /**
@@ -122,6 +134,7 @@ public class Base64CodecUtil {
         if(types==null)types = CtrlTypes.normal;
         switch (types){
             case online:
+            case pctrl:
                 sb.append(types.sperator).append(types.starter).append(types.sperator);
                 sb.append(encode(JSON.toJSONString(message)));
                 sb.append(types.sperator+"");
@@ -140,7 +153,8 @@ public class Base64CodecUtil {
     }
 
     /**
-     *
+     * 只解析出协议类型并做Base64 基础解码放入content，
+     * content内容解析具体有CtrlType 解析
      * @param m
      * @return
      */
@@ -193,30 +207,43 @@ public class Base64CodecUtil {
          * $ON.B64.J$xxxxxsssds$
          * 在线通知
          */
-        online("ON.B64.J",'$'),
+        online("ON.B64.J","$"),
+        /**
+         * $PC.B64.J$xxxxxxxx$
+         * 控制消息
+         */
+        pctrl("PC.B64.J","$"),
         /**
          * 正常消息
          * $IM.B64.S$xxx$
          */
-        normal("IM.B64.S",'$'),
+        normal("IM.B64.S","$"),
         /**
          * 未知
          */
-        unkonw("",'$');
+        unkonw("","");
 
         private String starter;
-        private char sperator;
+        private String sperator;
 
-        CtrlTypes(String starter, char sperator) {
+        CtrlTypes(String starter, String sperator) {
             this.starter = starter;
             this.sperator = sperator;
+        }
+
+        /**
+         *
+         * @return
+         */
+        public int getPreffixLength(){
+            return this.getPreffix().length();
         }
 
         public String getStarter() {
             return starter;
         }
 
-        public char getSperator() {
+        public String getSperator() {
             return sperator;
         }
 
@@ -227,6 +254,13 @@ public class Base64CodecUtil {
                     '}';
         }
 
+        /**
+         *
+         * @return
+         */
+        public String getPreffix(){
+            return this.sperator+this.starter+this.sperator;
+        }
         @Override
         public String toString() {
             return this.name().toString();

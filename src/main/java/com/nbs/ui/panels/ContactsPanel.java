@@ -150,32 +150,24 @@ public class ContactsPanel extends ParentAvailablePanel {
 
 
     /**
-     *
+     * 发布消息
      * @param sleeps
      */
     private void subWorld(long sleeps){
         List<Map<String, Object>> resList = Collections.synchronizedList(new ArrayList<>());
         AtomicInteger size = new AtomicInteger(0);
         new Thread(()->{
-            logger.warn(DateHelper.currentTime()+">>>>>>>启动订阅 NBSWorld...");
-            String topc = "NBS";
+            logger.warn(DateHelper.currentTime()+">>>>>>>启动订阅 NBSWorld..."+IPFSHelper.NBSWORLD_IMS_TOPIC);
             IPFS ipfs = new IPFS(ConfigHelper.getIpfsAddress());
-
 
             while (true){
                 try {
                     TimeUnit.MILLISECONDS.sleep(sleeps);
                     logger.info("Sleep>>>>>>>>>>>>>>>>>>>>>>>>"+sleeps);
-                   /* Stream<Map<String,Object>> subs = ipfs.pubsub.sub(IPFSHelper.NBSWORLD_CTRL_TOPIC);//
-                    List<Map<String,Object>> res = subs.limit(1).collect(Collectors.toList());*/
-
-                    ipfs.pubsub.sub(IPFSHelper.NBSWORLD_CTRL_TOPIC,resList::add,t->t.printStackTrace());
-                   // logger.info(">>>>>>"+resList.size());
-
+                    ipfs.pubsub.sub(IPFSHelper.NBSWORLD_IMS_TOPIC,resList::add,t->t.printStackTrace());
                 } catch (Exception e) {
                     logger.warn(e.getMessage());
                 }
-                logger.info("Sleep>>>>>>>>>>>>>>>>>>>>>>>>"+sleeps);
             }
         }).start();
 
@@ -194,15 +186,14 @@ public class ContactsPanel extends ParentAvailablePanel {
                             i++;
                             logger.info(i+">>收到世界消息："+json);
                             IpfsMessage imessage = JSON.parseObject(json,IpfsMessage.class);
-                            if(imessage.getFrom().equals(AppMainWindow.SEFL_BASE.getFrom())){
-                                logger.info("消息为自己所发消息："+json+">>>>>"+AppMainWindow.SEFL_BASE.getPeerID());
+                            if(imessage.getFrom().equals(AppMainWindow.currentPeerInfo().getFrom())){
+                                logger.info("消息为自己所发消息："+json+">>>>>"+AppMainWindow.currentPeerInfo().getPeerID());
                                 //不处理
                             }else {
-
+                                imessage.setTime(DateHelper.currentTime());
+                                //处理消息
+                                proccessIpfsMessage(imessage);
                             }
-                            imessage.setTime(DateHelper.currentTime());
-                            //处理消息
-                            proccessIpfsMessage(imessage);
                         }
                         size.set(currSize);
                     }else if(diff==1){
@@ -210,15 +201,15 @@ public class ContactsPanel extends ParentAvailablePanel {
                         i++;
                         logger.info(i+">>收到世界消息："+json);
                         IpfsMessage imessage = JSON.parseObject(json,IpfsMessage.class);
-                        if(imessage.getFrom().equals(AppMainWindow.SEFL_BASE.getFrom())){
-                            logger.info("消息为自己所发消息："+json+">>>>>"+AppMainWindow.SEFL_BASE.getPeerID());
+                        if(imessage.getFrom().equals(AppMainWindow.currentPeerInfo().getFrom())){
+                            logger.info("消息为自己所发消息："+json+">>>>>"+AppMainWindow.currentPeerInfo().getPeerID());
                             //不处理
                         }else {
-
+                            imessage.setTime(DateHelper.currentTime());
+                            //处理消息
+                            proccessIpfsMessage(imessage);
                         }
-                        imessage.setTime(DateHelper.currentTime());
-                        //处理消息
-                        proccessIpfsMessage(imessage);
+
                         size.set(currSize);
                     }else {
 
@@ -249,7 +240,7 @@ public class ContactsPanel extends ParentAvailablePanel {
                  * 解析更新列表
                  */
                 PeerBoradcastInfo peerInfo = JSON.parseObject(im.getContents(),PeerBoradcastInfo.class);
-                if(peerInfo.getId().equals(AppMainWindow.SEFL_BASE.getPeerID())){
+                if(peerInfo.getId().equals(AppMainWindow.currentPeerInfo().getPeerID())){
                     logger.info("忽略自己上线");
                     return;
                 }

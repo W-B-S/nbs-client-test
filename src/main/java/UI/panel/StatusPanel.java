@@ -104,8 +104,8 @@ public class StatusPanel extends JPanel {
         cell11.setLayout(new FlowLayout(FlowLayout.LEFT,ConstantsUI.MAIN_H_GAP,5));
 
         //头像
-        String nickVal = StringUtils.isBlank(AppMainWindow.PROFILE_NICKNAME) ?
-                PropertyUtil.getProperty("nbs.ui.panel.status.default-nickname") : AppMainWindow.PROFILE_NICKNAME;
+        String nickVal = StringUtils.isBlank(AppMainWindow.selfNick()) ?
+                PropertyUtil.getProperty("nbs.ui.panel.status.default-nickname") : AppMainWindow.selfNick();
         ImageIcon icon = new ImageIcon(AVATAR_IMAGE_PATH + PropertyUtil.getProperty("nbs.ui.panel.status.default-avatar"));
         AvatarIconButton avatar = new AvatarIconButton(icon,nickVal);
         //
@@ -127,7 +127,7 @@ public class StatusPanel extends JPanel {
         peerInfo.setLayout(new GridLayout(2,1));
         //
 
-        JLabel nickLabel = new ContentJLabel(AppMainWindow.PROFILE_NICKNAME);
+        JLabel nickLabel = new ContentJLabel(AppMainWindow.selfNick());
         nickLabel.setFont(ConstantsUI.FONT_LABEL);
 
 
@@ -138,7 +138,7 @@ public class StatusPanel extends JPanel {
                 if(StringUtils.isNotBlank(newNick)&&newNick.trim().length()<=40){
                     try {
                         String res = IPFSHelper.getInstance().updateNick(newNick);
-                        if(res!=null)AppMainWindow.PROFILE_NICKNAME = res;
+                        if(res!=null)AppMainWindow.currentPeerInfo().setNick(res);
                         nickLabel.setText(res);
                         nickLabel.updateUI();
                     } catch (IOException e1) {

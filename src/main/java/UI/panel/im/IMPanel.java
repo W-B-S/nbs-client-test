@@ -21,7 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -40,6 +39,8 @@ public class IMPanel extends NBSAbstractPanel {
     private static final long serialVersionUID = 1L;
     public static final String PKUI_PANEL_IM_LABEL = "nbs.ui.panel.im.label";
     private static IMPanel context;
+
+    private boolean testRunning = false;
 
     /**
      * 左侧IM peers
@@ -71,7 +72,7 @@ public class IMPanel extends NBSAbstractPanel {
     private static JPanel messPanel;
 
     protected static NBSIconButton sendButton = new NBSIconButton(ConstantsUI.ICON_SEND,ConstantsUI.ICON_SEND_ENABLED,ConstantsUI.ICON_SEND_DISABLED,"发送");
-    protected static NBSIconButton sendTest = new NBSIconButton(ConstantsUI.ICON_SEND,ConstantsUI.ICON_SEND_ENABLED,ConstantsUI.ICON_SEND_DISABLED,"发送TEST");
+    protected static NBSIconButton testButton = new NBSIconButton(ConstantsUI.ICON_SEND,ConstantsUI.ICON_SEND_ENABLED,ConstantsUI.ICON_SEND_DISABLED,"发送TEST");
 
 
     public IMPanel(boolean isDoubleBuffered) {
@@ -138,7 +139,45 @@ public class IMPanel extends NBSAbstractPanel {
                 sendMsg();
             }
         });
+
+        /**
+         * 测试按钮TODO
+         */
+        testButton.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                IPFS _ipfs = IPFSHelper.getInstance().getIpfs();
+                Thread autoSendThread = new Thread(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            String text = "Welcome NBS World!";
+                            while (testRunning){
+                                try {
+                                    TimeUnit.SECONDS.sleep(2);
+                                    _ipfs.pubsub.pub(IPFSHelper.NBSWORLD_IMS_TOPIC,Base64CodecUtil.encode(text));
+                                    logger.info(DateHelper.currentTime()+"SEND MSG : "+text);
+                                } catch (Exception e1) {
+                                    e1.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                );
+                if(!testRunning){
+                    testRunning = true;
+                    testButton.setIcon(ConstantsUI.ICON_SEND_ENABLED);
+                    autoSendThread.start();
+                }else {
+                    //testButton.setEnabled(false);
+                    testButton.setIcon(ConstantsUI.ICON_SEND);
+                    testRunning = false;
+                }
+            }
+        });
     }
+
+
 
     /**
      * 上下结构
@@ -196,7 +235,9 @@ public class IMPanel extends NBSAbstractPanel {
         imOperPanel.setPreferredSize(bd);
         imOperPanel.setLayout(new BorderLayout());
         imOperPanel.add(sendButton,BorderLayout.SOUTH);
-        //imOperPanel.add(sendTest,BorderLayout.NORTH);
+
+        //
+        imOperPanel.add(testButton,BorderLayout.NORTH);
         imDownContainer.add(imOperPanel,BorderLayout.EAST);
 
         messPanel.add(imupContainer,BorderLayout.CENTER);
@@ -217,7 +258,6 @@ public class IMPanel extends NBSAbstractPanel {
         }
         imMSGShow.revalidate();
         imMSGShow.updateUI();
-
     }
 
     /**
@@ -227,15 +267,16 @@ public class IMPanel extends NBSAbstractPanel {
     private void sendMsg(){
         String sendContent = inputArea.getText();
         if(StringUtils.isBlank(sendContent))return;
+        PeerInfoBase current = AppMainWindow.currentPeerInfo();
 /*        if(CURRENT_TO_CONTACTS_ITEM == null){
             JOptionPane.showMessageDialog(AppMainWindow.frame,"请选中联系人");
             return;
         }*/
-        String topic = IPFSHelper.NBSWORLD_CTRL_TOPIC;
+        String topic = IPFSHelper.NBSWORLD_IMS_TOPIC;
 
         try {
             StringBuffer sb = new StringBuffer();
-            sb.append(AppMainWindow.PROFILE_NICKNAME).append("  ").append(DateHelper.currentTime());
+            sb.append(current.getNick()).append("  ").append(DateHelper.currentTime());
             sb.append(ConstantsUI.ENTER_CHARACTER);
             sb.append(ConstantsUI.WSPACE_CHARACTER4).append(sendContent);
 
@@ -252,43 +293,7 @@ public class IMPanel extends NBSAbstractPanel {
         }
     }
 
-    /**
-     *
-     * @param
-     * @param
-     */
-    public void receiverRun(long sleepSec){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if(sleepSec>=1){
-                        TimeUnit.MILLISECONDS.sleep(sleepSec);
-                    }
-                    if(AppMainWindow.SEFL_BASE==null){
-                        TimeUnit.SECONDS.sleep(30);
-                        receiverRun(sleepSec);
-                        return;
-                    }
-                    Stream<Map<String,Object>> sub = IPFSHelper.getInstance().getIpfs().pubsub.sub(AppMainWindow.SEFL_BASE.getPeerID());
 
-                    List<Map> lst = sub.limit(1).collect(Collectors.toList());
-                    String json = JSONParser.toString(lst.get(0));
-                    logger.info(System.currentTimeMillis()+"-revc : "+json);
-                    appenRevcMsg(json);
-                    receiverRun(10);
-                }  catch (Exception e) {
-                    e.printStackTrace();
-                    try {
-                        TimeUnit.SECONDS.sleep(2);
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    }
-                    receiverRun(2000);
-                }
-            }
-        }).start();
-    }
 
     /**
      *
