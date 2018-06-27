@@ -3,9 +3,10 @@ package com.nbs.ui.panels;
 import UI.AppMainWindow;
 import UI.panel.im.IMPanel;
 import com.alibaba.fastjson.JSON;
-import com.nbs.biz.model.ContactsModel;
+import com.nbs.biz.model.ContactsEntity;
 import com.nbs.entity.ContactsItem;
 import com.nbs.entity.PeerBoradcastInfo;
+import com.nbs.entity.PeerInfoBase;
 import com.nbs.ipfs.IPFSHelper;
 import com.nbs.ipfs.entity.IpfsMessage;
 import com.nbs.tools.ConfigHelper;
@@ -29,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 
 /**
@@ -42,6 +42,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class ContactsPanel extends ParentAvailablePanel {
     private Logger logger = LoggerFactory.getLogger(ContactsPanel.class);
+
 
     /**
      *
@@ -96,18 +97,18 @@ public class ContactsPanel extends ParentAvailablePanel {
      */
     private void initData(){
         peerItems.clear();
-/*        List<ContactsModel> contacts = getContacts();
-        for(ContactsModel contactsUser : contacts){
+        List<ContactsEntity> contacts = getContacts();
+        for(ContactsEntity contactsUser : contacts){
             ContactsItem item = new ContactsItem(
                     contactsUser.getId(),
                     contactsUser.getNick(),
                     ContactsItem.TYPE.P.toString());
             peerItems.add(item);
-        }*/
+        }
     }
 
     public void notifyDataSetChanged(){
-        initData();
+        //initData();
         ((ContactsItemAdapter)contactsListView.getAdapter()).processData();
         contactsListView.notifyDataSetChanged(false);
         //更新头像
@@ -130,18 +131,26 @@ public class ContactsPanel extends ParentAvailablePanel {
      * 初始化Demo TODO
      * @return
      */
-    private List<ContactsModel> getContacts(){
-        List<ContactsModel> contacts = new ArrayList<>();
+    private List<ContactsEntity> getContacts(){
+        List<ContactsEntity> contacts = new ArrayList<>();
         RadomCharactersHelper charactersHelper = RadomCharactersHelper.getInstance();
         String hashPre = "hash.";
-        int count = 30;
 
+        if(AppMainWindow.currentPeerInfo()!=null){
+            PeerInfoBase base = AppMainWindow.currentPeerInfo();
+            ContactsEntity selfModel = new ContactsEntity(base.getPeerID(),base.getNick());
+            selfModel.setAvatar(base.getAvatarHash());
+            selfModel.setAvatarSuffix(base.getAvatarSuffix());
+            contacts.add(selfModel);
+        }
+
+        //虚拟6
+        int count = 6;
         for(int i=0;i<count;i++){
             String id = charactersHelper.generated(hashPre,20);
 
             String name = charactersHelper.generated("",6);
-            ContactsModel model = new ContactsModel(name,name);
-
+            ContactsEntity model = new ContactsEntity(name,name);
             contacts.add(model);
         }
         return contacts;
@@ -205,11 +214,11 @@ public class ContactsPanel extends ParentAvailablePanel {
                             logger.info("消息为自己所发消息："+json+">>>>>"+AppMainWindow.currentPeerInfo().getPeerID());
                             //不处理
                         }else {
-
+                            imessage.setTime(DateHelper.currentTime());
+                            //处理消息
+                            proccessIpfsMessage(imessage);
                         }
-                        imessage.setTime(DateHelper.currentTime());
-                        //处理消息
-                        proccessIpfsMessage(imessage);
+
                         size.set(currSize);
                     }else {
 
@@ -229,6 +238,7 @@ public class ContactsPanel extends ParentAvailablePanel {
      * @param im
      */
     private void proccessIpfsMessage(IpfsMessage im){
+
         if(im==null)return;
         Base64CodecUtil.CtrlTypes types =im.getTypes();
         if(types==null)types = Base64CodecUtil.CtrlTypes.unkonw;

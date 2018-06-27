@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nbs.biz.dao.ContactsDao">
+    <resultMap id="BaseResultMap" type="com.nbs.biz.model.ContactsEntity">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="fromid" property="fromid" jdbcType="VARCHAR"/>
+        <result column="nick" property="nick" jdbcType="VARCHAR"/>
+        <result column="avatar" property="avatar" jdbcType="VARCHAR"/>
+        <result column="avatar_suffix" property="avatarSuffix" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="ext_json" property="extJson" jdbcType="VARCHAR"/>
+        <result column="seckey" property="seckey" jdbcType="VARCHAR"/>
+        <result column="ctime" property="ctime" jdbcType="INTEGER"/>
+        <result column="lmtime" property="lmtime" jdbcType="INTEGER"/>
+    </resultMap>
+    <insert id="insert">
+        INSERT INTO nbs_contacts (id, fromid, nick,avatar,avatar_suffix,remark,ext_json,seckey,lmtime)
+        VALUES (#{id}, #{fromid}, #{nick},#{avatar},#{avatarSuffix},#{remark},#{extJson},#{seckey},#{lmtime})
+    </insert>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT * FROM nbs_contacts where id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT * FROM nbs_contacts
+    </select>
+
+    <select id="find" resultMap="BaseResultMap" statementType="STATEMENT" parameterType="map">
+        SELECT * FROM nbs_contacts where ${field} = ${val}
+    </select>
+
+    <delete id="delete" parameterType="java.lang.String">
+        DELETE * from nbs_contacts WHERE id = #{id}
+    </delete>
+
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(1) FROM nbs_contacts
+    </select>
+
+    <select id="exist" resultType="java.lang.Integer">
+        SELECT count(1) FROM nbs_contacts where id = #{id}
+    </select>
+
+    <delete id="deleteAll">
+        delete from nbs_contacts
+    </delete>
+
+
+    <update id="update">
+        UPDATE nbs_contacts
+        <set>
+            nick = #{nick},
+            fromid=#{fromid},
+            avatar=#{avatar},
+            avatar_suffix=#{avatarSuffix}
+            lmtime = #{lmtime}
+        </set>
+        WHERE id=#{id}
+    </update>
+
+
+    <update id="updateIgnoreNull">
+        UPDATE nbs_contacts
+        <set>
+            <if test="nick!= null">nick=#{nick},</if>
+            <if test="avatar!= null">avatar=#{avatar},</if>
+            <if test="avatarSuffix!= null">avatar_suffix=#{avatarSuffix},</if>
+            <if test="extJson!= null">ext_json=#{extJson},</if>
+            <if test="remark!= null">remark=#{remark},</if>
+        </set>
+        WHERE id=#{id}
+    </update>
+</mapper>

@@ -9,9 +9,10 @@ package com.nbs.biz.model;
  * Copyright (c) 2018, NBS , lambor.c<lanbery@gmail.com>.
  * All rights reserved.
  */
-public class ContactsModel extends BasicModel {
+public class ContactsEntity extends BasicModel {
 
     private String id;
+    private String fromid;
     private String nick;
     /**
      * hash58
@@ -28,16 +29,25 @@ public class ContactsModel extends BasicModel {
     private Integer ctime;
     private Integer lmtime;
 
-    public ContactsModel(String id, String nick, String avatar, String avatarSuffix) {
+
+    public ContactsEntity(String id, String nick, String avatar, String avatarSuffix) {
         this.id = id;
         this.nick = nick;
         this.avatar = avatar;
         this.avatarSuffix = avatarSuffix;
     }
 
-    public ContactsModel(String id, String nick) {
+    public ContactsEntity(String id, String nick) {
         this.id = id;
         this.nick = nick;
+    }
+
+    public String getFromid() {
+        return fromid;
+    }
+
+    public void setFromid(String fromid) {
+        this.fromid = fromid;
     }
 
     public String getId() {

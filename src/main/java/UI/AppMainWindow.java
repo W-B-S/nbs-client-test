@@ -142,7 +142,7 @@ public class AppMainWindow {
 
         initialize();
         //订阅世界消息
-        subCtrlWorld();
+       // subCtrlWorld();
         //广播自己上线
         broadcastOnline();
         ImPeersService imPeersService = new ImPeersService();
@@ -152,8 +152,6 @@ public class AppMainWindow {
         loadWorldControllerListener(imPeersService);
 
     }
-
-
 
     /**
      *
@@ -554,10 +552,9 @@ public class AppMainWindow {
             @Override
             public void run() {
                 try {
-                    Stream<Map<String,Object>> subs = ipfs.pubsub.sub(IPFSHelper.NBSWORLD_IMS_TOPIC);
+                    Stream<Map<String,Object>> subs = ipfs.pubsub.sub(IPFSHelper.NBSWORLD_CTRL_TOPIC);
                     List<Map<String,Object>> messages = subs.limit(1).collect(Collectors.toList());
                     logger.info(JSONParser.toString(messages));
-                    //TODO
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

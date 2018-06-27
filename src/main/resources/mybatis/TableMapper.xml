@@ -8,14 +8,16 @@
 
     <update id="createNbsContacts">
         create table nbs_contacts (
-        id varchar(64) primary key,
-        nick varchar(64),
-        avatar varchar(64),
-        avatar_suffix varchar(10),
-        remark varchar(100),
+        id integer ,
+        peerid varchar(64) ,
+        fromid varchar (64),
+        nick varchar(100),
+        avatar varchar(100),
+        avatar_suffix varchar(64),
+        remark varchar(200),
         ext_json text,
         seckey varchar (256),
-        ctime TIMESTAMP  default (datetime('now','localtime')),
+        ctime TimeStamp NOT NULL DEFAULT (datetime('now','localtime')),
         lmtime integer
         );
     </update>

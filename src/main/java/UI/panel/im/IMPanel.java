@@ -15,17 +15,16 @@ import com.nbs.tools.DateHelper;
 import com.nbs.ui.components.ColorCnst;
 import com.nbs.utils.Base64CodecUtil;
 import io.ipfs.api.IPFS;
-import io.ipfs.api.JSONParser;
+
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.concurrent.atomic.AtomicInteger;
+
 
 /**
  * @Package : UI.panel.im
@@ -41,7 +40,7 @@ public class IMPanel extends NBSAbstractPanel {
     private static IMPanel context;
 
     private boolean testRunning = false;
-
+    public static AtomicInteger msgMax = new AtomicInteger(0);
     /**
      * 左侧IM peers
      */
@@ -187,7 +186,7 @@ public class IMPanel extends NBSAbstractPanel {
         messPanel = new WihteBackJPanel();
         messPanel.setLayout(new BorderLayout());
         int downHeight = 116;
-        int upHeight = ConstantsUI.MAIN_WINDOW_HEIGHT -downHeight-24;
+        int upHeight = ConstantsUI.MAIN_WINDOW_HEIGHT -24;
 
         /**
          * 上部
@@ -237,7 +236,7 @@ public class IMPanel extends NBSAbstractPanel {
         imOperPanel.add(sendButton,BorderLayout.SOUTH);
 
         //
-        imOperPanel.add(testButton,BorderLayout.NORTH);
+        //imOperPanel.add(testButton,BorderLayout.NORTH);
         imDownContainer.add(imOperPanel,BorderLayout.EAST);
 
         messPanel.add(imupContainer,BorderLayout.CENTER);
@@ -284,6 +283,13 @@ public class IMPanel extends NBSAbstractPanel {
             AppMainWindow.ipfs.pubsub.pub(topic,Base64CodecUtil.encodeByCtrlType(sendContent,Base64CodecUtil.CtrlTypes.normal));
             inputArea.setText("");
             sb.append(ConstantsUI.ENTER_CHARACTER);
+            if(msgMax.intValue()>18){
+                msgMax.set(0);
+                imMSGShow.setText("");
+                //清空
+            }
+            int next = msgMax.intValue() +1;
+            msgMax.set(next);
             imMSGShow.append(sb.toString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -332,6 +338,13 @@ public class IMPanel extends NBSAbstractPanel {
 
     public static void appendMsgShow(List<ContactsItem> items,IpfsMessage ipfsMessage){
         if(ipfsMessage==null)return;
+        if(msgMax.intValue()>18){
+            msgMax.set(0);
+            imMSGShow.setText("");
+            //清空
+        }
+        int next = msgMax.intValue() +1;
+        msgMax.set(next);
         String formid = ipfsMessage.getFrom();
         String nick = formid;
         //
@@ -346,7 +359,7 @@ public class IMPanel extends NBSAbstractPanel {
 
         StringBuilder sb = new StringBuilder();
         sb.append(nick).append(">>").append(ipfsMessage.getTime()).append(ConstantsUI.ENTER_CHARACTER);
-        sb.append(ipfsMessage.getContents()).append(ConstantsUI.ENTER_CHARACTER);
+        sb.append(ConstantsUI.WSPACE_CHARACTER4).append(ipfsMessage.getContents()).append(ConstantsUI.ENTER_CHARACTER);
         imMSGShow.append(sb.toString());
     }
 

@@ -30,6 +30,9 @@ public class ContactsItemAdapter extends BaseAdapter<ContactsItemViewHolder> {
     private List<ContactsItem> contactsItems;
     private List<ContactsItemViewHolder> viewHolders = new ArrayList<>();
 
+    /**
+     * 首拼音
+     */
     Map<Integer, String> positionMap = new HashMap<>();
     /**
      * 选中的
@@ -149,7 +152,7 @@ public class ContactsItemAdapter extends BaseAdapter<ContactsItemViewHolder> {
             {
                 if (selectedViewHolder != viewHolder)
                 {
-                    setBackground(viewHolder, ColorCnst.DARK);
+                    setBackground(viewHolder, ColorCnst.DARKER);
                 }
             }
         });

@@ -21,7 +21,9 @@ public class CtrlMsgTest {
 
    public static void main(String[] agrs){
        CtrlMsgTest cmt = new CtrlMsgTest();
-       cmt.GetCtrlOnline();
+       long l = System.currentTimeMillis()/1000;
+       System.out.println(">>>"+l);
+       //cmt.GetCtrlOnline();
    }
 
    private void GetCtrlOnline(){
