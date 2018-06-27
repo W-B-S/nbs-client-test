@@ -118,7 +118,9 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- 打jar包 -->
+            <!-- 打jar包 https://blog.csdn.net/mn960mn/article/details/51554152  -->
+            <!-- lib目录中jar的存放规则，默认是${groupId}/${artifactId}的目录格式，flat表示直接把jar放到lib目录 -->
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>appassembler-maven-plugin</artifactId>
@@ -133,12 +135,18 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <assembleDirectory>${project.build.directory}/</assembleDirectory>
+                    <assembleDirectory>${project.build.directory}/nbs</assembleDirectory>
                     <repositoryLayout>flat</repositoryLayout>
+                    <repositoryName>lib</repositoryName>
+                    <binFolder>bin</binFolder>
+                    <configurationDirectory>conf</configurationDirectory>
                     <configurationSourceDirectory>src/main/resources</configurationSourceDirectory>
-                    <configurationSourceDirectory>config</configurationSourceDirectory>
                     <configurationDirectory>true</configurationDirectory>
+
                     <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
+                    <encoding>UTF-8</encoding>
+                    <logsDirectory>logs</logsDirectory>
+                    <tempDirectory>tmp</tempDirectory>
                     <extraJvmArguments>-Xms256m</extraJvmArguments>
                     <binFileExtensions><unix>.sh</unix></binFileExtensions>
                     <platforms>
@@ -152,6 +160,7 @@
                             <name>nbs-client4j</name>
                             <jvmSettings>
                                 <extraArguments>
+                                    <extraArgument>-Dfile.encoding=utf-8</extraArgument>
                                     <extraArgument>-server</extraArgument>
                                     <extraArgument>-Xms256m</extraArgument>
                                 </extraArguments>
@@ -159,8 +168,81 @@
                         </program>
                     </programs>
                 </configuration>
+
             </plugin>
 
+           <!-- <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <version>2.0.0</version>
+                <configuration>
+                    &lt;!&ndash; 根目录 &ndash;&gt;
+                    <assembleDirectory>${project.build.directory}/nbs</assembleDirectory>
+                    &lt;!&ndash; 打包的jar，以及maven依赖的jar放到这个目录里面 &ndash;&gt;
+                    <repositoryName>lib</repositoryName>
+                    &lt;!&ndash; 可执行脚本的目录 &ndash;&gt;
+                    <binFolder>bin</binFolder>
+                    &lt;!&ndash; 配置文件的目标目录 &ndash;&gt;
+                    <configurationDirectory>conf</configurationDirectory>
+                    &lt;!&ndash; 拷贝配置文件到上面的目录中 &ndash;&gt;
+                    <copyConfigurationDirectory>true</copyConfigurationDirectory>
+                    &lt;!&ndash; 从哪里拷贝配置文件 (默认src/main/config) &ndash;&gt;
+                    <configurationSourceDirectory>src/main/resources</configurationSourceDirectory>
+                    &lt;!&ndash; lib目录中jar的存放规则，默认是${groupId}/${artifactId}的目录格式，flat表示直接把jar放到lib目录 &ndash;&gt;
+                    <repositoryLayout>flat</repositoryLayout>
+                    <encoding>UTF-8</encoding>
+                    <logsDirectory>logs</logsDirectory>
+                    <tempDirectory>tmp</tempDirectory>
+                    <daemons>
+                        <daemon>
+                            <id>nbs</id>
+                            <mainClass>UI.AppMainWindow</mainClass>
+                            <platforms>
+                                <platform>jsw</platform>
+                            </platforms>
+                            <generatorConfigurations>
+                                <generatorConfiguration>
+                                    <generator>jsw</generator>
+                                    <includes>
+                                        <include>linux-x86-32</include>
+                                        <include>linux-x86-64</include>
+                                        <include>windows-x86-32</include>
+                                        <include>windows-x86-64</include>
+                                    </includes>
+                                    <configuration>
+                                        <property>
+                                            <name>configuration.directory.in.classpath.first</name>
+                                            <value>conf</value>
+                                        </property>
+                                        <property>
+                                            <name>wrapper.ping.timeout</name>
+                                            <value>120</value>
+                                        </property>
+                                        <property>
+                                            <name>set.default.REPO_DIR</name>
+                                            <value>lib</value>
+                                        </property>
+                                        <property>
+                                            <name>wrapper.logfile</name>
+                                            <value>logs/wrapper.log</value>
+                                        </property>
+                                    </configuration>
+                                </generatorConfiguration>
+                            </generatorConfigurations>
+                            <jvmSettings>
+                                &lt;!&ndash; jvm参数 &ndash;&gt;
+                                <systemProperties>
+                                    <systemProperty>com.sun.management.jmxremote</systemProperty>
+                                    <systemProperty>com.sun.management.jmxremote.port=1984</systemProperty>
+                                    <systemProperty>com.sun.management.jmxremote.authenticate=false</systemProperty>
+                                    <systemProperty>com.sun.management.jmxremote.ssl=false</systemProperty>
+                                </systemProperties>
+                            </jvmSettings>
+                        </daemon>
+                    </daemons>
+                </configuration>
+            </plugin>
+            &lt;!&ndash; package end &ndash;&gt;
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -172,14 +254,14 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <!--&lt;!&ndash; ${project.build.directory} 构建目录，缺省为target &ndash;&gt; -->
+                            &lt;!&ndash;&lt;!&ndash; ${project.build.directory} 构建目录，缺省为target &ndash;&gt; &ndash;&gt;
                             <outputDirectory>
                                 ${project.build.directory}/lib
                             </outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
 
             <!-- The configuration of maven-assembly-plugin -->
            <!-- <plugin>

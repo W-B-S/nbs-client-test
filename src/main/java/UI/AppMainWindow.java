@@ -274,7 +274,10 @@ public class AppMainWindow {
             ipfsDir.mkdirs();
         }
 
-        File f = new File(ConstantsUI.PROFILE_ROOT);
+        /**
+         * 初始化
+         */
+        File f = new File(ConfigHelper.NBS_CACHE_AVATAR_ROOT_PATH);
         if(!f.exists()){
             f.mkdirs();
         }

@@ -26,6 +26,10 @@
         SELECT * FROM nbs_contacts
     </select>
 
+    <select id="findAllExcludeId" resultMap="BaseResultMap">
+        SELECT * FROM nbs_contacts where  id != #{id}
+    </select>
+
     <select id="find" resultMap="BaseResultMap" statementType="STATEMENT" parameterType="map">
         SELECT * FROM nbs_contacts where ${field} = ${val}
     </select>

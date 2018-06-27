@@ -8,8 +8,7 @@
 
     <update id="createNbsContacts">
         create table nbs_contacts (
-        id integer ,
-        peerid varchar(64) ,
+        id varchar(64) PRIMARY KEY,
         fromid varchar (64),
         nick varchar(100),
         avatar varchar(100),

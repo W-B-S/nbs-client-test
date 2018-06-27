@@ -55,11 +55,11 @@ public class TableServiceTest {
     public void createNbsContacts(){
         TableService service = new TableService(DbUtil.getSqlSession());
         service.initNbsContacts();
-        List<NBSTest> lst = service.getAll();
-        if(lst!=null){
+       // List<NBSTest> lst = service.getAll();
+/*        if(lst!=null){
             String json = JSON.toJSONStringWithDateFormat(lst,"yyyy-MM-dd HH:mm:ss");
             System.out.println(json);
-        }
+        }*/
     }
 
 }

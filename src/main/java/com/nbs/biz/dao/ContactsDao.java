@@ -1,7 +1,9 @@
 package com.nbs.biz.dao;
 
+import com.nbs.biz.model.ContactsEntity;
 import org.apache.ibatis.session.SqlSession;
 
+import java.util.List;
 
 
 /**
@@ -19,5 +21,14 @@ public class ContactsDao extends BasicDao {
 
     public int existCountByPeerId(String peerId){
        return 0;
+    }
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    public List<ContactsEntity> findAllExcludeId(String id){
+        return session.selectList("findAllExcludeId",id);
     }
 }

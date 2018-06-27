@@ -4,6 +4,7 @@ import UI.AppMainWindow;
 import UI.panel.im.IMPanel;
 import com.alibaba.fastjson.JSON;
 import com.nbs.biz.model.ContactsEntity;
+import com.nbs.biz.service.ContactsService;
 import com.nbs.entity.ContactsItem;
 import com.nbs.entity.PeerBoradcastInfo;
 import com.nbs.entity.PeerInfoBase;
@@ -16,14 +17,17 @@ import com.nbs.ui.components.ColorCnst;
 import com.nbs.ui.components.GBC;
 import com.nbs.ui.components.NbsListView;
 import com.nbs.utils.Base64CodecUtil;
+import com.nbs.utils.DbUtil;
 import com.nbs.utils.RadomCharactersHelper;
 import io.ipfs.api.IPFS;
 import io.ipfs.api.JSONParser;
+import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -43,7 +47,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ContactsPanel extends ParentAvailablePanel {
     private Logger logger = LoggerFactory.getLogger(ContactsPanel.class);
 
-
+    /**
+     *
+     */
+    private ContactsService service;
     /**
      *
      */
@@ -70,6 +77,7 @@ public class ContactsPanel extends ParentAvailablePanel {
     public ContactsPanel(JPanel parent) {
         super(parent);
         context = this;
+        service = new ContactsService(DbUtil.getSqlSession());
         initComponent();
         initView();
         initData();
@@ -132,10 +140,10 @@ public class ContactsPanel extends ParentAvailablePanel {
      * @return
      */
     private List<ContactsEntity> getContacts(){
-        List<ContactsEntity> contacts = new ArrayList<>();
+        List<ContactsEntity> contacts = service.findAll();
+        if(contacts==null)contacts = new ArrayList<>();
         RadomCharactersHelper charactersHelper = RadomCharactersHelper.getInstance();
         String hashPre = "hash.";
-
         if(AppMainWindow.currentPeerInfo()!=null){
             PeerInfoBase base = AppMainWindow.currentPeerInfo();
             ContactsEntity selfModel = new ContactsEntity(base.getPeerID(),base.getNick());
@@ -144,7 +152,27 @@ public class ContactsPanel extends ParentAvailablePanel {
             contacts.add(selfModel);
         }
 
-        //虚拟6
+        IPFS ipfs = IPFSHelper.getInstance().getIpfs();
+
+        try {
+            Object obj = ipfs.pubsub.peers();
+            if(obj==null)return contacts;
+            List<String> peers = (List<String>)JSONParser.getValue(obj,"Strings");
+            if(peers!=null&&peers.size()>0){
+                for(String peerId : peers){
+                    StringBuilder nickSb = new StringBuilder();
+                    nickSb.append(peerId.substring(0,5)).append("...")
+                            .append(peerId.substring(peerId.length()-4));
+                    ContactsEntity entity = new ContactsEntity(peerId,nickSb.toString());
+                    contacts.add(entity);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+/*        //虚拟6
         int count = 6;
         for(int i=0;i<count;i++){
             String id = charactersHelper.generated(hashPre,20);
@@ -152,7 +180,7 @@ public class ContactsPanel extends ParentAvailablePanel {
             String name = charactersHelper.generated("",6);
             ContactsEntity model = new ContactsEntity(name,name);
             contacts.add(model);
-        }
+        }*/
         return contacts;
     }
 
