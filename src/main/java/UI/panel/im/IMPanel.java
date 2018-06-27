@@ -47,13 +47,17 @@ public class IMPanel extends NBSAbstractPanel {
      * 左侧IM peers
      */
     private ImLeftPanel leftPanel;
+    /**
+     * 右侧聊天面板
+     */
+    private  ChatPanel chatPanel;
 
 
     private static JTextArea imMSGShow = new JTextArea();
     /**
      * 顶部显示
      */
-    private static ToolbarStatsPanel toolbarStatsPanel = new ToolbarStatsPanel(PKUI_PANEL_IM_LABEL);;
+    private static ToolbarStatsPanel toolbarStatsPanel = new ToolbarStatsPanel(PKUI_PANEL_IM_LABEL);
 
     private static JTextArea inputArea = new JTextArea();
 
@@ -124,7 +128,7 @@ public class IMPanel extends NBSAbstractPanel {
          * 聊天主窗口
          */
         //centerPanel.add(buildMessMainPanel(),BorderLayout.CENTER);
-        ChatPanel chatPanel = new ChatPanel(this);
+        chatPanel = new ChatPanel(this);
         centerPanel.add(chatPanel,BorderLayout.CENTER);
         return centerPanel;
     }
@@ -134,6 +138,9 @@ public class IMPanel extends NBSAbstractPanel {
 
     }
 
+    /**
+     *
+     */
     @Override
     protected void addListener() {
         sendButton.addActionListener(new AbstractAction() {

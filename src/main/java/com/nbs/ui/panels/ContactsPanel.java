@@ -313,4 +313,12 @@ public class ContactsPanel extends ParentAvailablePanel {
         }
         return changed;
     }
+
+    public void setLogger(Logger logger) {
+        this.logger = logger;
+    }
+
+    public static ContactsPanel getContext() {
+        return context;
+    }
 }
