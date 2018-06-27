@@ -74,6 +74,8 @@ public class NBSIconButton extends JButton {
         this.setMargin(new Insets(0,0,0,0));
     }
 
+
+
     /**
      * 设置按钮样式：
      */

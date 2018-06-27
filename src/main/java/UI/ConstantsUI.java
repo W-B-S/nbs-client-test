@@ -56,7 +56,8 @@ public class ConstantsUI {
     /**
      * 图标路径
      */
-    private static final String BUTTON_ICON_ROOT = "/icon/"+PropertyUtil.getProperty("nbs.button.dir","")+"/";
+    public static final String BUTTON_ICON_ROOT = "/icon"+File.separator
+            +PropertyUtil.getProperty("nbs.button.dir","")+ File.separator;
 
     /**
      * 主图标

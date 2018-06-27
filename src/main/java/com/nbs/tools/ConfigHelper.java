@@ -32,6 +32,10 @@ public class ConfigHelper {
     public static final String PROFILE_ROOT = CURRENT_DIR + File.separator+"profile" + File.separator;
     public static final String NBS_FILES_ROOT_PATH = CURRENT_DIR + File.separator +"nbs" + File.separator;
     public static final String NBS_FILES_IPFS_ROOT = NBS_FILES_ROOT_PATH + "ipfs"+  File.separator;
+    /**
+     * 临时文件
+     */
+    public static final String NBS_TEMP_ROOT = NBS_FILES_ROOT_PATH + "_temp" + File.separator;
     public static final String NBS_CACHE_AVATAR_ROOT_PATH = NBS_FILES_ROOT_PATH +"cache"+ File.separator+ "avatar" + File.separator;
     private static final String CONF_FILE = "nbs-conf.properties";
 
