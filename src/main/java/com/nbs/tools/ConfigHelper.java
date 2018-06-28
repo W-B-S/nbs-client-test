@@ -21,13 +21,15 @@ import java.util.Properties;
  */
 public class ConfigHelper {
     private static final Logger logger = LoggerFactory.getLogger(ConfigHelper.class);
+    private int stats = 0;
     /**
      * 系统当前路径
      */
     public final static String CURRENT_DIR = System.getProperty("user.dir");
     public final static String OS_FILE_SEPARATOR = File.separator;
-    public static final String CONF_ROOT = CURRENT_DIR + File.separator+"config" + File.separator;
+    public static final String CONF_ROOT = File.separator+"conf" + File.separator;
     private static final String CONF_FILE = "nbs-conf.properties";
+    private static final String I18N_FILE = "zh-cn.properties";
     public static final String PROFILE_ROOT = CURRENT_DIR + File.separator+"profile" + File.separator;
     public static final String NBS_FILES_ROOT_PATH = CURRENT_DIR + File.separator +"nbs" + File.separator;
     public static final String NBS_FILES_IPFS_ROOT = NBS_FILES_ROOT_PATH + "ipfs"+  File.separator;
@@ -36,7 +38,6 @@ public class ConfigHelper {
      */
     public static final String NBS_TEMP_ROOT = NBS_FILES_ROOT_PATH + "_temp" + File.separator;
     public static final String NBS_CACHE_AVATAR_ROOT_PATH = NBS_FILES_ROOT_PATH +"cache"+ File.separator+ "avatar" + File.separator;
-
 
     public static final String PK_CFG_IPFS_ADDR = "nbs.server.address";
     private static final String CLIENT_ADD_FILE_ROOT = "nbs.client.merkle.root";
@@ -50,13 +51,30 @@ public class ConfigHelper {
 
     private static Properties env = new Properties();
     private static Properties i18nProps = new Properties();
-    static {
+
+    private ConfigHelper(){
+        initLoadEnv();
+        /**
+         * i18n
+         */
+        initLoadI18n();
+    }
+
+    /**
+     *
+     */
+    private void initLoadEnv(){
         InputStream is = null;
         try{
             is = new BufferedInputStream(new FileInputStream(
                     CONF_ROOT + CONF_FILE));
             env.load(is);
             is.close();
+            if(stats==2){
+                stats=3;
+            }else {
+                stats=1;
+            }
         }catch (IOException ioe){
             logger.error("load config error.%s",ioe.getMessage());
             if(is!=null){
@@ -66,18 +84,58 @@ public class ConfigHelper {
                 }
             }
         }
-        if(is != null)is=null;
-        /**
-         * i18n
-         */
+    }
+
+    private void initLoadI18n(){
+        InputStream is = null;
         try{
             is = new BufferedInputStream(new FileInputStream(
-                    CONF_ROOT + "zh-cn.properties"));
+                    CONF_ROOT + I18N_FILE));
             i18nProps.load(is);
             is.close();
-        }catch (Exception e){
-            logger.error("load i18n config error.");
+            if(stats==1){
+                stats=3;
+            }else {
+                stats=2;
+            }
+        }catch (IOException ioe){
+            logger.error("load i18n error.%s",ioe.getMessage());
+            if(is!=null){
+                try {
+                    is.close();
+                } catch (IOException e) {
+                }
+            }
         }
+    }
+
+    /**
+     * 重新加载配置
+     * @return
+     */
+    public boolean reload(){
+        if(stats==3)return true;
+        switch (stats){
+            case 1:
+                initLoadI18n();
+                break;
+            case 2:
+                initLoadEnv();
+                break;
+            case 0:
+            default:
+                initLoadEnv();
+                initLoadI18n();
+        }
+        return 3==stats;
+    }
+
+    private static class ConfigHolder {
+        public static ConfigHelper instance = new ConfigHelper();
+    }
+
+    public static ConfigHelper getInstance(){
+        return ConfigHolder.instance;
     }
 
     /**
@@ -85,8 +143,7 @@ public class ConfigHelper {
      * @param key
      * @return
      */
-    public static String getProperty(String key){
-        if(key==null||"".equals(key.trim()))throw new IllegalArgumentException("key must a string");
+    public String getProperty(String key){
         return env.getProperty(key);
     }
 
@@ -96,7 +153,7 @@ public class ConfigHelper {
      * @param defaultVal
      * @return
      */
-    public static String getProperty(String key,String defaultVal){
+    public String getProperty(String key,String defaultVal){
         return env.getProperty(key,defaultVal);
     }
 
@@ -115,7 +172,7 @@ public class ConfigHelper {
      * @param value
      * @param comments
      */
-    public static void setProperty(String key,String value ,String comments){
+    public void setProperty(String key,String value ,String comments){
         if(StringUtils.isBlank(key))throw  new IllegalArgumentException("key must a string");
         boolean oldhas = env.containsKey(key);
         if(value==null)value = "";
@@ -137,7 +194,7 @@ public class ConfigHelper {
      * 移除
      * @param key
      */
-    public static void removeProperty(String key){
+    public void removeProperty(String key){
         env.remove(key);
     }
 
@@ -145,7 +202,7 @@ public class ConfigHelper {
      * 获取Server Address
      * @return
      */
-    public static String getIpfsAddress(){
+    public String getIpfsAddress(){
         String v = getProperty(PK_CFG_IPFS_ADDR);
         if(StringUtils.isBlank(v))v= IPFS_ADDR_DEFAULT;
         return v;
@@ -155,14 +212,14 @@ public class ConfigHelper {
      *
      * @return
      */
-    public static String getNbsFilesRoot(){
+    public String getNbsFilesRoot(){
         return env.getProperty("nbs.client.files.root","nbs");
     }
     /**
      *
      * @return
      */
-    public static Properties getEnv() {
+    public Properties getEnv() {
         return env;
     }
 
@@ -170,7 +227,7 @@ public class ConfigHelper {
      *
      * @return
      */
-    public static String getClientAddRootNode(){
+    public String getClientAddRootNode(){
         String node = getProperty(CLIENT_ADD_FILE_ROOT);
         if(StringUtils.isBlank(node)){
             node = ".merkleroot";
@@ -179,7 +236,7 @@ public class ConfigHelper {
         return node;
     }
 
-    public static String getClientAddFileRootHash(){
+    public String getClientAddFileRootHash(){
         return getProperty(CLIENT_ADD_FILE_ROOT_HASH);
     }
 
@@ -190,7 +247,7 @@ public class ConfigHelper {
      * @return
      * @throws IOException
      */
-    public static boolean storeClientAddFileRootHash(String hash,String comments) throws IOException {
+    public boolean storeClientAddFileRootHash(String hash,String comments) throws IOException {
         if(hash==null)return false;
         if(comments==null)comments = "";
         comments = System.getenv("user.name")+" : " + comments;
@@ -204,7 +261,7 @@ public class ConfigHelper {
         return true;
     }
 
-    public static String getAddLogFileName(){
+    public String getAddLogFileName(){
         return env.getProperty("nbs.client.merkle.add.log.name","");
     }
 
@@ -212,7 +269,7 @@ public class ConfigHelper {
      * 控制显示会员
      * @return
      */
-    public static boolean subWorldPeers(){
+    public boolean subWorldPeers(){
         String stats = env.getProperty("nbs.client.im.topic.subworld","enabled");
         return(stats.equalsIgnoreCase("enabled")
                 || stats.equalsIgnoreCase("true")
@@ -220,7 +277,7 @@ public class ConfigHelper {
         )  ? true : false;
     }
 
-    public static String getI18nResourceHome(){
+    public String getI18nResourceHome(){
         String i18nHome = env.getProperty("nbs.client.i18n.home","zh_cn");
         return OS_FILE_SEPARATOR+"icon"+OS_FILE_SEPARATOR+i18nHome+OS_FILE_SEPARATOR;
     }
@@ -230,7 +287,7 @@ public class ConfigHelper {
      * @param key
      * @return
      */
-    public static String getI18nProperty(String key){
+    public String getI18nProperty(String key){
         return i18nProps.getProperty(key);
     }
 
@@ -240,7 +297,7 @@ public class ConfigHelper {
      * @param defaultVal
      * @return
      */
-    public static String getI18nProperty(String key,String defaultVal){
+    public String getI18nProperty(String key,String defaultVal){
         return i18nProps.getProperty(key,defaultVal);
     }
 }

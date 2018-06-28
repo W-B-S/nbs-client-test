@@ -114,6 +114,8 @@ public class AppMainWindow {
     public static Map<String,ContactsItem> peerItems = new HashMap<>();
 
     public static void main(String[] args){
+        String basedir = System.getProperty("user.dir");
+        System.out.println(System.getProperty("nbs.client.root",basedir));
         EventQueue.invokeLater(
                 new Runnable() {
                     @Override
@@ -164,7 +166,7 @@ public class AppMainWindow {
         AtomicInteger size = new AtomicInteger(0);
         new Thread(()->{
             logger.info("Start up the World Controller Message........");
-            IPFS worldIpfs = new IPFS(ConfigHelper.getIpfsAddress());
+            IPFS worldIpfs = new IPFS(ConfigHelper.getInstance().getIpfsAddress());
             while (true){
                 try{
                     TimeUnit.MILLISECONDS.sleep(100);
@@ -262,8 +264,7 @@ public class AppMainWindow {
      */
     private void loadEnv(){
         logger.info("=====>>>>>>> NBS Chain Client4J ENV initializing......");
-        Properties props = ConfigHelper.getEnv();
-
+        Properties props = ConfigHelper.getInstance().getEnv();
         for(String k : props.stringPropertyNames()){
             String v = props.getProperty(k);
             logger.info(k+"="+v);

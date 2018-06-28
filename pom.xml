@@ -82,10 +82,10 @@
     <build>
         <finalName>nbs-client4j1.0</finalName>
         <resources>
-<!--            <resource>
-                <directory>${project.basedir}/config/**</directory>
-                <targetPath>${project.build.outputDirectory}/config</targetPath>
-            </resource>-->
+            <resource>
+                <directory>conf/**</directory>
+                <targetPath>${build.outputDirectory}/</targetPath>
+            </resource>
         </resources>
         <plugins>
             <plugin>
@@ -98,7 +98,30 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
-
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-xmls</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/out/bin/conf</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/conf</directory>
+                                    <includes>
+                                        <include>**/*</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -148,12 +171,12 @@
                 </executions>
                 <configuration>
                     <assembleDirectory>${project.basedir}/out</assembleDirectory>
-                    <repositoryLayout>flat</repositoryLayout>
+                    <repositoryLayout>default</repositoryLayout>
                     <repositoryName>lib</repositoryName>
                     <binFolder>bin</binFolder>
+                    <copyConfigurationDirectory>true</copyConfigurationDirectory>
                     <configurationDirectory>conf</configurationDirectory>
                     <configurationSourceDirectory>src/main/resources</configurationSourceDirectory>
-                    <configurationDirectory>true</configurationDirectory>
                     <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
                     <encoding>UTF-8</encoding>
                     <logsDirectory>logs</logsDirectory>

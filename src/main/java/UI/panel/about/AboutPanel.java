@@ -205,7 +205,7 @@ public class AboutPanel extends JPanel {
                 try {
                     java.net.URI uri = java.net.URI.create(site);
                     java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
-                    String v =ConfigHelper.getIpfsAddress();
+                    String v =ConfigHelper.getInstance().getIpfsAddress();
                     logger.info(v);
                     if(desktop.isSupported(Desktop.Action.BROWSE)){
                             desktop.browse(uri);
@@ -227,8 +227,8 @@ public class AboutPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 logger.info(">>>>NBS TEST BUTTON.");
                 try {
-                    ConfigHelper.storeClientAddFileRootHash("skjfhsafkdasfd","TEST");
-                    logger.info(ConfigHelper.getClientAddFileRootHash());
+                    ConfigHelper.getInstance().storeClientAddFileRootHash("skjfhsafkdasfd","TEST");
+                    logger.info(ConfigHelper.getInstance().getClientAddFileRootHash());
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }

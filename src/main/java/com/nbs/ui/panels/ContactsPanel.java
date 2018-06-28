@@ -156,7 +156,7 @@ public class ContactsPanel extends ParentAvailablePanel {
 
         try {
             Object obj = null;
-            if(ConfigHelper.subWorldPeers()){
+            if(ConfigHelper.getInstance().subWorldPeers()){
                 obj = ipfs.pubsub.peers(IPFSHelper.NBSWORLD_IMS_TOPIC);
             }else {
                 obj = ipfs.pubsub.peers();
@@ -200,7 +200,7 @@ public class ContactsPanel extends ParentAvailablePanel {
         AtomicInteger size = new AtomicInteger(0);
         new Thread(()->{
             logger.warn(DateHelper.currentTime()+">>>>>>>启动订阅 NBSWorld..."+IPFSHelper.NBSWORLD_IMS_TOPIC);
-            IPFS ipfs = new IPFS(ConfigHelper.getIpfsAddress());
+            IPFS ipfs = new IPFS(ConfigHelper.getInstance().getIpfsAddress());
 
             while (true){
                 try {

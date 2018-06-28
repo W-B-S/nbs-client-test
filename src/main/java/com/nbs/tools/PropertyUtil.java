@@ -31,8 +31,7 @@ public class PropertyUtil {
         try{
 
             InputStream in = new BufferedInputStream(
-                    new FileInputStream(ConfigHelper.CONF_ROOT+"zh-cn.properties"));
-            System.out.println(ConfigHelper.CONF_ROOT+"zh-cn.properties");
+                    new FileInputStream("conf/"+"zh-cn.properties"));
             props.load(in);
             String v = props.getProperty(key);
             return v;

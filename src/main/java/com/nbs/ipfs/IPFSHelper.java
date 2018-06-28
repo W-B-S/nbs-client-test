@@ -37,7 +37,7 @@ public class IPFSHelper {
     public static final String NBSWORLD_IMS_TOPIC = Base64CodecUtil.encode("nbsio.net");
 
     public IPFSHelper() {
-        ipfs = new IPFS(ConfigHelper.getIpfsAddress());
+        ipfs = new IPFS(ConfigHelper.getInstance().getIpfsAddress());
         try {
             Map m = ipfs.id();
             secMap.putAll(m);
@@ -62,7 +62,7 @@ public class IPFSHelper {
      * @return
      */
     public IPFS rebuild(){
-        ipfs = new IPFS(ConfigHelper.getIpfsAddress());
+        ipfs = new IPFS(ConfigHelper.getInstance().getIpfsAddress());
         return ipfs;
     }
 
