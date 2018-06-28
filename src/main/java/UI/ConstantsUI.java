@@ -1,5 +1,6 @@
 package UI;
 
+import com.nbs.tools.ConfigHelper;
 import com.nbs.tools.PropertyUtil;
 
 import javax.swing.*;
@@ -19,8 +20,7 @@ public class ConstantsUI {
      * 软件名称、版本
      */
     public final static String APP_NAME = "NBS Chain";
-    public final static String APP_VERSION = "v0.1";
-    public final static String CRLF_PANEL = "\\r\\n";
+
 
     public final static String ENTER_CHARACTER = "\n";
     public final static String WSPACE_CHARACTER4 = "        ";
@@ -56,8 +56,7 @@ public class ConstantsUI {
     /**
      * 图标路径
      */
-    public static final String BUTTON_ICON_ROOT = "/icon"+File.separator
-            +PropertyUtil.getProperty("nbs.button.dir","")+ File.separator;
+    public static final String BUTTON_ICON_ROOT = "/icon/zh_cn/";
 
     /**
      * 主图标
@@ -133,7 +132,8 @@ public class ConstantsUI {
             AppMainWindow.class.getResource("/icon/data.png"));
     public final static ImageIcon ICON_FILE_ENABLED = new ImageIcon(
             AppMainWindow.class.getResource("/icon/data_enabled.png"));
-    public final static ImageIcon ICON_FILE_LS = new ImageIcon(AppMainWindow.class.getResource(BUTTON_ICON_ROOT+"file_ls_normal.png"));
+
+    public final static ImageIcon ICON_FILE_LS = new ImageIcon(AppMainWindow.class.getResource("/icon/zh_cn/" +"file_ls_normal.png"));
     public final static ImageIcon ICON_FILE_LS_ENABLED = new ImageIcon(AppMainWindow.class.getResource(BUTTON_ICON_ROOT+"file_ls_enabled.png"));
     public final static ImageIcon ICON_FILE_LS_DISABLED = new ImageIcon(AppMainWindow.class.getResource(BUTTON_ICON_ROOT+"file_ls_disabled.png"));
 

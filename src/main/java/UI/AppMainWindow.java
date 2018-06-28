@@ -15,6 +15,7 @@ import com.nbs.ipfs.entity.IpfsMessage;
 import com.nbs.tools.ConfigHelper;
 
 import com.nbs.tools.DateHelper;
+import com.nbs.tools.PropertyUtil;
 import com.nbs.ui.frames.MainFrame;
 import com.nbs.utils.Base64CodecUtil;
 import com.nbs.utils.RadomCharactersHelper;
@@ -260,13 +261,14 @@ public class AppMainWindow {
      * 加载环境配置
      */
     private void loadEnv(){
+        logger.info("=====>>>>>>> NBS Chain Client4J ENV initializing......");
         Properties props = ConfigHelper.getEnv();
-        logger.info("ENV ============================>>");
+
         for(String k : props.stringPropertyNames()){
             String v = props.getProperty(k);
             logger.info(k+"="+v);
         }
-        logger.info("ENV ============================<<");
+
         /**
          * 初始化文件目录
          */
@@ -290,7 +292,9 @@ public class AppMainWindow {
             SEFL_BASE = initCurrentPeerInfo();
         }
         SERVER_STAT = true;
-        logger.info("NBS Client Start success.");
+        String s = PropertyUtil.getProperty("PKUI_PANEL_ABOUT_LABEL");
+        logger.info(ConstantsUI.BUTTON_ICON_ROOT);
+        logger.info("=====>>>>>>> NBS Chain Client4J ENV initialized Success......");
     }
 
 
@@ -356,9 +360,6 @@ public class AppMainWindow {
             }
         }).start();
     }
-
-
-
 
 
     /**

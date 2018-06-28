@@ -147,14 +147,13 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <assembleDirectory>${project.build.directory}/nbs</assembleDirectory>
+                    <assembleDirectory>${project.basedir}/out</assembleDirectory>
                     <repositoryLayout>flat</repositoryLayout>
                     <repositoryName>lib</repositoryName>
                     <binFolder>bin</binFolder>
                     <configurationDirectory>conf</configurationDirectory>
                     <configurationSourceDirectory>src/main/resources</configurationSourceDirectory>
                     <configurationDirectory>true</configurationDirectory>
-
                     <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
                     <encoding>UTF-8</encoding>
                     <logsDirectory>logs</logsDirectory>

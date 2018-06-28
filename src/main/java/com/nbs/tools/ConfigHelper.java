@@ -1,10 +1,7 @@
 package com.nbs.tools;
 
-import UI.ConstantsUI;
-import com.nbs.utils.FormatCnst;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
-import org.apache.commons.lang3.time.DateUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +25,9 @@ public class ConfigHelper {
      * 系统当前路径
      */
     public final static String CURRENT_DIR = System.getProperty("user.dir");
+    public final static String OS_FILE_SEPARATOR = File.separator;
     public static final String CONF_ROOT = CURRENT_DIR + File.separator+"config" + File.separator;
+    private static final String CONF_FILE = "nbs-conf.properties";
     public static final String PROFILE_ROOT = CURRENT_DIR + File.separator+"profile" + File.separator;
     public static final String NBS_FILES_ROOT_PATH = CURRENT_DIR + File.separator +"nbs" + File.separator;
     public static final String NBS_FILES_IPFS_ROOT = NBS_FILES_ROOT_PATH + "ipfs"+  File.separator;
@@ -37,7 +36,7 @@ public class ConfigHelper {
      */
     public static final String NBS_TEMP_ROOT = NBS_FILES_ROOT_PATH + "_temp" + File.separator;
     public static final String NBS_CACHE_AVATAR_ROOT_PATH = NBS_FILES_ROOT_PATH +"cache"+ File.separator+ "avatar" + File.separator;
-    private static final String CONF_FILE = "nbs-conf.properties";
+
 
     public static final String PK_CFG_IPFS_ADDR = "nbs.server.address";
     private static final String CLIENT_ADD_FILE_ROOT = "nbs.client.merkle.root";
@@ -49,13 +48,13 @@ public class ConfigHelper {
     public static String JSON_AVATAR_NAME_KEY = "avatar-name";
     public static String JSON_AVATAR_SUFFIX_KEY = "suffix";
 
-
     private static Properties env = new Properties();
+    private static Properties i18nProps = new Properties();
     static {
         InputStream is = null;
         try{
             is = new BufferedInputStream(new FileInputStream(
-                    CnstTools.PROPS_ROOT_PATH + CONF_FILE));
+                    CONF_ROOT + CONF_FILE));
             env.load(is);
             is.close();
         }catch (IOException ioe){
@@ -66,6 +65,18 @@ public class ConfigHelper {
                 } catch (IOException e) {
                 }
             }
+        }
+        if(is != null)is=null;
+        /**
+         * i18n
+         */
+        try{
+            is = new BufferedInputStream(new FileInputStream(
+                    CONF_ROOT + "zh-cn.properties"));
+            i18nProps.load(is);
+            is.close();
+        }catch (Exception e){
+            logger.error("load i18n config error.");
         }
     }
 
@@ -195,5 +206,41 @@ public class ConfigHelper {
 
     public static String getAddLogFileName(){
         return env.getProperty("nbs.client.merkle.add.log.name","");
+    }
+
+    /**
+     * 控制显示会员
+     * @return
+     */
+    public static boolean subWorldPeers(){
+        String stats = env.getProperty("nbs.client.im.topic.subworld","enabled");
+        return(stats.equalsIgnoreCase("enabled")
+                || stats.equalsIgnoreCase("true")
+                || stats.equalsIgnoreCase("1")
+        )  ? true : false;
+    }
+
+    public static String getI18nResourceHome(){
+        String i18nHome = env.getProperty("nbs.client.i18n.home","zh_cn");
+        return OS_FILE_SEPARATOR+"icon"+OS_FILE_SEPARATOR+i18nHome+OS_FILE_SEPARATOR;
+    }
+
+    /**
+     *
+     * @param key
+     * @return
+     */
+    public static String getI18nProperty(String key){
+        return i18nProps.getProperty(key);
+    }
+
+    /**
+     *
+     * @param key
+     * @param defaultVal
+     * @return
+     */
+    public static String getI18nProperty(String key,String defaultVal){
+        return i18nProps.getProperty(key,defaultVal);
     }
 }

@@ -17,9 +17,6 @@ import java.util.Properties;
  * All rights reserved.
  */
 public class PropertyUtil {
-
-
-
     /**
      * @Date    : 2018/6/13 15:49
      * @Author  : lanbery
@@ -35,6 +32,7 @@ public class PropertyUtil {
 
             InputStream in = new BufferedInputStream(
                     new FileInputStream(ConfigHelper.CONF_ROOT+"zh-cn.properties"));
+            System.out.println(ConfigHelper.CONF_ROOT+"zh-cn.properties");
             props.load(in);
             String v = props.getProperty(key);
             return v;

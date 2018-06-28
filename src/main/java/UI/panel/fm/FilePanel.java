@@ -151,6 +151,7 @@ public class FilePanel extends NBSAbstractPanel {
                     }
                 } catch (IOException e1) {
                     e1.printStackTrace();
+                    logger.error("Query Hash",e1.getMessage());
                 }
 
             }

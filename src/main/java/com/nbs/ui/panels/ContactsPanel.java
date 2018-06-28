@@ -155,7 +155,12 @@ public class ContactsPanel extends ParentAvailablePanel {
         IPFS ipfs = IPFSHelper.getInstance().getIpfs();
 
         try {
-            Object obj = ipfs.pubsub.peers();
+            Object obj = null;
+            if(ConfigHelper.subWorldPeers()){
+                obj = ipfs.pubsub.peers(IPFSHelper.NBSWORLD_IMS_TOPIC);
+            }else {
+                obj = ipfs.pubsub.peers();
+            }
             if(obj==null)return contacts;
             List<String> peers = (List<String>)JSONParser.getValue(obj,"Strings");
             if(peers!=null&&peers.size()>0){
