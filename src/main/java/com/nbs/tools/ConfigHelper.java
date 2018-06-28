@@ -76,7 +76,7 @@ public class ConfigHelper {
                 stats=1;
             }
         }catch (IOException ioe){
-            logger.error("load config error.%s",ioe.getMessage());
+            logger.error("load config error.{}",ioe.getMessage());
             if(is!=null){
                 try {
                     is.close();
@@ -99,7 +99,7 @@ public class ConfigHelper {
                 stats=2;
             }
         }catch (IOException ioe){
-            logger.error("load i18n error.%s",ioe.getMessage());
+            logger.error("load i18n error.{}",ioe.getMessage());
             if(is!=null){
                 try {
                     is.close();

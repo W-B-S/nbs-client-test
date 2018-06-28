@@ -86,6 +86,9 @@
                 <directory>conf/**</directory>
                 <targetPath>${build.outputDirectory}/</targetPath>
             </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
         </resources>
         <plugins>
             <plugin>
@@ -171,11 +174,11 @@
                 </executions>
                 <configuration>
                     <assembleDirectory>${project.basedir}/out</assembleDirectory>
-                    <repositoryLayout>default</repositoryLayout>
+                    <repositoryLayout>flat</repositoryLayout>
                     <repositoryName>lib</repositoryName>
                     <binFolder>bin</binFolder>
                     <copyConfigurationDirectory>true</copyConfigurationDirectory>
-                    <configurationDirectory>conf</configurationDirectory>
+                    <configurationDirectory>resources</configurationDirectory>
                     <configurationSourceDirectory>src/main/resources</configurationSourceDirectory>
                     <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
                     <encoding>UTF-8</encoding>

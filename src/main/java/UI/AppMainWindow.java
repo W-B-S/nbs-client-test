@@ -13,11 +13,10 @@ import com.nbs.entity.PeerInfoBase;
 import com.nbs.ipfs.IPFSHelper;
 import com.nbs.ipfs.entity.IpfsMessage;
 import com.nbs.tools.ConfigHelper;
-
-import com.nbs.tools.DateHelper;
 import com.nbs.tools.PropertyUtil;
 import com.nbs.ui.frames.MainFrame;
 import com.nbs.utils.Base64CodecUtil;
+import com.nbs.utils.BaseURLUtil;
 import com.nbs.utils.RadomCharactersHelper;
 import io.ipfs.api.IPFS;
 import io.ipfs.api.JSONParser;
@@ -114,8 +113,8 @@ public class AppMainWindow {
     public static Map<String,ContactsItem> peerItems = new HashMap<>();
 
     public static void main(String[] args){
-        String basedir = System.getProperty("user.dir");
-        System.out.println(System.getProperty("nbs.client.root",basedir));
+        String basedir = System.getProperty("app.home");
+        System.out.println("nbs-client-dir>>>>>>>>>>"+basedir);
         EventQueue.invokeLater(
                 new Runnable() {
                     @Override
@@ -204,7 +203,7 @@ public class AppMainWindow {
      * 初始化frame内容
      */
     private void initialize(){
-        logger.info("NBS initializing start ...");
+        logger.info("NBS Client start ...");
         loadEnv();
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -255,7 +254,7 @@ public class AppMainWindow {
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //frame.pack();
-        logger.info("NBS initialized ...");
+        logger.info("NBS start complete ...");
 
     }
 
@@ -263,6 +262,8 @@ public class AppMainWindow {
      * 加载环境配置
      */
     private void loadEnv(){
+        logger.info(BaseURLUtil.getAppBaseDir());
+        logger.info(BaseURLUtil.getAppJarPath());
         logger.info("=====>>>>>>> NBS Chain Client4J ENV initializing......");
         Properties props = ConfigHelper.getInstance().getEnv();
         for(String k : props.stringPropertyNames()){
