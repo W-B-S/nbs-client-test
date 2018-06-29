@@ -310,7 +310,7 @@ public class AppMainWindow {
             if(cfgMap.containsKey(ConfigHelper.JSON_AVATAR_KEY)&&cfgMap.containsKey(ConfigHelper.JSON_AVATAR_SUFFIX_KEY)){
                 //
             }else {
-                File defaultAvatarImage = new File(ConfigHelper.PROFILE_ROOT+"nbs.png");
+                File defaultAvatarImage = new File(ConfigHelper.PROFILE_ROOT+ "defaults/nbs.png");
                 if(!defaultAvatarImage.exists()||defaultAvatarImage.isDirectory())return;
                 fileName = defaultAvatarImage.getName();
                 suffix = fileName.substring(fileName.lastIndexOf("."));

@@ -126,9 +126,9 @@ public class IMPanel extends NBSAbstractPanel {
         /**
          * 聊天主窗口
          */
-        //centerPanel.add(buildMessMainPanel(),BorderLayout.CENTER);
-        chatPanel = new ChatPanel(this);
-        centerPanel.add(chatPanel,BorderLayout.CENTER);
+        centerPanel.add(buildMessMainPanel(),BorderLayout.CENTER);
+        //chatPanel = new ChatPanel(this);
+        //centerPanel.add(chatPanel,BorderLayout.CENTER);
         return centerPanel;
     }
 
