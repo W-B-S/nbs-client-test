@@ -1,8 +1,8 @@
 package com.nbs.ui.holder;
 
-import com.nbs.ui.cnst.FontUtil;
-import com.nbs.ui.components.ColorCnst;
-import com.nbs.ui.components.GBC;
+import io.ipfs.nbs.cnsts.FontUtil;
+import io.ipfs.nbs.cnsts.ColorCnst;
+import io.ipfs.nbs.ui.components.GBC;
 import com.nbs.ui.components.SizeAutoAdjustTextArea;
 import com.nbs.ui.components.VerticalFlowLayout;
 import com.nbs.ui.components.messages.NBSLeftImageMessageBubble;

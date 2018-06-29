@@ -1,4 +1,4 @@
-package com.nbs.ui.cnst;
+package io.ipfs.nbs.cnsts;
 
 /**
  * @Package : com.nbs.ui.cnst

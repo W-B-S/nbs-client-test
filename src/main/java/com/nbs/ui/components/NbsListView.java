@@ -3,6 +3,7 @@ package com.nbs.ui.components;
 import com.nbs.ui.AvatarViewHolder;
 import com.nbs.ui.ViewHolder;
 import com.nbs.ui.adapter.BaseAdapter;
+import io.ipfs.nbs.cnsts.ColorCnst;
 
 import javax.swing.*;
 import java.awt.*;

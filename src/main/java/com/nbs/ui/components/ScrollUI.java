@@ -1,5 +1,7 @@
 package com.nbs.ui.components;
 
+import io.ipfs.nbs.cnsts.ColorCnst;
+
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;

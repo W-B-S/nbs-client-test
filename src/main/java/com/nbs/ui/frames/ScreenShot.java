@@ -1,9 +1,9 @@
 package com.nbs.ui.frames;
 
-import com.nbs.ui.components.ColorCnst;
+import io.ipfs.nbs.cnsts.ColorCnst;
 import com.nbs.ui.panels.ChatPanel;
 import com.nbs.utils.ClipboardUtil;
-import com.nbs.utils.IconUtil;
+import io.ipfs.nbs.utils.IconUtil;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

@@ -13,15 +13,14 @@ import com.nbs.ipfs.entity.IpfsMessage;
 import com.nbs.tools.ConfigHelper;
 import com.nbs.tools.DateHelper;
 import com.nbs.ui.adapter.ContactsItemAdapter;
-import com.nbs.ui.components.ColorCnst;
-import com.nbs.ui.components.GBC;
+import io.ipfs.nbs.cnsts.ColorCnst;
+import io.ipfs.nbs.ui.components.GBC;
 import com.nbs.ui.components.NbsListView;
 import com.nbs.utils.Base64CodecUtil;
 import com.nbs.utils.DbUtil;
 import com.nbs.utils.RadomCharactersHelper;
 import io.ipfs.api.IPFS;
 import io.ipfs.api.JSONParser;
-import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,9 +1,8 @@
 package com.nbs.utils;
 
-import UI.AppMainWindow;
 import com.nbs.tools.ConfigHelper;
-import com.nbs.ui.cnst.FontUtil;
-import com.nbs.ui.components.ColorCnst;
+import io.ipfs.nbs.cnsts.FontUtil;
+import io.ipfs.nbs.cnsts.ColorCnst;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

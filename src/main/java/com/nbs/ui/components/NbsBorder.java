@@ -1,5 +1,7 @@
 package com.nbs.ui.components;
 
+import io.ipfs.nbs.cnsts.ColorCnst;
+
 import javax.swing.border.Border;
 import java.awt.*;
 

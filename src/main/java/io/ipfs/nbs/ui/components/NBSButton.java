@@ -1,6 +1,6 @@
-package com.nbs.ui.buttons;
+package io.ipfs.nbs.ui.components;
 
-import com.nbs.ui.cnst.FontUtil;
+import io.ipfs.nbs.cnsts.FontUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,6 +46,18 @@ public class NBSButton extends JButton {
         this.BUTTON_COLOR3 = press;
     }
 
+    /**
+     *
+     * @param text
+     * @param normal
+     * @param hover
+     */
+    public NBSButton(String text, Color normal, Color hover) {
+        this(text);
+        this.BUTTON_COLOR1 = normal;
+        this.BUTTON_COLOR2 = hover;
+        this.BUTTON_COLOR3 = hover;
+    }
     /**
      *
      * @param text

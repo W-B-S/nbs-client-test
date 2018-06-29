@@ -12,7 +12,7 @@ import com.nbs.entity.PeerInfoBase;
 import com.nbs.ipfs.IPFSHelper;
 import com.nbs.ipfs.entity.IpfsMessage;
 import com.nbs.tools.DateHelper;
-import com.nbs.ui.components.ColorCnst;
+import io.ipfs.nbs.cnsts.ColorCnst;
 import com.nbs.ui.panels.ChatPanel;
 import com.nbs.utils.Base64CodecUtil;
 import io.ipfs.api.IPFS;

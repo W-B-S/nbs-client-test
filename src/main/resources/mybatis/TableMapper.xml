@@ -6,6 +6,22 @@
 		select count(1) AS c from sqlite_master where type = 'table' and name = #{name}
 	</select>
 
+    <update id="createCurrentPeers">
+        create table current_peers (
+          id varchar(64) PRIMARY KEY,
+          fromid varchar(64),
+          nick varchar(100),
+          avatar varchar(100),
+          avatar_suffix varchar(64),
+          ip varchar (32),
+          locations varchar (200),
+          remark varchar(200),
+          ext_json text,
+          ctime TimeStamp NOT NULL DEFAULT (datetime('now','localtime')),
+          lmtime integer
+        );
+    </update>
+
     <update id="createNbsContacts">
         create table nbs_contacts (
         id varchar(64) PRIMARY KEY,
@@ -20,6 +36,8 @@
         lmtime integer
         );
     </update>
+
+
 
     <update id="createNbsMessage">
         CREATE table nbs_message (

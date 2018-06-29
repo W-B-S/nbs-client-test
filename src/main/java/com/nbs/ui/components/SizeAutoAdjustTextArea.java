@@ -1,7 +1,7 @@
 package com.nbs.ui.components;
 
-import com.nbs.ui.cnst.FontUtil;
-import com.nbs.ui.cnst.OSUtil;
+import io.ipfs.nbs.cnsts.FontUtil;
+import io.ipfs.nbs.cnsts.OSUtil;
 import com.nbs.ui.panels.message.JIMSendTextPane;
 import com.nbs.utils.EmojiUtil;
 import com.vdurmont.emoji.EmojiParser;

@@ -1,7 +1,7 @@
 package UI.panel.im;
 
-import com.nbs.ui.components.ColorCnst;
-import com.nbs.ui.components.GBC;
+import io.ipfs.nbs.cnsts.ColorCnst;
+import io.ipfs.nbs.ui.components.GBC;
 import com.nbs.ui.panels.ListPanel;
 import com.nbs.ui.panels.SearchPanel;
 

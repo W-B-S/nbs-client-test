@@ -1,11 +1,10 @@
 package com.nbs.ui.adapter;
 
-import UI.AppMainWindow;
 import UI.panel.im.IMPanel;
 import com.nbs.entity.ContactsItem;
 import com.nbs.ui.AvatarViewHolder;
 import com.nbs.ui.ContactsItemViewHolder;
-import com.nbs.ui.components.ColorCnst;
+import io.ipfs.nbs.cnsts.ColorCnst;
 import com.nbs.ui.components.NbsBorder;
 import com.nbs.ui.holder.ContactsAvatarViewHolder;
 import com.nbs.ui.listener.AbstractMouseListener;

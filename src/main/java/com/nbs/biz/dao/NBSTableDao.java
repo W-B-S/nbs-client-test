@@ -29,6 +29,10 @@ public class NBSTableDao {
         session.update("createNbsContacts");
     }
 
+    public void createCurrentPeers(){
+        session.update("createCurrentPeers");
+    }
+
     public void createNbsMessage(){
         session.update("createNbsMessage");
     }

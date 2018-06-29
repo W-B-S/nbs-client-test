@@ -40,9 +40,10 @@ public class ConfigHelper {
     public static final String NBS_CACHE_AVATAR_ROOT_PATH = NBS_FILES_ROOT_PATH +"cache"+ File.separator+ "avatar" + File.separator;
 
     public static final String PK_CFG_IPFS_ADDR = "nbs.server.address";
+    private static final String IPFS_ADDR_DEFAULT = "/ip4/127.0.0.1/tcp/5001";
     private static final String CLIENT_ADD_FILE_ROOT = "nbs.client.merkle.root";
     private static final String CLIENT_ADD_FILE_ROOT_HASH = "nbs.client.merkle.root.hash";
-    private static final String IPFS_ADDR_DEFAULT = "/ip4/127.0.0.1/tcp/5001";
+
 
     public static String JSON_NICKNAME_KEY = "nickname";
     public static String JSON_AVATAR_KEY = "avatar";

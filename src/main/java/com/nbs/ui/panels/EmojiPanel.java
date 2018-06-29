@@ -1,8 +1,8 @@
 package com.nbs.ui.panels;
 
-import com.nbs.ui.components.ColorCnst;
+import io.ipfs.nbs.cnsts.ColorCnst;
 import com.nbs.ui.listener.ExpressionListener;
-import com.nbs.utils.IconUtil;
+import io.ipfs.nbs.utils.IconUtil;
 
 import javax.swing.*;
 import java.awt.*;

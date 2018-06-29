@@ -1,4 +1,4 @@
-package com.nbs.ui.components;
+package io.ipfs.nbs.cnsts;
 
 import java.awt.*;
 

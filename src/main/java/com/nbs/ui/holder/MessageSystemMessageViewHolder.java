@@ -1,7 +1,7 @@
 package com.nbs.ui.holder;
 
-import com.nbs.ui.cnst.FontUtil;
-import com.nbs.ui.components.ColorCnst;
+import io.ipfs.nbs.cnsts.FontUtil;
+import io.ipfs.nbs.cnsts.ColorCnst;
 import com.nbs.ui.components.VerticalFlowLayout;
 
 import javax.swing.*;

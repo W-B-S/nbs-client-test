@@ -30,8 +30,8 @@ public class TableServiceTest {
         TableServiceTest tt = new TableServiceTest();
 
         //tt.createNbsContacts();
-       // tt.crateTest();
-        tt.save();
+        tt.crateTest();
+        //tt.save();
 
     }
 
@@ -49,7 +49,7 @@ public class TableServiceTest {
     public void crateTest(){
         TableService service = new TableService(DbUtil.getSqlSession());
         //service.initNBSMessage(true);
-        service.initNbsContacts();
+        service.createCurrentPeersTable();
     }
 
     public void createNbsContacts(){

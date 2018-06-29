@@ -1,6 +1,6 @@
 package com.nbs.ui.panels;
 
-import com.nbs.ui.components.ColorCnst;
+import io.ipfs.nbs.cnsts.ColorCnst;
 import com.nbs.ui.components.NbsListView;
 
 import javax.swing.*;

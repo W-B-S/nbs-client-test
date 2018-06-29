@@ -1,4 +1,4 @@
-package com.nbs.utils;
+package io.ipfs.nbs.utils;
 
 import javax.swing.*;
 import java.awt.*;

@@ -29,6 +29,13 @@ public class TableService {
         }
     }
 
+    public void createCurrentPeersTable(){
+        String tbNbsContacts = "current_peers";
+        boolean b = dao.tableExist(tbNbsContacts);
+        if(!b){
+            dao.createCurrentPeers();
+        }
+    }
     public void initNBSMessage(Boolean clear){
         String tbNBSMessage = "nbs_message";
         boolean b = dao.tableExist(tbNBSMessage);
