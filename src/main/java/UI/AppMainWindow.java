@@ -17,7 +17,7 @@ import com.nbs.tools.PropertyUtil;
 import com.nbs.ui.frames.MainFrame;
 import com.nbs.utils.Base64CodecUtil;
 import com.nbs.utils.BaseURLUtil;
-import com.nbs.utils.RadomCharactersHelper;
+import io.ipfs.nbs.utils.RadomCharactersHelper;
 import io.ipfs.api.IPFS;
 import io.ipfs.api.JSONParser;
 import io.ipfs.api.MerkleNode;

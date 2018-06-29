@@ -3,7 +3,7 @@ package com.nbs.test;
 import com.alibaba.fastjson.JSON;
 import com.nbs.entity.PeerBoradcastInfo;
 import com.nbs.utils.Base64CodecUtil;
-import com.nbs.utils.RadomCharactersHelper;
+import io.ipfs.nbs.utils.RadomCharactersHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,9 +21,12 @@ public class CtrlMsgTest {
 
    public static void main(String[] agrs){
        CtrlMsgTest cmt = new CtrlMsgTest();
-       long l = System.currentTimeMillis()/1000;
-       System.out.println(">>>"+l);
+       /*long l = System.currentTimeMillis()/1000;
+       System.out.println(">>>"+l);*/
        //cmt.GetCtrlOnline();
+
+       String name = "kasdfsadf.txt";
+       System.out.println(name.substring(name.lastIndexOf(".")));
    }
 
    private void GetCtrlOnline(){

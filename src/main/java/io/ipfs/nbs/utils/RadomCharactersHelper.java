@@ -1,4 +1,4 @@
-package com.nbs.utils;
+package io.ipfs.nbs.utils;
 
 /**
  * @Package : com.nbs.utils

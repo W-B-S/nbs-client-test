@@ -1,14 +1,14 @@
 package io.ipfs.nbs;
 
-
-import com.nbs.ipfs.IPFSHelper;
-import com.nbs.tools.ConfigHelper;
 import io.ipfs.api.IPFS;
-import io.ipfs.api.JSONParser;
 import io.ipfs.nbs.cnsts.AppGlobalCnst;
+import io.ipfs.nbs.cnsts.ColorCnst;
 import io.ipfs.nbs.helper.ConfigurationHelper;
+import io.ipfs.nbs.peers.PeerInfo;
 import io.ipfs.nbs.ui.frames.FailFrame;
+import io.ipfs.nbs.ui.frames.InitialFrame;
 import io.ipfs.nbs.utils.DataBaseUtil;
+import io.ipfs.nbs.utils.IconUtil;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +32,8 @@ public class Launcher {
     private static Launcher context;
     private static SqlSession sqlSession;
     private static final String APP_VERSION = "2.0";
+
+    public static ImageIcon logo ;
     /**
      * 文件基础路径
      * ${basedir}/.nbs/
@@ -54,6 +56,8 @@ public class Launcher {
      */
     private JFrame currentFrame;
 
+    private static PeerInfo currentPeer;
+
     static {
         sqlSession = DataBaseUtil.getSqlSession();
         CURRENT_DIR = System.getProperty("user.dir");
@@ -62,6 +66,7 @@ public class Launcher {
 
     public Launcher(){
         context = this;
+        logo = IconUtil.getIcon(this,"/icons/nbs.png");
         cfgHelper = ConfigurationHelper.getInstance();
     }
     public Launcher(String[] args){
@@ -86,9 +91,12 @@ public class Launcher {
         try{
             ipfs =  new IPFS(cfgHelper.getIPFSAddress());
             boolean first = checkedFirst(ipfs);
+            if(first){
 
+            }
+            currentFrame = new InitialFrame(ipfs);
 
-
+            currentFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }catch (RuntimeException re){
             System.out.println(re.getMessage());
             StringBuilder sb = new StringBuilder();
@@ -106,7 +114,8 @@ public class Launcher {
             currentFrame = new FailFrame(sb.toString());
             currentFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }
-
+        currentFrame.setBackground(ColorCnst.WINDOW_BACKGROUND);
+        currentFrame.setIconImage(logo.getImage());
         currentFrame.setVisible(true);
     }
 
@@ -148,5 +157,22 @@ public class Launcher {
             appBaseFile.mkdirs();
         }
         //数据库建表初始化
+
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static Launcher getContext() {
+        return context;
+    }
+
+    public static PeerInfo getCurrentPeer() {
+        return currentPeer;
+    }
+
+    public static void setCurrentPeer(PeerInfo currentPeer) {
+        Launcher.currentPeer = currentPeer;
     }
 }

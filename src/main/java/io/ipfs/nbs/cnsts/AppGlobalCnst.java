@@ -17,9 +17,19 @@ public class AppGlobalCnst {
      * 临时文件目录
      */
     public static final String TEMP_FILE = "tmp";
+
     /**
      * 在用户目录下 : .nbs/nbs.lock
      */
     public static final String LOCK_FILE = "nbs.lock";
 
+
+    public static String getAvatarPath(){
+        String fileSeparator = System.getProperty("file.separator");
+        StringBuilder sb = new StringBuilder();
+        sb.append(System.getProperty("user.dir")).append(fileSeparator);
+        sb.append(NBS_ROOT).append(fileSeparator).append("cache").append(fileSeparator);
+        sb.append("avatars");
+        return sb.toString();
+    }
 }

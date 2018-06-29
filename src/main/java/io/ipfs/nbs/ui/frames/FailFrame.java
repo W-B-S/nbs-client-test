@@ -11,9 +11,7 @@ import io.ipfs.nbs.utils.IconUtil;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+import java.awt.event.*;
 
 /**
  * @Package : io.ipfs.nbs.ui.frames
@@ -112,6 +110,10 @@ public class FailFrame extends JFrame {
         );
     }
 
+    public FailFrame() throws HeadlessException {
+        super();
+    }
+
     private void addListeners(){
         closeLabel.addMouseListener(new AbstractMouseListener(){
             @Override
@@ -150,5 +152,12 @@ public class FailFrame extends JFrame {
             });
 
         }
+
+        exitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(1);
+            }
+        });
     }
 }

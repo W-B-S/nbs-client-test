@@ -50,7 +50,7 @@ public class NBSTableDao {
      * 创建
      */
     public void createPeerdLogin(){
-        session.update("createPeerCurrent");
+        session.update("createPeerdLogin");
     }
 
     public void createUploadInfo(){
