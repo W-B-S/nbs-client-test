@@ -21,31 +21,113 @@ public class TableService {
         this.dao = new NBSTableDao(session);
     }
 
-    public void initNbsContacts(){
-        String tbNbsContacts = "nbs_contacts";
-        boolean b = dao.tableExist(tbNbsContacts);
+    /**
+     * 初始化所有表
+     */
+    public void initClientDB(){
+        initAttachmentInfo();
+        initPeerContacts();
+        initPeerLogin();
+        initPeerMessages();
+        initUploadInfo();
+        initWorldMessages();
+    }
+
+    /**
+     *
+     */
+    public void initPeerLogin(){
+        boolean b = dao.tableExist(TableTypes.PeerLogin.getTname());
         if(!b){
-            dao.createNbsContacts();
+            dao.createPeerdLogin();
         }
     }
 
-    public void createCurrentPeersTable(){
-        String tbNbsContacts = "current_peers";
-        boolean b = dao.tableExist(tbNbsContacts);
+    /**
+     *
+     */
+    public void initPeerContacts(){
+        boolean b = dao.tableExist(TableTypes.PeerContacts.getTname());
         if(!b){
-            dao.createCurrentPeers();
+            dao.createPeerContacts();
         }
     }
-    public void initNBSMessage(Boolean clear){
-        String tbNBSMessage = "nbs_message";
-        boolean b = dao.tableExist(tbNBSMessage);
-        if(b&&clear){
-            //清空表数据
-        }else {
-            dao.createNbsMessage();
+
+    /**
+     *
+     */
+    public void initAttachmentInfo(){
+        boolean b = dao.tableExist(TableTypes.AttachmentInfo.getTname());
+        if(!b){
+            dao.createAttachmentInfo();
         }
     }
+
+    /**
+     *
+     */
+    public void initPeerMessages(){
+        boolean b = dao.tableExist(TableTypes.PeerMessages.getTname());
+        if(!b){
+            dao.createPeerMessages();
+        }
+    }
+
+    /**
+     *
+     */
+    public void initWorldMessages(){
+        boolean b = dao.tableExist(TableTypes.WorldMessages.getTname());
+        if(!b){
+            dao.createWorldMessages();
+        }
+    }
+
+    /**
+     *
+     */
+    public void initUploadInfo(){
+        boolean b = dao.tableExist(TableTypes.UploadInfo.getTname());
+        if(!b){
+            dao.createUploadInfo();
+        }
+    }
+
     public List<NBSTest> getAll(){
         return dao.findAll();
+    }
+
+    private static enum TableTypes{
+        PeerLogin("p_login","登录记录"),
+        PeerContacts("p_contacts","联系人"),
+        PeerMessages("p_messages","消息"),
+        WorldMessages("w_messages","世界消息"),
+        UploadInfo("upload_info","下载"),
+        AttachmentInfo("attac_info","附件")
+        ;
+
+        private String tname;
+        private String remark;
+
+        TableTypes(String tname, String remark) {
+            this.tname = tname;
+            this.remark = remark;
+        }
+
+        public String getTname() {
+            return tname;
+        }
+
+        public void setTname(String tname) {
+            this.tname = tname;
+        }
+
+        public String getRemark() {
+            return remark;
+        }
+
+        public void setRemark(String remark) {
+            this.remark = remark;
+        }
     }
 }

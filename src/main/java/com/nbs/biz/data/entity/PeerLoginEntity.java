@@ -1,47 +1,35 @@
-package com.nbs.biz.model;
-
-import com.nbs.biz.data.entity.BasicModel;
+package com.nbs.biz.data.entity;
 
 /**
- * @Package : com.nbs.biz.model
- * @Description :
- * <p></p>
+ * @Package : com.nbs.biz.data.entity
+ * @Description : <p></p>
  * @Author : lambor.c
- * @Date : 2018/6/24-9:06
+ * @Date : 2018/6/29-20:24
  * Copyright (c) 2018, NBS , lambor.c<lanbery@gmail.com>.
  * All rights reserved.
  */
-public class ContactsEntity extends BasicModel {
+public class PeerLoginEntity extends BasicModel {
 
     private String id;
     private String fromid;
     private String nick;
-    /**
-     * hash58
-     */
     private String avatar;
-    /**
-     * .png
-     */
     private String avatarSuffix;
-
+    private String ip;
+    private String locations;
     private String remark;
     private String extJson;
     private String seckey;
+    private String sysuser;
     private Integer ctime;
     private Integer lmtime;
 
-
-    public ContactsEntity(String id, String nick, String avatar, String avatarSuffix) {
-        this.id = id;
-        this.nick = nick;
-        this.avatar = avatar;
-        this.avatarSuffix = avatarSuffix;
+    public String getId() {
+        return id;
     }
 
-    public ContactsEntity(String id, String nick) {
+    public void setId(String id) {
         this.id = id;
-        this.nick = nick;
     }
 
     public String getFromid() {
@@ -50,14 +38,6 @@ public class ContactsEntity extends BasicModel {
 
     public void setFromid(String fromid) {
         this.fromid = fromid;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getNick() {
@@ -84,6 +64,22 @@ public class ContactsEntity extends BasicModel {
         this.avatarSuffix = avatarSuffix;
     }
 
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public String getLocations() {
+        return locations;
+    }
+
+    public void setLocations(String locations) {
+        this.locations = locations;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -106,6 +102,14 @@ public class ContactsEntity extends BasicModel {
 
     public void setSeckey(String seckey) {
         this.seckey = seckey;
+    }
+
+    public String getSysuser() {
+        return sysuser;
+    }
+
+    public void setSysuser(String sysuser) {
+        this.sysuser = sysuser;
     }
 
     public Integer getCtime() {

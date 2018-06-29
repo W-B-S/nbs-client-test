@@ -25,19 +25,45 @@ public class NBSTableDao {
         return ((int) session.selectOne("tableExist", name)) > 0;
     }
 
-    public void createNbsContacts(){
-        session.update("createNbsContacts");
+    /**
+     *
+     */
+    public void createPeerContacts(){
+        session.update("createPeerContacts");
     }
 
-    public void createCurrentPeers(){
-        session.update("createCurrentPeers");
+    /**
+     * 世界消息
+     */
+    public void createWorldMessages(){
+        session.update("createWorldMessages");
     }
 
-    public void createNbsMessage(){
-        session.update("createNbsMessage");
+    /**
+     * 点对点消息
+     */
+    public void createPeerMessages(){
+        session.update("createPeerMessages");
+    }
+
+    /**
+     * 创建
+     */
+    public void createPeerdLogin(){
+        session.update("createPeerCurrent");
+    }
+
+    public void createUploadInfo(){
+        session.update("createUploadInfo");
     }
 
 
+    /**
+     *
+     */
+    public void createAttachmentInfo(){
+        session.update("createAttachmentInfo");
+    }
     public List<NBSTest> findAll(){
         return session.selectList("findAll");
     }

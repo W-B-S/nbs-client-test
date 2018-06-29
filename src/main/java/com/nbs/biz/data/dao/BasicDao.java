@@ -1,8 +1,10 @@
-package com.nbs.biz.dao;
+package com.nbs.biz.data.dao;
 
-import com.nbs.biz.model.BasicModel;
+import com.nbs.biz.data.entity.BasicModel;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.Map;
  * All rights reserved.
  */
 public class BasicDao {
+    private Logger logger = LoggerFactory.getLogger(BasicDao.class);
     protected SqlSession session;
     private String className;
 
@@ -43,6 +46,7 @@ public class BasicDao {
         if (time > 10)
         {
             System.out.println("查询到 BasicModelList 对象失败次数>10，放弃查询");
+            logger.warn("{}->findAll(),查询到 BasicModelList 对象失败次数>10，放弃查询",className);
             return null;
         }
 

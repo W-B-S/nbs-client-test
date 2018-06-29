@@ -49,12 +49,12 @@ public class TableServiceTest {
     public void crateTest(){
         TableService service = new TableService(DbUtil.getSqlSession());
         //service.initNBSMessage(true);
-        service.createCurrentPeersTable();
+        service.initWorldMessages();
     }
 
     public void createNbsContacts(){
         TableService service = new TableService(DbUtil.getSqlSession());
-        service.initNbsContacts();
+        service.initPeerMessages();
        // List<NBSTest> lst = service.getAll();
 /*        if(lst!=null){
             String json = JSON.toJSONStringWithDateFormat(lst,"yyyy-MM-dd HH:mm:ss");

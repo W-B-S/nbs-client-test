@@ -1,7 +1,8 @@
 package com.nbs.biz.service;
 
-import com.nbs.biz.dao.BasicDao;
-import com.nbs.biz.model.BasicModel;
+
+import com.nbs.biz.data.dao.BasicDao;
+import com.nbs.biz.data.entity.BasicModel;
 
 import java.util.List;
 

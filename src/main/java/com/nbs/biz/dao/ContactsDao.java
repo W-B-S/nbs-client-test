@@ -1,5 +1,6 @@
 package com.nbs.biz.dao;
 
+import com.nbs.biz.data.dao.BasicDao;
 import com.nbs.biz.model.ContactsEntity;
 import org.apache.ibatis.session.SqlSession;
 
