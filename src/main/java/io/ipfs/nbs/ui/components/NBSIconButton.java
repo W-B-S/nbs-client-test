@@ -1,7 +1,12 @@
-package UI.button;
+package io.ipfs.nbs.ui.components;
 
+import sun.swing.ImageIconUIResource;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * @Package : UI.button
@@ -37,9 +42,12 @@ public class NBSIconButton extends JButton {
         this.iconEnabled = enabledIcon;
         this.iconDisabled = disabledIcon;
         this.tip = tip;
-
         initialize();
         setUp();
+    }
+
+    public void actived(){
+        setIcon(this.iconEnabled);
     }
 
     /**
@@ -88,4 +96,6 @@ public class NBSIconButton extends JButton {
             this.setToolTipText(tip);
         }
     }
+
+
 }

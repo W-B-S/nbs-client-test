@@ -11,6 +11,7 @@ import com.nbs.ui.components.NbsListView;
 import com.nbs.ui.frames.MainFrame;
 import com.nbs.utils.Base64CodecUtil;
 import io.ipfs.api.IPFS;
+import io.ipfs.nbs.ui.panels.ParentAvailablePanel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +37,7 @@ import java.util.List;
  * Copyright (c) 2018, NBS , lambor.c<lanbery@gmail.com>.
  * All rights reserved.
  */
-public class ChatPanel extends ParentAvailablePanel{
+public class ChatPanel extends ParentAvailablePanel {
 
     private static Logger logger = LoggerFactory.getLogger(ChatPanel.class);
 

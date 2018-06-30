@@ -2,7 +2,7 @@ package UI.panel.fm;
 
 import UI.AppMainWindow;
 import UI.ConstantsUI;
-import UI.button.NBSIconButton;
+import io.ipfs.nbs.ui.components.NBSIconButton;
 import UI.common.NBSAbstractPanel;
 import UI.common.ToolbarStatsPanel;
 import UI.panel.ContentJLabel;
@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * @Package : UI.panel.fm

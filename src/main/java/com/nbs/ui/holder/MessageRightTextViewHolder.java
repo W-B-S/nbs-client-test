@@ -1,7 +1,7 @@
 package com.nbs.ui.holder;
 
 import UI.AppMainWindow;
-import UI.button.NBSIconButton;
+import io.ipfs.nbs.ui.components.NBSIconButton;
 import com.nbs.tools.ConfigHelper;
 import io.ipfs.nbs.cnsts.FontUtil;
 import io.ipfs.nbs.cnsts.ColorCnst;

@@ -2,7 +2,7 @@ package UI.panel.im;
 
 import UI.AppMainWindow;
 import UI.ConstantsUI;
-import UI.button.NBSIconButton;
+import io.ipfs.nbs.ui.components.NBSIconButton;
 import UI.common.NBSAbstractPanel;
 import UI.common.ToolbarStatsPanel;
 import UI.templete.WihteBackJPanel;

@@ -2,7 +2,7 @@ package UI.panel;
 
 import UI.AppMainWindow;
 import UI.ConstantsUI;
-import UI.button.NBSIconButton;
+import io.ipfs.nbs.ui.components.NBSIconButton;
 import com.nbs.tools.PropertyUtil;
 
 import javax.swing.*;

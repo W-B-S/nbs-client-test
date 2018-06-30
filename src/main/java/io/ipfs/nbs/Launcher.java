@@ -3,6 +3,7 @@ package io.ipfs.nbs;
 import io.ipfs.api.IPFS;
 import io.ipfs.nbs.cnsts.AppGlobalCnst;
 import io.ipfs.nbs.cnsts.ColorCnst;
+import io.ipfs.nbs.cnsts.OSUtil;
 import io.ipfs.nbs.helper.ConfigurationHelper;
 import io.ipfs.nbs.peers.PeerInfo;
 import io.ipfs.nbs.ui.frames.FailFrame;
@@ -119,7 +120,9 @@ public class Launcher {
             currentFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }
         currentFrame.setBackground(ColorCnst.WINDOW_BACKGROUND);
-        currentFrame.setIconImage(logo.getImage());
+        if(OSUtil.getOsType()!=OSUtil.Mac_OS){
+            currentFrame.setIconImage(logo.getImage());
+        }
         currentFrame.setVisible(true);
     }
 

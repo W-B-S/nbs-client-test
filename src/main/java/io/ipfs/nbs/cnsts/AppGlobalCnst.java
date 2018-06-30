@@ -25,6 +25,11 @@ public class AppGlobalCnst {
      */
     public static final String LOCK_FILE = "nbs.lock";
 
+    /**
+     * 图标根
+     */
+    public static String TOOL_ICON_PATH = "/icons/tools/";
+
 
     /**
      * 构造路径

@@ -1,4 +1,4 @@
-package com.nbs.ui.panels;
+package io.ipfs.nbs.ui.panels;
 
 import javax.swing.*;
 

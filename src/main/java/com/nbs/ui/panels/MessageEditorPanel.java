@@ -2,7 +2,7 @@ package com.nbs.ui.panels;
 
 import UI.AppMainWindow;
 import UI.ConstantsUI;
-import UI.button.NBSIconButton;
+import io.ipfs.nbs.ui.components.NBSIconButton;
 import io.ipfs.nbs.ui.components.NBSButton;
 import io.ipfs.nbs.cnsts.FontUtil;
 import io.ipfs.nbs.cnsts.OSUtil;
@@ -12,6 +12,7 @@ import com.nbs.ui.components.NBSTextEditor;
 import com.nbs.ui.components.ScrollUI;
 import com.nbs.ui.frames.ScreenShot;
 import com.nbs.ui.icons.NBSIcon;
+import io.ipfs.nbs.ui.panels.ParentAvailablePanel;
 
 import javax.swing.*;
 import java.awt.*;
