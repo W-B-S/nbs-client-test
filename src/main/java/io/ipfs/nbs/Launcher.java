@@ -7,8 +7,10 @@ import io.ipfs.nbs.helper.ConfigurationHelper;
 import io.ipfs.nbs.peers.PeerInfo;
 import io.ipfs.nbs.ui.frames.FailFrame;
 import io.ipfs.nbs.ui.frames.InitialFrame;
+import io.ipfs.nbs.ui.frames.MainFrame;
 import io.ipfs.nbs.utils.DataBaseUtil;
 import io.ipfs.nbs.utils.IconUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +58,8 @@ public class Launcher {
      */
     private JFrame currentFrame;
 
+    public static PeerInfo currentPeer;
+
     static {
         sqlSession = DataBaseUtil.getSqlSession();
         CURRENT_DIR = System.getProperty("user.dir");
@@ -88,12 +92,14 @@ public class Launcher {
 
         try{
             ipfs =  new IPFS(cfgHelper.getIPFSAddress());
-            boolean first = checkedFirst(ipfs);
+            boolean first = needInitConfig(ipfs);
+           // first = true;
             if(first){
-
+                currentFrame = new InitialFrame(ipfs);
+            }else {
+                currentFrame = new MainFrame(currentPeer);
+                currentFrame.setVisible(true);
             }
-            currentFrame = new InitialFrame(ipfs);
-
             currentFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }catch (RuntimeException re){
             System.out.println(re.getMessage());
@@ -123,12 +129,30 @@ public class Launcher {
      * @return
      * @throws IOException
      */
-    private boolean checkedFirst(IPFS ipfs) throws IOException {
+    private boolean needInitConfig(IPFS ipfs) throws IOException {
         Map cfg = ipfs.config.show();
-        if(cfg.containsKey(ConfigurationHelper.JSON_NICKNAME_KEY)){
-            return true;
-        }else {
+        String peerid = (String)ipfs.id().get("ID");
+        if(cfg.containsKey(ConfigurationHelper.JSON_NICKNAME_KEY)
+                && cfg.containsKey(ConfigurationHelper.JSON_CFG_FROMID_KEY)){
+            String nick = (String)cfg.get(ConfigurationHelper.JSON_NICKNAME_KEY);
+            String fromid =  (String)cfg.get(ConfigurationHelper.JSON_CFG_FROMID_KEY);
+            if(StringUtils.isBlank(fromid)||StringUtils.isBlank(nick))return true;
+
+            currentPeer = new PeerInfo();
+            currentPeer.setId(peerid);
+            currentPeer.setNick(nick);
+            currentPeer.setFrom(fromid);
+
+            Object avatar = cfg.get(ConfigurationHelper.JSON_AVATAR_KEY);
+            Object avatarSuffix = cfg.get(ConfigurationHelper.JSON_AVATAR_SUFFIX_KEY);
+            if(avatar!=null&&!avatar.toString().equals("")
+                    &&avatarSuffix!=null&& !"".equals(avatarSuffix.toString())){
+                currentPeer.setAvatar(avatar.toString());
+                currentPeer.setAvatarSuffix(avatarSuffix.toString());
+            }
             return false;
+        }else {
+            return true;
         }
     }
 

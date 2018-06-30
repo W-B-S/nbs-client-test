@@ -25,6 +25,8 @@ public class MainFrame extends JFrame {
         context = this;
         currentPeer = peerInfo;
         initComponents();
+
+        initView();
     }
 
     private void initComponents(){
@@ -35,5 +37,13 @@ public class MainFrame extends JFrame {
         test = new JPanel();
         JLabel jLabel = new JLabel(currentPeer.getNick());
         add(jLabel);
+    }
+
+    private void initView(){
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -257,6 +257,18 @@ public class InitialFrame extends JFrame {
             setUndecorated(true);
             contentPanel.add(ctrlPanel,
                     new GBC(0,0).setFill(GBC.HORIZONTAL).setWeight(1,1).setInsets(0,0,10,0));
+
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (UnsupportedLookAndFeelException e) {
+                e.printStackTrace();
+            }
         }
 
 
@@ -349,6 +361,14 @@ public class InitialFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 boolean complete = false;
+                String nickname = nickField.getText();
+                if(StringUtils.isBlank(nickname)){
+                    statusLabel.setText("请填写昵称.");
+                    statusLabel.setVisible(true);
+                    statusLabel.updateUI();
+                    return;
+                }
+                tempInfo.setNick(nickname);
                 /**
                  * 1.ipfs config
                  */
@@ -403,8 +423,9 @@ public class InitialFrame extends JFrame {
         this.dispose();
         MainFrame frame = new MainFrame(tempInfo);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setBackground(ColorCnst.WINDOW_BACKGROUND);
+        frame.setIconImage(Launcher.logo.getImage());
         frame.setVisible(true);
-
     }
 
 
