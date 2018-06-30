@@ -1,5 +1,7 @@
 package io.ipfs.nbs.cnsts;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * @Package : io.ipfs.nbs.cnsts
  * @Description : <p></p>
@@ -24,12 +26,23 @@ public class AppGlobalCnst {
     public static final String LOCK_FILE = "nbs.lock";
 
 
-    public static String getAvatarPath(){
-        String fileSeparator = System.getProperty("file.separator");
+    /**
+     * 构造路径
+     * @param agrs
+     * @return
+     */
+    public static String consturactPath(String... agrs){
         StringBuilder sb = new StringBuilder();
-        sb.append(System.getProperty("user.dir")).append(fileSeparator);
-        sb.append(NBS_ROOT).append(fileSeparator).append("cache").append(fileSeparator);
-        sb.append("avatars");
+        String fileSeparator = System.getProperty("file.separator");
+        int len = agrs.length;
+        for(int i=0;i<len;i++ ){
+            if(i==(len-1)){
+                sb.append(agrs[i]);
+            }else {
+                sb.append(agrs[i]).append(fileSeparator);
+            }
+
+        }
         return sb.toString();
     }
 }

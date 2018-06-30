@@ -33,9 +33,12 @@ public class ConfigurationHelper {
      * profiles
      */
     public static String JSON_NICKNAME_KEY = "nickname";
+    public static String JSON_CFG_FROMID_KEY = "fromid";
     public static String JSON_AVATAR_KEY = "avatar";
     public static String JSON_AVATAR_NAME_KEY = "avatar-name";
     public static String JSON_AVATAR_SUFFIX_KEY = "suffix";
+
+
 
     private Properties cfgProps = new Properties();
     private Properties i18nProps = new Properties();

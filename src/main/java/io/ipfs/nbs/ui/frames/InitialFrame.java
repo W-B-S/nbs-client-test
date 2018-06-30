@@ -1,6 +1,6 @@
 package io.ipfs.nbs.ui.frames;
 
-import com.nbs.biz.service.PeerLoginService;
+import com.nbs.biz.PeersOperatorService;
 import com.nbs.biz.service.TableService;
 import com.nbs.ui.components.VerticalFlowLayout;
 import com.nbs.ui.listener.AbstractMouseListener;
@@ -13,17 +13,20 @@ import io.ipfs.nbs.cnsts.AppGlobalCnst;
 import io.ipfs.nbs.cnsts.ColorCnst;
 import io.ipfs.nbs.cnsts.FontUtil;
 import io.ipfs.nbs.cnsts.OSUtil;
+import io.ipfs.nbs.helper.ConfigurationHelper;
+import io.ipfs.nbs.helper.HttpURLImageHelper;
 import io.ipfs.nbs.peers.PeerInfo;
 import io.ipfs.nbs.ui.components.GBC;
 import io.ipfs.nbs.ui.components.NBSButton;
-import io.ipfs.nbs.ui.filters.ImageFileFilter;
 import io.ipfs.nbs.utils.DataBaseUtil;
 import io.ipfs.nbs.utils.IconUtil;
 import io.ipfs.nbs.utils.RadomCharactersHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -57,8 +60,8 @@ public class InitialFrame extends JFrame {
     private static Point origin = new Point();
 
     private SqlSession sqlSession;
-    private PeerLoginService peerLoginService;
     private TableService tableService;
+    private PeersOperatorService operatorService;
     private final static String DEFAULT_NICK_PREFFIX = "NBSChain_";
 
     private final static String TIP = "点击头像图标或下方按钮可上传头像.";
@@ -86,6 +89,7 @@ public class InitialFrame extends JFrame {
 
     private JFileChooser fileChooser;
 
+    private String upFileName;
     public InitialFrame(IPFS ipfs){
         this.ipfs = ipfs;
         /**
@@ -344,12 +348,27 @@ public class InitialFrame extends JFrame {
         initButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                boolean complete = false;
                 /**
                  * 1.ipfs config
-                 *
                  */
+                boolean b = saveIpfsConfig(upFileName);
+                /**
+                 * 保存数据库
+                 */
+                if(b){
+                    complete = operatorService.initSaveSelf(tempInfo,"首次登陆初始化");
+                }
+                if(complete){
+                    openMainFrame();
+                }else {
+                    statusLabel.setText("保存失败，请重试.");
+                    statusLabel.setVisible(true);
+                    statusLabel.updateUI();
+                }
             }
         });
+
 
         avatarLabel.addMouseListener(new AbstractMouseListener(){
             @Override
@@ -379,15 +398,47 @@ public class InitialFrame extends JFrame {
             }
         });
     }
+    private void openMainFrame(){
+        //Launcher.setCurrentPeer(tempInfo);
+        this.dispose();
+        MainFrame frame = new MainFrame(tempInfo);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+
+    }
+
+
+    /**
+     * 更新到IPFS Config
+     * @param originAvatarName
+     * @return
+     */
+    private boolean saveIpfsConfig(String originAvatarName){
+        if(tempInfo==null||tempInfo.getId()==null||StringUtils.isBlank(tempInfo.getFrom()))return false;
+        try {
+            ipfs.config.set(ConfigurationHelper.JSON_NICKNAME_KEY,tempInfo.getNick());
+            ipfs.config.set(ConfigurationHelper.JSON_CFG_FROMID_KEY,tempInfo.getFrom());
+            ipfs.config.set(ConfigurationHelper.JSON_AVATAR_KEY,tempInfo.getAvatar());
+            ipfs.config.set(ConfigurationHelper.JSON_AVATAR_SUFFIX_KEY,tempInfo.getAvatarSuffix());
+            if(StringUtils.isNotBlank(originAvatarName))ipfs.config.set(ConfigurationHelper.JSON_AVATAR_NAME_KEY,originAvatarName);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
 
     /**
      *
      */
     private void initService(){
         sqlSession = DataBaseUtil.getSqlSession();
-        peerLoginService = new PeerLoginService(sqlSession);
         tableService = new TableService(sqlSession);
         tableService.initClientDB();
+
+        operatorService = new PeersOperatorService(sqlSession);
 
         tempInfo = new PeerInfo();
         //获取fromid
@@ -404,6 +455,12 @@ public class InitialFrame extends JFrame {
             e.printStackTrace();
         }
         getFromid(tempInfo);
+    }
+
+    private void saveDBPContacts(PeerInfo peerInfo){
+        if(peerInfo==null)return;
+
+
     }
 
     private void getFromid(PeerInfo info){
@@ -437,9 +494,8 @@ public class InitialFrame extends JFrame {
         /**
          *
          */
-         String nbsWorkBase = Launcher.CURRENT_DIR+Launcher.FILE_SEPARATOR + AppGlobalCnst.NBS_ROOT;
          String tempBase = Launcher.CURRENT_DIR+Launcher.FILE_SEPARATOR + AppGlobalCnst.TEMP_FILE;
-         String avatarCache = AppGlobalCnst.getAvatarPath();
+         String avatarCache = AppGlobalCnst.consturactPath(Launcher.appBasePath,"cache","avatars");
          File tmpFile = new File(tempBase);
          if(!tmpFile.exists())tmpFile.mkdirs();
          File avatarFile = new File(avatarCache);
@@ -455,6 +511,7 @@ public class InitialFrame extends JFrame {
        // fileChooser.setFileFilter(new ImageFileFilter());
         File file = fileChooser.getSelectedFile();
         if(file!=null){
+            //上传前先压缩
             new Thread(()->{
                 List<MerkleNode> nodes;
                 NamedStreamable.FileWrapper fileWrapper = new NamedStreamable.FileWrapper(file);
@@ -466,24 +523,27 @@ public class InitialFrame extends JFrame {
                     tempInfo.setAvatar(fileHash);
                     tempInfo.setAvatarSuffix(name.substring(name.lastIndexOf(".")));
                     //TODO 存数据库upload
-                    byte[] bytes = ipfs.get(nodes.get(0).hash);
                     String avatarFileName = fileHash+ name.substring(name.lastIndexOf("."));
 
-                    File avatarFile = new File(AppGlobalCnst.getAvatarPath(),avatarFileName);
-                    if(avatarFile!=null){
-                        avatarFile.delete();
-                    }
-                    avatarFile.createNewFile();
-
-                    fos = new FileOutputStream(avatarFile);
-                    fos.write(bytes);
-                    fos.flush();
-                    fos.close();
-                    //图片压缩TODO
                     URL url = new URL("http://127.0.0.1:8080/ipfs/"+fileHash);
-                    ImageIcon icon = new ImageIcon(url) ;
-                    avatarLabel.setIcon(icon);
-                    avatarLabel.updateUI();
+                    String avatarCachePath = AppGlobalCnst.consturactPath(Launcher.appBasePath,"cache","avatars");
+                    File avatarFile = new File(avatarCachePath,avatarFileName);
+                    HttpURLImageHelper httpURLImageHelper = HttpURLImageHelper.getInstance();
+                    try {
+                        File localFile = httpURLImageHelper.saveFileFromUrl(url,avatarFileName);
+                        //图片压缩TODO
+                        Image image = ImageIO.read(localFile);
+                        ImageIcon icon = httpURLImageHelper.generateThumbScale(image,fileHash+tempInfo.getAvatarSuffix(),128);
+                        if(icon!=null){
+                            logger.info(fileHash);
+                            avatarLabel.setIcon(icon);
+                            avatarLabel.updateUI();
+                            upFileName = file.getName();
+                        }
+                    } catch (Exception e) {
+                        logger.info(e.getMessage());
+                        e.printStackTrace();
+                    }
                 } catch (IOException e) {
                    logger.error("上传失败：{}",e.getMessage());
                    statusLabel.setText(e.getMessage());

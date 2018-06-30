@@ -28,4 +28,12 @@ public class DateHelper {
     public static String currentTime(){
         return DateFormatUtils.format(System.currentTimeMillis(),FORMAT_STANDARD_TIME);
     }
+
+    /**
+     * int
+     * @return
+     */
+    public static int currentSecond(){
+        return (int)(System.currentTimeMillis()/1000);
+    }
 }

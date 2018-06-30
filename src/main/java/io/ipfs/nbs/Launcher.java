@@ -56,8 +56,6 @@ public class Launcher {
      */
     private JFrame currentFrame;
 
-    private static PeerInfo currentPeer;
-
     static {
         sqlSession = DataBaseUtil.getSqlSession();
         CURRENT_DIR = System.getProperty("user.dir");
@@ -168,11 +166,4 @@ public class Launcher {
         return context;
     }
 
-    public static PeerInfo getCurrentPeer() {
-        return currentPeer;
-    }
-
-    public static void setCurrentPeer(PeerInfo currentPeer) {
-        Launcher.currentPeer = currentPeer;
-    }
 }

@@ -25,6 +25,6 @@
 
     <mappers>
         <mapper resource="mybatis/TableMapper.xml"/>
-        <mapper resource="mybatis/ContactsMapper.xml"/>
+        <mapper resource="mybatis/PeerContactsMapper.xml"/>
     </mappers>
 </configuration>
