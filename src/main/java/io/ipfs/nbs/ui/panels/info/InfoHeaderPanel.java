@@ -69,7 +69,7 @@ public class InfoHeaderPanel extends ParentAvailablePanel {
     private void initComponents(){
         avatarLabel = new JLabel();
         nickLabel = new LCJlabel(ColorCnst.FONT_GRAY_DARKER);
-        nickLabel.setFont(FontUtil.getDefaultFont(20));
+        nickLabel.setFont(FontUtil.getDefaultFont(24));
 
         locationLabel = new LCJlabel();
         locationLabel.setFont(FontUtil.getDefaultFont(14));

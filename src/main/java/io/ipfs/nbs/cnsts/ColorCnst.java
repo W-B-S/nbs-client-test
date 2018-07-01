@@ -35,6 +35,12 @@ public class ColorCnst {
     public static Color MAIN_COLOR = new Color(54, 172, 72);
     public static Color MAIN_COLOR_DARKER = new Color(51, 154, 69);
     public static final Color SCROLL_BAR_THUMB = new Color(122, 122, 122);
+    public static final Color SCROLL_BAR_TTRACK = new Color(175, 175, 175);
 
-    public static final Color CONTACTS_ITEM_GRAY = new Color(221, 221, 221);
+    public static final Color CONTACTS_ITEM_GRAY_MAIN = new Color(221, 221, 221);
+    public static final Color CONTACTS_ITEM_LINE_GRAY = new Color(207, 207, 207);
+    public static final Color CONTACTS_ITEM_GRAY = new Color(191, 191, 191);
+    public static final Color SEEARCH_ITEM_GRAY_LIGHT = new Color(211, 211, 211);
+    public static final Color SEEARCHTEXT_ITEM_GRAYBG = new Color(175, 175, 175);
+    public static final Color SEEARCH_ITEM_GRAY_DARKER = new Color(138, 138, 138);
 }

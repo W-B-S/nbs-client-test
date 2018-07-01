@@ -1,4 +1,4 @@
-package com.nbs.ui.adapter;
+package io.nbs.commons.adapter;
 
 import com.nbs.ui.AvatarViewHolder;
 import com.nbs.ui.ViewHolder;

@@ -25,15 +25,18 @@ public class ContactsItemViewHolder extends ViewHolder {
         initView();
     }
 
+    /**
+     * 列表项内容设置
+     */
     private void initComponents(){
         setPreferredSize(new Dimension(100,50));
-        setBackground(ColorCnst.DARK);
-        setBorder(new NbsBorder(NbsBorder.BOTTOM));
+        setBackground(ColorCnst.CONTACTS_ITEM_GRAY_MAIN);
+        setBorder(new NbsBorder(NbsBorder.BOTTOM,ColorCnst.CONTACTS_ITEM_LINE_GRAY));
         setOpaque(true);
         setForeground(ColorCnst.FONT_WHITE);
 
         roomName.setFont(FontUtil.getDefaultFont(13));
-        roomName.setForeground(ColorCnst.FONT_WHITE);
+        roomName.setForeground(ColorCnst.ITEM_SELECTED);
     }
 
     /**

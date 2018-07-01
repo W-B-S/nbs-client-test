@@ -1,9 +1,12 @@
 package io.ipfs.nbs.ui.panels.im;
 
 import io.ipfs.nbs.cnsts.ColorCnst;
+import io.ipfs.nbs.ui.components.GBC;
+import io.ipfs.nbs.ui.frames.MainFrame;
 import io.ipfs.nbs.ui.panels.ParentAvailablePanel;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * @Package : io.ipfs.nbs.ui.panels.im
@@ -20,18 +23,44 @@ public class IMLeftPanel extends ParentAvailablePanel {
      */
     private IMInfoPanel infoPanel;
 
+    /**
+     *
+     */
+    private SearchePanel searchePanel;
+    /**
+     * 列表展示区
+     */
+    private IMListPanel listPanel;
+
     public IMLeftPanel(JPanel parent) {
         super(parent);
-
         initComponents();
         initView();
+
+        setListeners();
     }
 
     private void initComponents(){
-        //setBorder(MainFrame.buleBorder);
+
+        searchePanel = new SearchePanel(this);
+        listPanel = new IMListPanel(this);
+        //listPanel.setBackground(ColorCnst.CONTACTS_ITEM_GRAY_MAIN);
+        //searchePanel.setBorder(MainFrame.buleBorder);
+
     }
 
     private void initView(){
         setBackground(ColorCnst.CONTACTS_ITEM_GRAY);
+        setLayout(new BorderLayout());
+
+
+        add(searchePanel,BorderLayout.NORTH);
+               // new GBC(0,0).setFill(GBC.BOTH).setWeight(1,1).setAnchor(GBC.CENTER));
+        add(listPanel,BorderLayout.CENTER);
+               // new GBC(0,0).setFill(GBC.BOTH).setWeight(1,67).setAnchor(GBC.CENTER));
+    }
+
+    private void setListeners(){
+
     }
 }

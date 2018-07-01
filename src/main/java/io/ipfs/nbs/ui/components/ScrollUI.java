@@ -1,4 +1,4 @@
-package com.nbs.ui.components;
+package io.ipfs.nbs.ui.components;
 
 import io.ipfs.nbs.cnsts.ColorCnst;
 
@@ -37,7 +37,7 @@ public class ScrollUI extends BasicScrollBarUI {
      */
     public ScrollUI() {
         this.thumbColor = ColorCnst.SCROLL_BAR_THUMB;
-        this.trackColor = ColorCnst.DARK;
+        this.trackColor = ColorCnst.SCROLL_BAR_TTRACK;
     }
 
     public void setThumbColor(Color thumbColor) {

@@ -22,7 +22,7 @@ import java.awt.*;
 public class IMMasterPanel extends JPanel {
 
     public static final int IM_LEFT_WIDTH = 280;
-    JLabel testShowLanbel = new JLabel("聊天IMMasterPanel");
+
 
     private static IMMasterPanel context;
 
@@ -41,11 +41,9 @@ public class IMMasterPanel extends JPanel {
     private void initComponents(){
         leftPanel = new IMLeftPanel(this);
         leftPanel.setPreferredSize(new Dimension(IM_LEFT_WIDTH,MainFrame.H_SIZE));
-        //leftPanel.setBackground(ColorCnst.FONT_GRAY_DARKER);
         rightPanel = new IMRightPanel(this);
 
-        //centerPanel.add(winTitlePanel);
-        //centerPanel.add(testShowLanbel);
+
 
 
         setBorder(new LineBorder(ColorCnst.SCROLL_BAR_TRACK_LIGHT));

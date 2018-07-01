@@ -1,4 +1,4 @@
-package com.nbs.ui.adapter;
+package io.nbs.commons.adapter;
 
 import UI.panel.im.IMPanel;
 import com.nbs.entity.ContactsItem;
@@ -75,7 +75,7 @@ public class ContactsItemAdapter extends BaseAdapter<ContactsItemViewHolder> {
     }
 
     /**
-     *
+     * 字母
      * @param viewHolder
      * @param position
      */
@@ -83,7 +83,7 @@ public class ContactsItemAdapter extends BaseAdapter<ContactsItemViewHolder> {
     public void onBindHeaderViewHolder(AvatarViewHolder viewHolder, int position) {
         ContactsAvatarViewHolder holder = (ContactsAvatarViewHolder) viewHolder;
         holder.setPreferredSize(new Dimension(100, 25));
-        holder.setBackground(ColorCnst.DARKER);
+        holder.setBackground(ColorCnst.ITEM_SELECTED_LIGHT);
         holder.setBorder(new NbsBorder(NbsBorder.BOTTOM));
         holder.setOpaque(true);
 
@@ -142,7 +142,7 @@ public class ContactsItemAdapter extends BaseAdapter<ContactsItemViewHolder> {
             {
                 if (selectedViewHolder != viewHolder)
                 {
-                    setBackground(viewHolder, ColorCnst.ITEM_SELECTED_DARK);
+                    setBackground(viewHolder, ColorCnst.ITEM_SELECTED_LIGHT);
                 }
             }
 
@@ -151,7 +151,7 @@ public class ContactsItemAdapter extends BaseAdapter<ContactsItemViewHolder> {
             {
                 if (selectedViewHolder != viewHolder)
                 {
-                    setBackground(viewHolder, ColorCnst.DARKER);
+                    setBackground(viewHolder, ColorCnst.CONTACTS_ITEM_GRAY_MAIN);
                 }
             }
         });

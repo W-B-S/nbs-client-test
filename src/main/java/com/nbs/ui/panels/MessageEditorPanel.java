@@ -9,7 +9,7 @@ import io.ipfs.nbs.cnsts.OSUtil;
 import io.ipfs.nbs.cnsts.ColorCnst;
 import io.ipfs.nbs.ui.components.GBC;
 import com.nbs.ui.components.NBSTextEditor;
-import com.nbs.ui.components.ScrollUI;
+import io.ipfs.nbs.ui.components.ScrollUI;
 import com.nbs.ui.frames.ScreenShot;
 import com.nbs.ui.icons.NBSIcon;
 import io.ipfs.nbs.ui.panels.ParentAvailablePanel;

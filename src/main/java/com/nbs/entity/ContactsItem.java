@@ -29,6 +29,13 @@ public class ContactsItem implements Comparable<ContactsItem> {
 
     private String avatarSuffix;
 
+    private String ip;
+    private String locations;
+    /**
+     * 是否在线
+     */
+    private Integer online;
+
     public ContactsItem() { }
 
     /**
@@ -135,6 +142,30 @@ public class ContactsItem implements Comparable<ContactsItem> {
 
     public void setAvatarSuffix(String avatarSuffix) {
         this.avatarSuffix = avatarSuffix;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public String getLocations() {
+        return locations;
+    }
+
+    public void setLocations(String locations) {
+        this.locations = locations;
+    }
+
+    public Integer getOnline() {
+        return online;
+    }
+
+    public void setOnline(Integer online) {
+        this.online = online;
     }
 
     /**

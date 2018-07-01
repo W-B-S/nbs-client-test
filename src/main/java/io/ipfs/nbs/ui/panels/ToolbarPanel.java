@@ -1,14 +1,11 @@
 package io.ipfs.nbs.ui.panels;
 
-import UI.ConstantsUI;
-import com.nbs.ui.components.VerticalFlowLayout;
-import com.nbs.ui.listener.AbstractMouseListener;
+import io.ipfs.nbs.ui.components.VerticalFlowLayout;
 import io.ipfs.nbs.cnsts.AppGlobalCnst;
 import io.ipfs.nbs.cnsts.ColorCnst;
 import io.ipfs.nbs.helper.AvatarImageHandler;
 import io.ipfs.nbs.peers.PeerInfo;
 import io.ipfs.nbs.ui.components.GBC;
-import io.ipfs.nbs.ui.components.LamButtonIcon;
 import io.ipfs.nbs.ui.components.NBSIconButton;
 import io.ipfs.nbs.ui.frames.MainFrame;
 import io.ipfs.nbs.utils.ButtonIconUtil;
@@ -182,8 +179,8 @@ public class ToolbarPanel extends JPanel {
     }
 
     public void setDefaultSelected(){
-        selectedBTN(infoBTN);
-        mainCtx.mainWinShow(MainFrame.MainCardLayoutTypes.INFO);
+        selectedBTN(imBTN);
+        mainCtx.mainWinShow(MainFrame.MainCardLayoutTypes.IM);
     }
     private void initialButton(){
         infoBTN = ButtonIconUtil.infoBTN;

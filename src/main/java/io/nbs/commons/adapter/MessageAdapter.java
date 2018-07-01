@@ -1,8 +1,8 @@
-package com.nbs.ui.adapter;
+package io.nbs.commons.adapter;
 
 import com.nbs.entity.MessageItem;
 import com.nbs.tools.MessageViewHolderCacheHelper;
-import com.nbs.ui.components.NbsListView;
+import io.ipfs.nbs.ui.components.NbsListView;
 import com.nbs.ui.holder.BaseMessageViewHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
