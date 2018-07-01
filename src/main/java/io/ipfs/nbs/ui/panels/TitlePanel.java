@@ -11,7 +11,7 @@ import io.ipfs.nbs.ui.frames.MainFrame;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 
 /**
  * @Package : io.ipfs.nbs.ui.panels
@@ -21,7 +21,7 @@ import java.awt.event.MouseEvent;
  * Copyright (c) 2018, NBS , lambor.c<lanbery@gmail.com>.
  * All rights reserved. ParentAvailablePanel
  */
-public class TitlePanel extends JPanel {
+public class TitlePanel extends ParentAvailablePanel {
 
     private static TitlePanel context;
 
@@ -36,23 +36,23 @@ public class TitlePanel extends JPanel {
 
     private ImageIcon maxIcon;
     private ImageIcon minIcon;
-    private boolean windowMax;
+    private ImageIcon restoreIcon;
 
+    private boolean windowMax ;
     private Rectangle desktopBounds; // 去除任务栏后窗口的大小
     private Rectangle normalBounds;
+    private long lastClickTime;
     private static Point origin = new Point();
 
 
     /**
      * JPanel parent
      */
-    public TitlePanel() {
-       // super(parent);
+    public TitlePanel(JPanel parent) {
+        super(parent);
         context = this;
         initComponents();
-
         initView();
-
         setListeners();
         initBounds();
     }
@@ -63,15 +63,16 @@ public class TitlePanel extends JPanel {
 
         maxIcon = new ImageIcon(getClass().getResource("/icons/window_max.png"));
         minIcon = new ImageIcon(getClass().getResource("/icons/window_min.png"));
-
+        restoreIcon =  new ImageIcon(getClass().getResource("/icons/window_restore.png"));
         titlePanel = new JPanel();
         titlePanel.setLayout(new GridBagLayout());
 
         titleLabel = new JLabel();
-        titleLabel.setFont(FontUtil.getDefaultFont(16));
-        titleLabel.setText("NBS Chain 世界频道");
+        titleLabel.setFont(FontUtil.getDefaultFont(15));
+        //titleLabel.setText("NBS Chain 世界频道");
 
 
+        CtrlLabelMouseListener listener = new CtrlLabelMouseListener();
         /**
          * 窗口控制
          */
@@ -85,6 +86,7 @@ public class TitlePanel extends JPanel {
         closeLabel.setOpaque(true);
         closeLabel.setPreferredSize(ctrlItemSize);
         closeLabel.setCursor(handCursor);
+        closeLabel.addMouseListener(listener);
 
         maxLabel = new JLabel();
         maxLabel.setIcon(maxIcon);
@@ -92,6 +94,7 @@ public class TitlePanel extends JPanel {
         maxLabel.setOpaque(true);
         maxLabel.setPreferredSize(ctrlItemSize);
         maxLabel.setCursor(handCursor);
+        maxLabel.addMouseListener(listener);
 
         minLabel = new JLabel();
         minLabel.setIcon(minIcon);
@@ -99,15 +102,28 @@ public class TitlePanel extends JPanel {
         minLabel.setOpaque(true);
         minLabel.setPreferredSize(ctrlItemSize);
         minLabel.setCursor(handCursor);
-
-
+        minLabel.addMouseListener(listener);
 
     }
 
+    /**
+     *
+     */
     private void initView(){
-        setLayout(new VerticalFlowLayout(VerticalFlowLayout.TOP,0,0,true,true));
+        //setLayout(new VerticalFlowLayout(VerticalFlowLayout.TOP,0,0,true,true));
+        setLayout(new GridBagLayout());
+        setLayout(new GridBagLayout());
+        JPanel left = new JPanel();
+        left.setLayout(new FlowLayout(FlowLayout.LEFT,5,0));
+        JPanel right = new JPanel();
+        right.setLayout(new FlowLayout(FlowLayout.RIGHT,0,0));
+
+        //add(left,BorderLayout.CENTER);
+        //add(right,BorderLayout.EAST);
+
+        //setLayout(new GridBagLayout());
         setBorder(null);
-        this.setBorder(new LamBorder(LamBorder.BOTTOM,ColorCnst.LIGHT_GRAY));
+        //this.setBorder(new LamBorder(LamBorder.BOTTOM,ColorCnst.LIGHT_GRAY));
 
         ctrlPanel.add(minLabel);
         ctrlPanel.add(maxLabel);
@@ -115,11 +131,17 @@ public class TitlePanel extends JPanel {
 
         int margin;
         if(OSUtil.getOsType() != OSUtil.Mac_OS){
-            add(ctrlPanel);
-            add(titlePanel);
+            right.add(ctrlPanel);
+            left.add(titlePanel);
+            add(left,
+                    new GBC(0,0).setFill(GBC.BOTH).setWeight(85,5).setInsets(0,0,0,0));
+            add(right,
+                    new GBC(1,0).setFill(GBC.HORIZONTAL).setWeight(10,2).setInsets(0,0,0,0) );
             margin = 5;
         }else {
-            add(titlePanel);
+            left.add(titlePanel);
+            add(left,
+                    new GBC(0,0).setFill(GBC.BOTH).setWeight(85,5).setInsets(0,0,0,0));
             margin = 15;
         }
 
@@ -129,10 +151,77 @@ public class TitlePanel extends JPanel {
 
     }
 
+    /**
+     *
+     */
     private void setListeners(){
+
+        if(OSUtil.getOsType() != OSUtil.Mac_OS){
+            MouseAdapter mouseAdapter = new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if(System.currentTimeMillis()-lastClickTime < 700){
+                        maxOrRestoreWindow();
+                    }
+                    lastClickTime =System.currentTimeMillis();
+                    super.mouseClicked(e);
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+                   origin.x = e.getX();
+                   origin.y =e.getY();
+                }
+            };
+
+            /**
+             * 拖动
+             */
+            MouseMotionListener mouseMotionListener = new MouseMotionAdapter() {
+                @Override
+                public void mouseDragged(MouseEvent e) {
+                    Point oldP = MainFrame.getContext().getLocation();
+                    MainFrame.getContext().setLocation(oldP.x +e.getX()-origin.x,oldP.y+e.getY()-origin.y);
+                    //super.mouseDragged(e);
+                }
+            };
+
+            ctrlPanel.addMouseListener(mouseAdapter);
+            ctrlPanel.addMouseMotionListener(mouseMotionListener);
+
+            this.addMouseListener(mouseAdapter);
+            this.addMouseMotionListener(mouseMotionListener);
+        }
+
+        /**
+         * TODO room member control
+         */
+        MouseListener mouseListener = new AbstractMouseListener(){
+
+        };
 
     }
 
+    /**
+     * 设置标题
+     * @param title
+     */
+    public void setTitle(String title){
+        if(title==null)title="";
+        titleLabel.setText(title);
+    }
+
+    private void maxOrRestoreWindow(){
+        if(windowMax){
+            MainFrame.getContext().setBounds(normalBounds);
+            maxLabel.setIcon(maxIcon);
+            windowMax = false;
+        }else {
+            MainFrame.getContext().setBounds(desktopBounds);
+            maxLabel.setIcon(restoreIcon);
+            windowMax = true;
+        }
+    }
     /**
      *
      */
@@ -157,13 +246,14 @@ public class TitlePanel extends JPanel {
         @Override
         public void mouseClicked(MouseEvent e) {
             if(e.getComponent()==closeLabel){
-                MainFrame.getContext().setVisible(false);
+                //MainFrame.getContext().setVisible(false);
+                System.exit(1);
             }else if(e.getComponent() == maxLabel){
-
+                maxOrRestoreWindow();
             }else if(e.getComponent() == minLabel){
-
+                MainFrame.getContext().setExtendedState(JFrame.ICONIFIED);
             }
-            super.mouseClicked(e);
+            //super.mouseClicked(e);
         }
 
         @Override

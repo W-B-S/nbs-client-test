@@ -1,5 +1,6 @@
 package io.ipfs.nbs.ui.panels;
 
+import io.ipfs.nbs.ui.frames.MainFrame;
 import io.ipfs.nbs.ui.panels.im.IMMasterPanel;
 import io.ipfs.nbs.ui.panels.info.InfoMasterPanel;
 
@@ -17,42 +18,17 @@ import java.awt.*;
 public class MainContentPanel extends JPanel {
     private static MainContentPanel context;
 
-    /**
-     * win 窗口控制
-     */
-    public static TitlePanel winTitlePanel;
-    /**
-     * PEER INFO
-     */
-    private InfoMasterPanel infoMasterPanel;
-    /**
-     * 聊天
-     */
-    private IMMasterPanel imMasterPanel;
-
-
-
     public MainContentPanel() {
-        /**
-         * win ctrl
-         */
-        winTitlePanel = new TitlePanel();
         initComponents();
-
         initView();
     }
 
     private void initComponents(){
 
-        infoMasterPanel = new InfoMasterPanel(winTitlePanel);
-
-        imMasterPanel = new IMMasterPanel(winTitlePanel);
-
-
     }
 
     private void initView(){
-        add(imMasterPanel);
+
     }
 
     /**
@@ -63,15 +39,7 @@ public class MainContentPanel extends JPanel {
         return context;
     }
 
-    /**
-     *
-     * @param types
-     */
-    public void setPanelShow(MasterTypes types){
 
-    }
 
-    public static enum MasterTypes{
-        INFO,IM,DATDA,MUSIC,ABOUT;
-    }
+
 }

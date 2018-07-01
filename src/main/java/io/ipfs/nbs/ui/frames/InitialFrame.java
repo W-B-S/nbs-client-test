@@ -13,6 +13,7 @@ import io.ipfs.nbs.cnsts.AppGlobalCnst;
 import io.ipfs.nbs.cnsts.ColorCnst;
 import io.ipfs.nbs.cnsts.FontUtil;
 import io.ipfs.nbs.cnsts.OSUtil;
+import io.ipfs.nbs.helper.AvatarImageHandler;
 import io.ipfs.nbs.helper.ConfigurationHelper;
 import io.ipfs.nbs.helper.HttpURLImageHelper;
 import io.ipfs.nbs.peers.PeerInfo;
@@ -90,8 +91,15 @@ public class InitialFrame extends JFrame {
     private JFileChooser fileChooser;
 
     private String upFileName;
+    /**
+     * 头像处理工具类
+     */
+    private AvatarImageHandler imageHandler;
+
+
     public InitialFrame(IPFS ipfs){
         this.ipfs = ipfs;
+        imageHandler = AvatarImageHandler.getInstance();
         /**
          * first
          */
@@ -104,6 +112,7 @@ public class InitialFrame extends JFrame {
         initComponents();
         initView();
         setListeners();
+        imageHandler.initAvatarLocalDir();
         centerScreen();
     }
 
@@ -524,6 +533,10 @@ public class InitialFrame extends JFrame {
     }
     /**
      * 上传头像
+     * 1. 压缩大小
+     * 128*128  .nbs/profile/avatars/peerId
+     * 64*64 .nbs/profile/avatars/thumbs/peerId
+     * 40*40 .nbs/cache/avatars/thumbs/hash
      */
     private void uploadAvatar(){
         fileChooser = new JFileChooser();
@@ -532,29 +545,28 @@ public class InitialFrame extends JFrame {
        // fileChooser.setFileFilter(new ImageFileFilter());
         File file = fileChooser.getSelectedFile();
         if(file!=null){
-            //上传前先压缩
+            String name = file.getName();//源文件名
+            String avatarPeerName = tempInfo.getId() + name.substring(name.lastIndexOf("."));
             new Thread(()->{
                 List<MerkleNode> nodes;
-                NamedStreamable.FileWrapper fileWrapper = new NamedStreamable.FileWrapper(file);
+
                 FileOutputStream fos = null;
                 try {
+                    //上传前先压缩
+                    imageHandler.createdAvatar4Profile(file,avatarPeerName);
+                    File file128 = new File(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),avatarPeerName));
+                    NamedStreamable.FileWrapper fileWrapper = new NamedStreamable.FileWrapper(file128);
+
                     nodes = ipfs.add(fileWrapper);
                     String fileHash = nodes.get(0).hash.toBase58();
-                    String name = file.getName();
+
                     tempInfo.setAvatar(fileHash);
                     tempInfo.setAvatarSuffix(name.substring(name.lastIndexOf(".")));
                     //TODO 存数据库upload
                     String avatarFileName = fileHash+ name.substring(name.lastIndexOf("."));
-
-                    URL url = new URL("http://127.0.0.1:8080/ipfs/"+fileHash);
-                    String avatarCachePath = AppGlobalCnst.consturactPath(Launcher.appBasePath,"cache","avatars");
-                    File avatarFile = new File(avatarCachePath,avatarFileName);
-                    HttpURLImageHelper httpURLImageHelper = HttpURLImageHelper.getInstance();
                     try {
-                        File localFile = httpURLImageHelper.saveFileFromUrl(url,avatarFileName);
-                        //图片压缩TODO
-                        Image image = ImageIO.read(localFile);
-                        ImageIcon icon = httpURLImageHelper.generateThumbScale(image,fileHash+tempInfo.getAvatarSuffix(),128);
+                        imageHandler.createContactsAvatar(file,avatarFileName);
+                        ImageIcon icon = new ImageIcon(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),avatarPeerName));
                         if(icon!=null){
                             logger.info(fileHash);
                             avatarLabel.setIcon(icon);
@@ -565,7 +577,7 @@ public class InitialFrame extends JFrame {
                         logger.info(e.getMessage());
                         e.printStackTrace();
                     }
-                } catch (IOException e) {
+                } catch (Exception e) {
                    logger.error("上传失败：{}",e.getMessage());
                    statusLabel.setText(e.getMessage());
                    statusPanel.setVisible(true);

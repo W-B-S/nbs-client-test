@@ -50,6 +50,9 @@ public class NBSIconButton extends JButton {
         setIcon(this.iconEnabled);
     }
 
+    public void normal(){
+        setIcon(this.iconDisabled);
+    }
     /**
      * 构造方法
      * @param normalIcon

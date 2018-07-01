@@ -63,7 +63,7 @@ public class HttpURLImageHelper {
     }
 
     /**
-     *
+     * 从URL获取图标
      * @param url
      * @param fileName
      * @return
@@ -91,58 +91,23 @@ public class HttpURLImageHelper {
         }
     }
 
-    private void saveURL(URL url,File saveFile){
 
-    }
 
-    public ImageIcon generateThumbScale(Image image,String identifyName,int size){
+
+
+
+
+    /**
+     * 生成头像图标
+     * @param srcFile
+     * @param identify
+     * @param size
+     * @return
+     */
+    public Image generateThumb(File srcFile,String identify,int size){
         if(size<32)size = DEFAULT_THUMB_SIZE;
-        int width = image.getWidth(null);
-        int height = image.getHeight(null);
-
-        int w=128,h=128;
-        float scale = width*1.0F/height;
-        String path = AppGlobalCnst.consturactPath(Launcher.appBasePath,"cache","thumbs",identifyName);
-        File destFile = new File(path);
-        float compScale = 1.0F;
-        if(scale>=1.0F&& width>size){//按宽压缩
-            compScale = size*1.0F/width;
-            w = size;
-            h = (int)(height*compScale);
-        }else if(scale<1.0F && height>size) {
-            h =  size;
-            compScale = size*1.0F/height;
-            w = (int)(width*compScale);
-        }
         try {
-            compressImage(image,destFile,w,h);
-            if(destFile.exists()){
-                ImageIcon iconThumb = new ImageIcon(path);
-                return iconThumb;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-
-    }
-
-    public void compressImage(Image img,File destFile,int w,int h) throws IOException {
-        if(!destFile.getParentFile().exists())destFile.getParentFile().mkdirs();
-        BufferedImage image = new BufferedImage(w,h,BufferedImage.SCALE_SMOOTH);
-        image.getGraphics().drawImage(img,0,0,w,h,null);
-        FileOutputStream out = new FileOutputStream(destFile);
-        JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-        encoder.encode(image);
-        out.close();
-
-    }
-
-    public Image generateThumb(Image image,String identify,int size){
-        if(size<32)size = DEFAULT_THUMB_SIZE;
-
-        try {
+            Image image = ImageIO.read(srcFile);
             int[] imageSize = getImageSize(image);
             int oriW = imageSize[0];
             int oriH = imageSize[1];

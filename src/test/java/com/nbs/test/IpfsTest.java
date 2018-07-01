@@ -4,7 +4,7 @@ import UI.AppMainWindow;
 import UI.ConstantsUI;
 import UI.panel.ContentJLabel;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
+
 import com.alibaba.fastjson.TypeReference;
 import com.nbs.entity.NbsChainFile;
 import io.ipfs.api.IPFS;
@@ -38,6 +38,7 @@ public class IpfsTest {
 
     public static void main(String[] args){
         IpfsTest it = new IpfsTest();
+        it.getConfig();
        // it.test1();
        // it.listAddr();
        // it.getIDmap();
@@ -46,6 +47,17 @@ public class IpfsTest {
         //it.addFile();
         //it.fileLs();
         it.addDirFile();
+    }
+
+    private void getConfig(){
+        String key = "Gateway";
+        try {
+            Object s= ipfs.config.get(key);
+            String json = io.ipfs.api.JSONParser.toString(s);
+            System.out.println(json);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void fileLs(){

@@ -54,6 +54,8 @@ public class Launcher {
     public static String CURRENT_DIR;
     public static final String FILE_SEPARATOR;
     private ConfigurationHelper cfgHelper;
+
+    private IPFS ipfs;
     /**
      * 当前Frame
      */
@@ -89,12 +91,12 @@ public class Launcher {
         /**
          * 2.构建IPFS
          */
-        IPFS ipfs = null;
+        ipfs = null;
 
         try{
             ipfs =  new IPFS(cfgHelper.getIPFSAddress());
             boolean first = needInitConfig(ipfs);
-           // first = true;
+            first = true;
             if(first){
                 currentFrame = new InitialFrame(ipfs);
             }else {
@@ -103,6 +105,7 @@ public class Launcher {
             }
             currentFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }catch (RuntimeException re){
+            re.printStackTrace();
             System.out.println(re.getMessage());
             StringBuilder sb = new StringBuilder();
             sb.append("<html>");
@@ -193,4 +196,7 @@ public class Launcher {
         return context;
     }
 
+    public IPFS getIpfs() {
+        return ipfs;
+    }
 }

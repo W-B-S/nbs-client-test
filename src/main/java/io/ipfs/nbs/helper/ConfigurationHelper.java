@@ -1,11 +1,14 @@
 package io.ipfs.nbs.helper;
 
+import io.ipfs.api.IPFS;
 import io.ipfs.nbs.Launcher;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -28,6 +31,7 @@ public class ConfigurationHelper {
 
     public static final String PK_CFG_IPFS_ADDR = "nbs.server.address";
     private static final String IPFS_ADDR_DEFAULT = "/ip4/127.0.0.1/tcp/5001";
+
 
     /**
      * profiles
@@ -54,6 +58,24 @@ public class ConfigurationHelper {
         public static ConfigurationHelper instance = new ConfigurationHelper();
     }
 
+    /**
+     *
+     * @param key
+     * @param defVal
+     * @return
+     */
+    public String getI18nProperty(String key,String defVal){
+        return i18nProps.getProperty(key,defVal);
+    }
+
+    /**
+     *
+     * @param key
+     * @return
+     */
+    public String getI18nProperty(String key){
+        return i18nProps.getProperty(key);
+    }
     /**
      *
      * @return
@@ -121,5 +143,26 @@ public class ConfigurationHelper {
                 } catch (IOException e){}
             }
         }
+    }
+
+    /**
+     * 获取http IPFS URL
+     * @return
+     */
+    public String getGateWayURL(){
+        String gwUrl = cfgProps.getProperty("nbs.server.address.gateway-url","http://127.0.0.1:8080/ipfs/");
+        if(StringUtils.isNotBlank(gwUrl))return gwUrl;
+        if(!gwUrl.endsWith("/"))gwUrl = gwUrl+"/";
+        return gwUrl;
+    }
+
+    /**
+     * 返回组装好的
+     * @param hash
+     * @return
+     */
+    public String getGateWayURL(String hash){
+        String gwUrl = getGateWayURL();
+        return gwUrl+hash;
     }
 }

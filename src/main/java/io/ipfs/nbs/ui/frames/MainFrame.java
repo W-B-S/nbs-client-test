@@ -5,9 +5,10 @@ import io.ipfs.nbs.cnsts.FontUtil;
 import io.ipfs.nbs.cnsts.OSUtil;
 import io.ipfs.nbs.peers.PeerInfo;
 import io.ipfs.nbs.ui.panels.MainContentPanel;
-import io.ipfs.nbs.ui.panels.TitlePanel;
 import io.ipfs.nbs.ui.panels.ToolbarPanel;
+import io.ipfs.nbs.ui.panels.about.AboutMasterPanel;
 import io.ipfs.nbs.ui.panels.im.IMMasterPanel;
+import io.ipfs.nbs.ui.panels.info.InfoMasterPanel;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -28,7 +29,7 @@ public class MainFrame extends JFrame {
     public  static  Border buleBorder = BorderFactory.createLineBorder(Color.blue,1);
 
     private static MainFrame context;
-    private static PeerInfo currentPeer;
+    private PeerInfo currentPeer;
     public static final int W_SIZE = 900;
     public static final int H_SIZE = 650;
     public static final  int TOOLBAR_WIDTH = 52;
@@ -40,12 +41,24 @@ public class MainFrame extends JFrame {
     private JPanel leftMenuPanle;
 
     private MainContentPanel mainCentetPanel;
-
-
+    private CardLayout cardLayout;
 
     private static JPanel mainJPanel;
 
 
+    /**
+     * PEER INFO
+     */
+    private InfoMasterPanel infoMasterPanel;
+    /**
+     * 聊天
+     */
+    private IMMasterPanel imMasterPanel;
+
+
+    private AboutMasterPanel aboutMasterPanel;
+
+    public static Cursor handCursor = new Cursor(Cursor.HAND_CURSOR);
 
     public MainFrame(PeerInfo peerInfo){
         context = this;
@@ -81,18 +94,16 @@ public class MainFrame extends JFrame {
             }
         }
 
+        cardLayout = new CardLayout();
         /**
          * 功能按钮
          */
         leftMenuPanle = new JPanel();
         leftMenuPanle.setBackground(ColorCnst.DARKER);
-
-        toolbarPanel = new ToolbarPanel();
+        toolbarPanel = new ToolbarPanel(context);
         toolbarPanel.setBackground(ColorCnst.DARKER);
         toolbarPanel.setPreferredSize(new Dimension(MainFrame.TOOLBAR_WIDTH,MainFrame.H_SIZE));
         leftMenuPanle.add(toolbarPanel);
-
-
 
 
         /**
@@ -100,9 +111,15 @@ public class MainFrame extends JFrame {
          */
         mainCentetPanel = new MainContentPanel();
         mainCentetPanel.setBackground(ColorCnst.WINDOW_BACKGROUND);
+        mainCentetPanel.setLayout(cardLayout);
 
+        infoMasterPanel = new InfoMasterPanel();
+        imMasterPanel = new IMMasterPanel();
+        aboutMasterPanel = new AboutMasterPanel();
 
-
+        mainCentetPanel.add(infoMasterPanel,MainFrame.MainCardLayoutTypes.INFO.name());
+        mainCentetPanel.add(imMasterPanel,MainCardLayoutTypes.IM.name());
+        mainCentetPanel.add(aboutMasterPanel,MainCardLayoutTypes.ABOUT.name());
     }
 
     private void initView(){
@@ -111,13 +128,17 @@ public class MainFrame extends JFrame {
         setMinimumSize(winDimension);
         //mainJPanel.setLayout(new BorderLayout());
 
-        mainJPanel.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
-        mainJPanel.add(leftMenuPanle);
+        //mainJPanel.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
+        mainJPanel.setLayout(new BorderLayout());
+        mainJPanel.add(leftMenuPanle,BorderLayout.WEST);
+        mainJPanel.add(mainCentetPanel,BorderLayout.CENTER);
 
-        mainJPanel.add(mainCentetPanel);
-
-
+        /**
+         * 设置默认显示
+         */
+        toolbarPanel.setDefaultSelected();
         add(mainJPanel);
+
         centerScreen();
     }
 
@@ -129,6 +150,13 @@ public class MainFrame extends JFrame {
     }
 
     /**
+     *
+     * @param clType
+     */
+    public void mainWinShow(MainCardLayoutTypes clType){
+        cardLayout.show(mainCentetPanel,clType.name());
+    }
+    /**
      * 居中设置
      */
     private void centerScreen(){
@@ -139,5 +167,17 @@ public class MainFrame extends JFrame {
 
     public static MainFrame getContext() {
         return context;
+    }
+
+    public static enum MainCardLayoutTypes{
+        INFO,IM,DATDA,MUSIC,ABOUT;
+    }
+
+    public PeerInfo getCurrentPeer() {
+        return currentPeer;
+    }
+
+    public void setCurrentPeer(PeerInfo currentPeer) {
+        this.currentPeer = currentPeer;
     }
 }

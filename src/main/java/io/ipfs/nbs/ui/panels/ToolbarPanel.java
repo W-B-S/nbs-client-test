@@ -2,6 +2,7 @@ package io.ipfs.nbs.ui.panels;
 
 import UI.ConstantsUI;
 import com.nbs.ui.components.VerticalFlowLayout;
+import com.nbs.ui.listener.AbstractMouseListener;
 import io.ipfs.nbs.cnsts.ColorCnst;
 import io.ipfs.nbs.ui.components.GBC;
 import io.ipfs.nbs.ui.components.LamButtonIcon;
@@ -12,6 +13,9 @@ import io.ipfs.nbs.utils.IconUtil;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 
 /**
  * @Package : io.ipfs.nbs.ui.panels
@@ -48,13 +52,13 @@ public class ToolbarPanel extends JPanel {
     private static NBSIconButton setBTN;
 
     private static NBSIconButton aboutBTN;
+    private MainFrame mainCtx;
 
-
-
-
-    public ToolbarPanel() {
+    public ToolbarPanel(MainFrame mainFrameCtx) {
+        mainCtx = mainFrameCtx;
         initComponents();
         initView();
+        setListeners();
     }
 
 
@@ -104,7 +108,51 @@ public class ToolbarPanel extends JPanel {
 
     }
 
+    private void setListeners(){
+        infoBTN.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedBTN(infoBTN);
+                mainCtx.mainWinShow(MainFrame.MainCardLayoutTypes.INFO);
+            }
+        });
 
+        imBTN.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedBTN(imBTN);
+                mainCtx.mainWinShow(MainFrame.MainCardLayoutTypes.IM);
+            }
+        });
+
+        aboutBTN.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedBTN(aboutBTN);
+                mainCtx.mainWinShow(MainFrame.MainCardLayoutTypes.ABOUT);
+            }
+        });
+    }
+
+    /**
+     * Selection NBSButton
+     * @param btn
+     */
+    private void selectedBTN(NBSIconButton btn){
+        NBSIconButton[] btns = {infoBTN,imBTN,dataBTN,musicBTN,aboutBTN};
+        for(NBSIconButton button : btns){
+            if(btn==button){
+                button.actived();
+            }else {
+                button.normal();
+            }
+        }
+    }
+
+    public void setDefaultSelected(){
+        selectedBTN(infoBTN);
+        mainCtx.mainWinShow(MainFrame.MainCardLayoutTypes.INFO);
+    }
     private void initialButton(){
         infoBTN = ButtonIconUtil.infoBTN;
         imBTN = ButtonIconUtil.imBTN;
