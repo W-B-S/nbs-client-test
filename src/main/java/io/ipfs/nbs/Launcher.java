@@ -96,7 +96,7 @@ public class Launcher {
         try{
             ipfs =  new IPFS(cfgHelper.getIPFSAddress());
             boolean first = needInitConfig(ipfs);
-            first = true;
+           // first = true;
             if(first){
                 currentFrame = new InitialFrame(ipfs);
             }else {

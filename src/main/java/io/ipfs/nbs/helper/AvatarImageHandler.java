@@ -32,6 +32,9 @@ import java.net.URL;
 public class AvatarImageHandler {
     private static Logger logger = LoggerFactory.getLogger(AvatarImageHandler.class);
     private static final int DEFAULT_THUMB_SIZE = 128;
+    private static final int DEFAULT_PROFILE_AVATAR_SIZE = 128;
+    private static final int DEFAULT_PROFILE_THUMB_SIZE = 48;
+    private static final int DEFAULT_CONTACTS_THUMB_SIZE = 40;
     private static AvatarImageHandler ourInstance = new AvatarImageHandler();
 
     public static AvatarImageHandler getInstance() {
@@ -139,10 +142,10 @@ public class AvatarImageHandler {
          */
         String target128 = AppGlobalCnst.consturactPath(AVATAR_PROFILE_HOME,hashFileName);
         File targetFile128 = new File(target128);
-        generateThumbScale(srcFile,targetFile128,128);
+        generateThumbScale(srcFile,targetFile128,DEFAULT_PROFILE_AVATAR_SIZE);
 
         File target64 = new File(AppGlobalCnst.consturactPath(AVATAR_PROFILE_HOME,"thumbs",hashFileName));
-        generateThumbScale(srcFile,target64,64);
+        generateThumbScale(srcFile,target64,DEFAULT_PROFILE_THUMB_SIZE);
     }
 
     /**
@@ -156,7 +159,7 @@ public class AvatarImageHandler {
         String targetPath = AppGlobalCnst.consturactPath(AVATAR_THUMB_HOME,hashFileName);
         File thumbs4Contacts = new File(targetPath);
         try {
-            generateThumbScale(srcFile,thumbs4Contacts,40);
+            generateThumbScale(srcFile,thumbs4Contacts,DEFAULT_CONTACTS_THUMB_SIZE);
             return new ImageIcon(targetPath);
         } catch (IOException e) {
             logger.warn(e.getMessage());

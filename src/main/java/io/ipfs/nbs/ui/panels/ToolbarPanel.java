@@ -3,19 +3,23 @@ package io.ipfs.nbs.ui.panels;
 import UI.ConstantsUI;
 import com.nbs.ui.components.VerticalFlowLayout;
 import com.nbs.ui.listener.AbstractMouseListener;
+import io.ipfs.nbs.cnsts.AppGlobalCnst;
 import io.ipfs.nbs.cnsts.ColorCnst;
+import io.ipfs.nbs.helper.AvatarImageHandler;
+import io.ipfs.nbs.peers.PeerInfo;
 import io.ipfs.nbs.ui.components.GBC;
 import io.ipfs.nbs.ui.components.LamButtonIcon;
 import io.ipfs.nbs.ui.components.NBSIconButton;
 import io.ipfs.nbs.ui.frames.MainFrame;
 import io.ipfs.nbs.utils.ButtonIconUtil;
 import io.ipfs.nbs.utils.IconUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
+import java.io.File;
 
 /**
  * @Package : io.ipfs.nbs.ui.panels
@@ -68,8 +72,20 @@ public class ToolbarPanel extends JPanel {
         upButtonPanel.setLayout(new VerticalFlowLayout(VerticalFlowLayout.TOP,0,15,false,false));
 
         avatarLabel = new JLabel();
+        PeerInfo peer = MainFrame.getContext().getCurrentPeer();
+        ImageIcon icon = null;
+        if(peer!=null&&StringUtils.isNotBlank(peer.getId())
+                &&StringUtils.isNotBlank(peer.getAvatarSuffix())){
+            String a48Path = AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),"thumbs",peer.getId()+peer.getAvatarSuffix());
+            System.out.println(a48Path);
+            if((new File(a48Path)).exists()){
+                icon = new ImageIcon(a48Path);
+            }else {
+                icon = IconUtil.getIcon(this,"/icons/lambor48.png");
+            }
+        }
 
-        avatarLabel.setIcon(IconUtil.getIcon(this,"/icons/lambor48.png"));
+        avatarLabel.setIcon(icon);
         avatarLabel.setHorizontalAlignment(JLabel.CENTER);
         initialButton();
 
