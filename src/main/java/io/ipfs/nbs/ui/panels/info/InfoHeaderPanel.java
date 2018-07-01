@@ -1,7 +1,10 @@
 package io.ipfs.nbs.ui.panels.info;
 
+import com.nbs.ipfs.IPFSHelper;
 import com.nbs.ui.listener.AbstractMouseListener;
 import io.ipfs.api.IPFS;
+import io.ipfs.api.MerkleNode;
+import io.ipfs.api.NamedStreamable;
 import io.ipfs.nbs.Launcher;
 import io.ipfs.nbs.cnsts.AppGlobalCnst;
 import io.ipfs.nbs.cnsts.ColorCnst;
@@ -19,7 +22,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @Package : io.ipfs.nbs.ui.panels.info
@@ -40,15 +46,21 @@ public class InfoHeaderPanel extends ParentAvailablePanel {
 
     private PeerInfo self;
     private static InfoHeaderPanel context;
+    private JFileChooser fileChooser;
+    private AvatarImageHandler imageHandler ;
+    private IPFS ipfs;
 
     public InfoHeaderPanel(JPanel parent) {
         super(parent);
         context =this;
+        ipfs = IPFSHelper.getInstance().getIpfs();
         self = MainFrame.getContext().getCurrentPeer();
+        imageHandler = AvatarImageHandler.getInstance();
         initComponents();
         initView();
 
         setListeners();
+
     }
 
     /**
@@ -127,7 +139,8 @@ public class InfoHeaderPanel extends ParentAvailablePanel {
         avatarLabel.addMouseListener(new AbstractMouseListener(){
             @Override
             public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+                uploadAvatar();
+
             }
 
             @Override
@@ -172,5 +185,67 @@ public class InfoHeaderPanel extends ParentAvailablePanel {
                 super.mouseEntered(e);
             }
         });
+    }
+
+    /**
+     *
+     */
+    private void uploadAvatar(){
+        fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.showDialog(this,"选择图片");
+        File file = fileChooser.getSelectedFile();
+        if(file!=null) {
+            String name = file.getName();//源文件名
+            String avatarPeerName = self.getId() + name.substring(name.lastIndexOf("."));
+            new Thread(()->{
+                List<MerkleNode> nodes;
+
+                FileOutputStream fos = null;
+                try {
+                    //上传前先压缩
+                    imageHandler.createdAvatar4Profile(file,avatarPeerName);
+                    File file128 = new File(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),avatarPeerName));
+                    NamedStreamable.FileWrapper fileWrapper = new NamedStreamable.FileWrapper(file128);
+
+                    nodes = ipfs.add(fileWrapper);
+                    String fileHash = nodes.get(0).hash.toBase58();
+
+                    self.setAvatar(fileHash);
+                    self.setAvatarSuffix(name.substring(name.lastIndexOf(".")));
+
+                    ipfs.config.set(ConfigurationHelper.JSON_AVATAR_KEY,fileHash);
+                    ipfs.config.set(ConfigurationHelper.JSON_AVATAR_SUFFIX_KEY,self.getAvatarSuffix());
+                    ipfs.config.set(ConfigurationHelper.JSON_AVATAR_NAME_KEY,name);
+
+                    //TODO 存数据库upload
+                    String avatarFileName = fileHash+ name.substring(name.lastIndexOf("."));
+                    try {
+                        imageHandler.createContactsAvatar(file,avatarFileName);
+                        ImageIcon icon = new ImageIcon(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),avatarPeerName));
+                        if(icon!=null){
+                            logger.info(fileHash);
+                            avatarLabel.setIcon(icon);
+                            avatarLabel.updateUI();
+                            MainFrame.getContext().refreshAvatar();
+                        }
+                    } catch (Exception e) {
+                        logger.info(e.getMessage());
+                        return;
+                    }
+                } catch (Exception e) {
+                    logger.error("上传失败：{}",e.getMessage());
+                    JOptionPane.showMessageDialog(context,"上传失败");
+                    return;
+                }
+            }).start();
+        }
+    }
+
+    /**
+     * 更新数据库
+     */
+    private void updatePeers(){
+
     }
 }

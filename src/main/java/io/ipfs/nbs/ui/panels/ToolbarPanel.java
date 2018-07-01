@@ -73,18 +73,7 @@ public class ToolbarPanel extends JPanel {
 
         avatarLabel = new JLabel();
         PeerInfo peer = MainFrame.getContext().getCurrentPeer();
-        ImageIcon icon = null;
-        if(peer!=null&&StringUtils.isNotBlank(peer.getId())
-                &&StringUtils.isNotBlank(peer.getAvatarSuffix())){
-            String a48Path = AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),"thumbs",peer.getId()+peer.getAvatarSuffix());
-            System.out.println(a48Path);
-            if((new File(a48Path)).exists()){
-                icon = new ImageIcon(a48Path);
-            }else {
-                icon = IconUtil.getIcon(this,"/icons/lambor48.png");
-            }
-        }
-
+        ImageIcon icon = getAvatarIcon(peer);
         avatarLabel.setIcon(icon);
         avatarLabel.setHorizontalAlignment(JLabel.CENTER);
         initialButton();
@@ -97,6 +86,28 @@ public class ToolbarPanel extends JPanel {
         bottomPanel.setLayout(new VerticalFlowLayout(VerticalFlowLayout.BOTTOM,0,10,false,false));
 
 
+    }
+
+    /**
+     *
+     * @param peer
+     * @return
+     */
+    private ImageIcon getAvatarIcon(PeerInfo peer){
+        ImageIcon icon;
+        if(peer!=null&&StringUtils.isNotBlank(peer.getId())
+                &&StringUtils.isNotBlank(peer.getAvatarSuffix())){
+            String a48Path = AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),"thumbs",peer.getId()+peer.getAvatarSuffix());
+            System.out.println(a48Path);
+            if((new File(a48Path)).exists()){
+                icon = new ImageIcon(a48Path);
+            }else {
+                icon = IconUtil.getIcon(this,"/icons/lambor48.png");
+            }
+        }else {
+            icon = IconUtil.getIcon(this,"/icons/lambor48.png");
+        }
+        return icon;
     }
 
     private void initView(){
@@ -150,6 +161,11 @@ public class ToolbarPanel extends JPanel {
         });
     }
 
+    public void refreshToolbarAvatar(){
+        ImageIcon icon = getAvatarIcon(MainFrame.getContext().getCurrentPeer());
+        avatarLabel.setIcon(icon);
+        avatarLabel.updateUI();
+    }
     /**
      * Selection NBSButton
      * @param btn

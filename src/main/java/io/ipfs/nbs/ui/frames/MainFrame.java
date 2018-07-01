@@ -180,4 +180,8 @@ public class MainFrame extends JFrame {
     public void setCurrentPeer(PeerInfo currentPeer) {
         this.currentPeer = currentPeer;
     }
+
+    public void refreshAvatar(){
+        toolbarPanel.refreshToolbarAvatar();
+    }
 }
