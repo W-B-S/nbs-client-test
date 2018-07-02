@@ -143,15 +143,37 @@ public class ConfigurationHelper {
         }
     }
 
+
+    /**
+     *
+     * @return
+     */
+    public String getIPFSServerHost(){
+        return cfgProps.getProperty("nbs.server.address.host","127.0.0.1");
+    }
+
+    /**
+     * IPFS API 5001
+     * @return
+     */
+    public String getIPFSApiPort(){
+        return cfgProps.getProperty("nbs.server.address.api-port","5001");
+    }
+
+    public String getIPFSGatewayPort(){
+        return cfgProps.getProperty("nbs.server.address.gateway-port","8080");
+    }
+
     /**
      * 获取http IPFS URL
      * @return
      */
     public String getGateWayURL(){
-        String gwUrl = cfgProps.getProperty("nbs.server.address.gateway-url","http://127.0.0.1:8080/ipfs/");
-        if(StringUtils.isNotBlank(gwUrl))return gwUrl;
-        if(!gwUrl.endsWith("/"))gwUrl = gwUrl+"/";
-        return gwUrl;
+        StringBuilder urlSb = new StringBuilder();
+        urlSb.append("http://").append(getIPFSServerHost())
+                .append(":").append(getIPFSGatewayPort());
+        urlSb.append("/ipfs/");
+        return urlSb.toString();
     }
 
     /**
@@ -163,4 +185,5 @@ public class ConfigurationHelper {
         String gwUrl = getGateWayURL();
         return gwUrl+hash;
     }
+
 }

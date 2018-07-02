@@ -2,6 +2,8 @@ package com.nbs.biz.service;
 
 import com.nbs.biz.data.dao.PeerLoginDao;
 import com.nbs.biz.data.entity.PeerLoginEntity;
+import io.nbs.commons.helper.DateHelper;
+import io.nbs.sdk.beans.PeerInfo;
 import org.apache.ibatis.session.SqlSession;
 
 /**
@@ -29,5 +31,29 @@ public class PeerLoginService extends BasicService<PeerLoginDao,PeerLoginEntity>
        }else {
            return dao.insert(entity);
        }
+    }
+
+    /**
+     *
+     * @param info
+     * @return
+     */
+    public int refreshLoginInfo(PeerInfo info){
+        if(info==null)return 0;
+        PeerLoginEntity entity = convertFromPeerInfo(info);
+        return updateOrInsertPeer(entity);
+    }
+
+    public static PeerLoginEntity convertFromPeerInfo(PeerInfo info){
+        PeerLoginEntity entity = new PeerLoginEntity();
+        entity.setId(info.getId());
+        entity.setNick(info.getNick());
+        entity.setAvatar(info.getAvatar());
+        entity.setAvatarSuffix(info.getAvatarSuffix());
+        entity.setIp(info.getIp());
+        entity.setFromid(info.getFrom());
+        entity.setSysuser(System.getProperty("user.name",""));
+        entity.setLmtime(DateHelper.currentSecond());
+        return entity;
     }
 }

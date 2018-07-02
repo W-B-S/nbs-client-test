@@ -21,7 +21,7 @@ import java.util.Properties;
  */
 public class ConfigHelper {
     private static final Logger logger = LoggerFactory.getLogger(ConfigHelper.class);
-    private int stats = 0;
+    private static int stats = 0;
     /**
      * 系统当前路径
      */
@@ -135,8 +135,27 @@ public class ConfigHelper {
         public static ConfigHelper instance = new ConfigHelper();
     }
 
+    /**
+     *
+     * @return
+     */
     public static ConfigHelper getInstance(){
-        return ConfigHolder.instance;
+        ConfigHelper instance = ConfigHolder.instance;
+        switch (stats){
+            case 1:
+                instance.initLoadI18n();
+                break;
+            case 2:
+                instance.initLoadEnv();
+                break;
+            default:
+                instance.initLoadI18n();
+                instance.initLoadEnv();
+                break;
+
+        }
+
+        return instance;
     }
 
     /**
@@ -301,4 +320,6 @@ public class ConfigHelper {
     public String getI18nProperty(String key,String defaultVal){
         return i18nProps.getProperty(key,defaultVal);
     }
+
+
 }

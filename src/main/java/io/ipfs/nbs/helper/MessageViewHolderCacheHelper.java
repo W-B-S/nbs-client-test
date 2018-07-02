@@ -1,4 +1,4 @@
-package com.nbs.tools;
+package io.ipfs.nbs.helper;
 
 import io.nbs.client.ui.panels.im.messages.MessageLeftTextViewHolder;
 import io.nbs.client.ui.panels.im.messages.MessageRightTextViewHolder;

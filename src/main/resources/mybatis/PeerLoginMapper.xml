@@ -18,7 +18,7 @@
     </resultMap>
 
     <sql id="BaseSqlColumns">
-
+      id,fromid,nick,avatar,avatar_suffix,ip,locations,remark,ext_json,seckey,sysuser,ctime,lmtime
     </sql>
 
     <insert id="insert">
@@ -76,7 +76,6 @@
     <update id="updateIgnoreNull">
         UPDATE p_login
         <set>
-            lmtime=#{lmtime},
             <if test="nick!= null">nick=#{nick},</if>
             <if test="avatar!= null">avatar=#{avatar},</if>
             <if test="avatarSuffix!= null">avatar_suffix=#{avatarSuffix},</if>
@@ -84,8 +83,8 @@
             <if test="locations!= null">locations=#{locations},</if>
             <if test="remark!= null">remark=#{remark},</if>
             <if test="sysuser!= null">sysuser=#{sysuser},</if>
-            <if test="sysuser!= null">sysuser=#{sysuser},</if>
+            <if test="lmtime!= null">lmtime=#{lmtime},</if>
         </set>
-        WHERE userId=#{userId}
+        WHERE id=#{id}
     </update>
 </mapper>

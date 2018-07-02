@@ -6,8 +6,8 @@ import com.nbs.tools.ConfigHelper;
 import io.nbs.client.cnsts.FontUtil;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.ui.components.GBC;
-import com.nbs.ui.components.SizeAutoAdjustTextArea;
-import com.nbs.ui.components.messages.NBSRightImageMessageBubble;
+import io.nbs.client.ui.components.SizeAutoAdjustTextArea;
+import com.nbs.ui.components.messages.IMRightImageMessageBubble;
 import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.holders.BaseMessageViewHolder;
 
@@ -32,7 +32,7 @@ public class MessageRightTextViewHolder extends BaseMessageViewHolder {
     private JPanel timePanel = new JPanel();
     private JPanel messageAvatarPanel = new JPanel();
 
-    private NBSRightImageMessageBubble messageBubble = new NBSRightImageMessageBubble();
+    private IMRightImageMessageBubble messageBubble = new IMRightImageMessageBubble();
 
     public MessageRightTextViewHolder(){
         initComponents();

@@ -1,5 +1,7 @@
 package com.nbs.ui.components;
 
+import io.nbs.client.ui.components.message.IMMessageBubble;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -14,12 +16,12 @@ import java.awt.event.MouseListener;
  * Copyright (c) 2018, NBS , lambor.c<lanbery@gmail.com>.
  * All rights reserved.
  */
-public class NBSAttachmentMessageBubble extends JPanel implements NBSMessageBubble {
+public class IMAttachmentMessageBubble extends JPanel implements IMMessageBubble {
 
     private NBS9PathImageIcon normal;
     private NBS9PathImageIcon active;
 
-    public NBSAttachmentMessageBubble() {
+    public IMAttachmentMessageBubble() {
         setOpaque(false);
         setListener();
     }
@@ -71,7 +73,7 @@ public class NBSAttachmentMessageBubble extends JPanel implements NBSMessageBubb
             setBackgroundIcon(normal);
         }
 
-        NBSAttachmentMessageBubble.this.repaint();
+        IMAttachmentMessageBubble.this.repaint();
     }
 
     @Override

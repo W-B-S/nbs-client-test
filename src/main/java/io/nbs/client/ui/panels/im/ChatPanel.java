@@ -1,8 +1,9 @@
 package io.nbs.client.ui.panels.im;
 
+import io.nbs.client.services.IpfsMessageSender;
+import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.sdk.beans.MessageItem;
-import com.nbs.ipfs.IPFSHelper;
-import com.nbs.tools.MessageViewHolderCacheHelper;
+import io.ipfs.nbs.helper.MessageViewHolderCacheHelper;
 import io.nbs.client.ui.panels.im.messages.MessageEditorPanel;
 import io.nbs.client.ui.panels.im.messages.MessagePanel;
 import io.nbs.client.adapter.MessageAdapter;
@@ -10,8 +11,6 @@ import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.ui.components.GBC;
 import com.nbs.ui.components.NbsBorder;
 import io.nbs.client.ui.components.NbsListView;
-import UI.common.Base64CodecUtil;
-import io.ipfs.api.IPFS;
 import io.nbs.client.ui.panels.ParentAvailablePanel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -160,13 +159,24 @@ public class ChatPanel extends ParentAvailablePanel {
      * 发送消息
      */
     private void sendMessage(){
+
         List<Object> inTextList = getEditorText();
         if(inTextList==null||inTextList.size()<=0){
             return;
         }
-        String text = (String)inTextList.get(0);
+        Object data = inTextList.get(0);
+        IpfsMessageSender sender = MainFrame.getContext().getMessageSender();
+
+
+        try {
+            sender.ipfsSendMessage(data.toString());
+            messageEditorPanel.getTextEditor().setText("");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+     /*   String text = (String)inTextList.get(0);
         IPFS ipfs = IPFSHelper.getInstance().getIpfs();
-        String encodeMsg = Base64CodecUtil.encodeCtrlMsg(text,Base64CodecUtil.CtrlTypes.normal);
+        String encodeMsg = Base64CodecUtil.encode(text);
         boolean success = false;
         int i = 0;
         while (!success && i<5 ){
@@ -177,9 +187,9 @@ public class ChatPanel extends ParentAvailablePanel {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        }*/
 
-        messageEditorPanel.getTextEditor().setText("");
+
 
     }
 

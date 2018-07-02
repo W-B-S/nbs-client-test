@@ -75,7 +75,11 @@
             <artifactId>emoji-java</artifactId>
             <version>4.0.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>nine-patch</groupId>
+            <artifactId>android.nine.patch</artifactId>
+            <version>1.0</version>
+        </dependency>
 
     </dependencies>
 

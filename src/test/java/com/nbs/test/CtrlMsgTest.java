@@ -38,7 +38,7 @@ public class CtrlMsgTest {
 
        String json = JSON.toJSONString(peerInfo);
        log.info(json);
-       String encode = Base64CodecUtil.encodeCtrlMsg(peerInfo,Base64CodecUtil.CtrlTypes.online);
+       String encode = Base64CodecUtil.encode(json);
        log.info(encode);
    }
 }

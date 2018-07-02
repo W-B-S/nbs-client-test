@@ -349,7 +349,7 @@ public class AppMainWindow {
                         TimeUnit.SECONDS.sleep(30);
                         broadcastOnline();
                     }else {
-                        String ctrlMsg = Base64CodecUtil.encodeCtrlMsg(SEFL_BASE,Base64CodecUtil.CtrlTypes.online);
+                        String ctrlMsg = Base64CodecUtil.encode(JSON.toJSONString(SEFL_BASE));
                         Object o = ipfs.pubsub.pub(IPFSHelper.NBSWORLD_IMS_TOPIC,ctrlMsg);
                         logger.info("TOPIC["+IPFSHelper.NBSWORLD_IMS_TOPIC+" ]Send CTRL MSG : "+ctrlMsg);
                         boradcastSuccess = true;

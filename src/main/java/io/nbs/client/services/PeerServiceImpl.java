@@ -120,9 +120,9 @@ public class PeerServiceImpl {
             Object o = ipfs.pubsub.peers();
                     //ipfs.pubsub.peers(IPFSHelper.NBSWORLD_IMS_TOPIC);
             result = (List<String>)JSONParser.getValue(o,"Strings");
-            for(String p : result){
+           /* for(String p : result){
                 logger.info(">>>>>>>GET {} peers",p);
-            }
+            }*/
         } catch (IOException e) {
             e.printStackTrace();
         }

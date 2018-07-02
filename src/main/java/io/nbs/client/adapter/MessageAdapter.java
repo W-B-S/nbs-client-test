@@ -1,7 +1,7 @@
 package io.nbs.client.adapter;
 
 import io.nbs.sdk.beans.MessageItem;
-import com.nbs.tools.MessageViewHolderCacheHelper;
+import io.ipfs.nbs.helper.MessageViewHolderCacheHelper;
 import io.nbs.client.ui.components.NbsListView;
 import io.nbs.client.ui.holders.BaseMessageViewHolder;
 import org.slf4j.Logger;
@@ -19,14 +19,21 @@ import java.util.List;
  */
 public class MessageAdapter extends BaseAdapter<BaseMessageViewHolder> {
     private static final Logger logger = LoggerFactory.getLogger(MessageAdapter.class);
+
     private List<MessageItem> messageItems;
 
     private NbsListView listView;
     MessageViewHolderCacheHelper messageViewHolderCacheHelper;
+
+    /**
+     *
+     * @param messageItems 消息数组
+     * @param listView 消息展示表容器
+     * @param messageViewHolderCacheHelper 消息缓存处理类
+     */
     public MessageAdapter(List<MessageItem> messageItems, NbsListView listView,MessageViewHolderCacheHelper messageViewHolderCacheHelper) {
         this.messageItems = messageItems;
         this.listView = listView;
-
         this.messageViewHolderCacheHelper = messageViewHolderCacheHelper;
     }
 

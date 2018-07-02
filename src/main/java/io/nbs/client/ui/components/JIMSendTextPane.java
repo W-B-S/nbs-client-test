@@ -1,4 +1,4 @@
-package com.nbs.ui.panels.message;
+package io.nbs.client.ui.components;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -23,7 +23,7 @@ public class JIMSendTextPane extends JTextPane {
     }
 
     /**
-     *
+     * 用于实现自动强制折行
      */
     private class WarpEditorKit extends StyledEditorKit{
         private ViewFactory defaultFactory = new WarpColumnFactory();
@@ -34,6 +34,9 @@ public class JIMSendTextPane extends JTextPane {
         }
     }
 
+    /**
+     *
+     */
     private class WarpColumnFactory implements ViewFactory{
         @Override
         public View create(Element elem) {
@@ -77,7 +80,7 @@ public class JIMSendTextPane extends JTextPane {
     }
 
     /**
-     *
+     * 图片自动换行
      */
     private class WarpIconView extends IconView{
         public WarpIconView(Element elem) {

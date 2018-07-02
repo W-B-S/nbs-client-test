@@ -1,14 +1,23 @@
 package io.nbs.client.ui.frames;
 
+import com.nbs.biz.service.PeerLoginService;
+import io.ipfs.api.IPFS;
+import io.nbs.client.Launcher;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.cnsts.FontUtil;
 import io.nbs.client.cnsts.OSUtil;
+import io.nbs.client.services.IpfsMessageSender;
+import io.nbs.client.services.MessageSendService;
+import io.nbs.sdk.beans.OnlineMessage;
 import io.nbs.sdk.beans.PeerInfo;
 import io.nbs.client.ui.panels.MainContentPanel;
 import io.nbs.client.ui.panels.ToolbarPanel;
 import io.nbs.client.ui.panels.about.AboutMasterPanel;
 import io.nbs.client.ui.panels.im.IMMasterPanel;
 import io.nbs.client.ui.panels.info.InfoMasterPanel;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -23,9 +32,12 @@ import java.awt.*;
  * All rights reserved.
  */
 public class MainFrame extends JFrame {
+    public static Logger logger = LoggerFactory.getLogger(MainFrame.class);
 
+    /**
+     * 测试用
+     */
     public  static  Border redBorder = BorderFactory.createLineBorder(Color.RED);
-
     public  static  Border buleBorder = BorderFactory.createLineBorder(Color.blue,1);
 
     private static MainFrame context;
@@ -36,8 +48,6 @@ public class MainFrame extends JFrame {
     public int currentWindowHeight = H_SIZE;
 
     public static final  int TOOLBAR_WIDTH = 52;
-    public static final  int LEFT_WIDTH = 260;
-
 
 
     private ToolbarPanel toolbarPanel;
@@ -48,7 +58,13 @@ public class MainFrame extends JFrame {
 
     private static JPanel mainJPanel;
 
+    /**
+     *
+     */
+    private IpfsMessageSender messageSender;
+    private MessageSendService messageSendService;
 
+    private PeerLoginService peerLoginService;
     /**
      * PEER INFO
      */
@@ -68,13 +84,21 @@ public class MainFrame extends JFrame {
         currentPeer = peerInfo;
         mainJPanel = new JPanel(true);
        // mainJPanel.setBackground(ColorCnst.WINDOW_BACKGROUND_LIGHT);
-
+        initServices();
         initComponents();
 
         initView();
         setListeners();
 
+        //
+        notifyWorldOnline();
+    }
 
+    private void initServices(){
+       IPFS ipfs = Launcher.getContext().getIpfs();
+       messageSender = new IpfsMessageSender(ipfs);
+       messageSendService = new MessageSendService(Launcher.getSqlSession());
+       peerLoginService = new PeerLoginService(Launcher.getSqlSession());
     }
 
     private void initComponents(){
@@ -186,5 +210,38 @@ public class MainFrame extends JFrame {
 
     public void refreshAvatar(){
         toolbarPanel.refreshToolbarAvatar();
+    }
+
+    /**
+     *
+     */
+    private void notifyWorldOnline(){
+        PeerInfo info = Launcher.currentPeer;
+        if(info==null)return;
+        OnlineMessage message = new OnlineMessage(info.getId(),info.getNick(),info.getFrom());
+        if(StringUtils.isNotBlank(info.getAvatar())){
+            message.setAvatar(info.getAvatar());
+            message.setAvatarFile(info.getAvatarName());
+            message.setAvatarSuffix(info.getAvatarSuffix());
+            message.setLocations("中国*北京");
+        }
+        //IP 解析
+        try {
+            messageSender.sendOnline(message);
+        } catch (Exception e) {
+            logger.warn(e.getMessage(),e.getCause());
+        }
+
+        //刷新数据库登录
+        peerLoginService.refreshLoginInfo(info);
+    }
+
+
+    public IpfsMessageSender getMessageSender() {
+        return messageSender;
+    }
+
+    public MessageSendService getMessageSendService() {
+        return messageSendService;
     }
 }

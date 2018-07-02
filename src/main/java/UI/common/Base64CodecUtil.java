@@ -22,8 +22,6 @@ import java.io.UnsupportedEncodingException;
 public class Base64CodecUtil {
     private static final Base64 base64 = new Base64();
 
-    public static final String BASE64_START = "$BASE64$";
-    public static final String BASE64_END = "$";
     /**
      *
      * @param origin
@@ -58,74 +56,13 @@ public class Base64CodecUtil {
 
 
 
-
-    public static boolean isBase64encode(String base64Str){
-        return base64Str.startsWith(BASE64_START)&&base64Str.endsWith(BASE64_END);
-    }
-
-
-
-    /**
-     * IPFS 消息解码
-     * @param encodeStr
-     * @return
-     */
-    public static String decodeIPFSMsg(String encodeStr){
-        if(isBase64encode(encodeStr)){
-            int len = encodeStr.length();
-            encodeStr = encodeStr.substring(BASE64_START.length(),len-1);
-            return decode(encodeStr);
-        }else {
-            return encodeStr;
-        }
-    }
-
-    /**
-     *
-     * @param message
-     * @return
-     * @throws IllegalIPFSMessageException
-     */
-    public PeerBoradcastInfo parseFromIm(IpfsMessage message) throws IllegalIPFSMessageException {
-        if(message==null
-                ||message.getTypes()!=CtrlTypes.online
-                ||(StringUtils.isBlank(message.getContents())&&StringUtils.isBlank(message.getData())))
-            return null;
-        if(StringUtils.isBlank(message.getContents())){
-            String jsonData = decode(message.getData());
-            if(!jsonData.startsWith(CtrlTypes.online.getPreffix())||!jsonData.endsWith(CtrlTypes.online.sperator)){
-                throw new IllegalIPFSMessageException("message data not online type message");
-            }
-            int len = jsonData.length();
-            message.setContents(jsonData.substring(CtrlTypes.online.getPreffixLength(),len-1));
-        }
-        PeerBoradcastInfo res = JSON.parseObject(message.getContents(),PeerBoradcastInfo.class);
-        return res;
-    }
-
-    /**
-     * 编码控制消息
-     * @param o
-     * @param type
-     * @return
-     */
-    public static String encodeCtrlMsg(Object o,CtrlTypes type){
-        if(o==null)return null;
-        if(type==null)type=CtrlTypes.online;
-        StringBuffer mSb = new StringBuffer();
-        mSb.append(type.sperator).append(type.starter).append(type.sperator);
-        String json = JSON.toJSONString(o);
-        mSb.append(encode(json));
-        mSb.append(type.sperator);
-        return mSb.toString();
-    }
-
     /**
      *
      * @param message
      * @param types
      * @return
      */
+    @Deprecated
     public static String encodeByCtrlType(Object message,CtrlTypes types){
         if(message==null)return null;
         StringBuffer sb = new StringBuffer();
@@ -154,6 +91,7 @@ public class Base64CodecUtil {
      * @param m
      * @return
      */
+    @Deprecated
     public static IpfsMessage parseIpmsMessageCtrlType(IpfsMessage m){
         if(m==null||m.getData()==null||m.getData().length()<1)return null;
         String decode64 = decode(m.getData());
@@ -179,25 +117,9 @@ public class Base64CodecUtil {
     }
 
 
-    /**
-     *
-     * @param baseStr
-     * @param type
-     * @return
-     */
-    public static String decodeCtrlMsg(String baseStr,CtrlTypes type){
-        if(baseStr==null)return null;
-        if(type==null)type=CtrlTypes.online;
-        if(baseStr.startsWith(type.sperator+type.starter+type.sperator)&&baseStr.endsWith(type.sperator+"")){
-            int len = baseStr.length();
-            baseStr = baseStr.substring(type.starter.length()+2,len-1);
-            return decode(baseStr);
-        }else {
-            return decode(baseStr);
-        }
-    }
 
 
+    @Deprecated
     public static enum CtrlTypes{
         /**
          * $ON.B64.J$xxxxxsssds$
@@ -263,24 +185,4 @@ public class Base64CodecUtil {
         }
     }
 
-    public static void main(String[] args) {
-        String in = "你好NBS 的圣诞  xccxv 节收到 \\n slfsak阿卡恢复大师的/n";
-        System.out.println(in);
-        String encodeIn = encode(in);
-        System.out.println(encodeIn);
-        String enMsg = "$BASE64|"+encodeIn+"|";
-        System.out.println(enMsg);
-        String dec = decodeIPFSMsg(enMsg);
-        System.out.println(dec);
-        String h = "Hello!";
-        String res = "";
-        res = Base64CodecUtil.encode(h);
-        System.out.println(res);
-
-
-        Multihash multihash = Multihash.fromHex("EiBCOcWflebcLfrIFDlcWTMFG+2sQ6dGv2BKlop/JjrRmA==");
-
-        System.out.println(Base64CodecUtil.decode("EiBCOcWflebcLfrIFDlcWTMFG+2sQ6dGv2BKlop/JjrRmA=="));
-
-    }
 }
