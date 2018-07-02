@@ -2,19 +2,19 @@ package UI.panel.im;
 
 import UI.AppMainWindow;
 import UI.ConstantsUI;
-import io.ipfs.nbs.ui.components.NBSIconButton;
+import io.nbs.client.ui.components.NBSIconButton;
 import UI.common.NBSAbstractPanel;
 import UI.common.ToolbarStatsPanel;
 import UI.templete.WihteBackJPanel;
 import com.alibaba.fastjson.JSON;
-import com.nbs.entity.ContactsItem;
+import io.nbs.client.vo.ContactsItem;
 import com.nbs.entity.PeerInfoBase;
 import com.nbs.ipfs.IPFSHelper;
 import com.nbs.ipfs.entity.IpfsMessage;
 import com.nbs.tools.DateHelper;
-import io.ipfs.nbs.cnsts.ColorCnst;
+import io.nbs.client.cnsts.ColorCnst;
 import com.nbs.ui.panels.ChatPanel;
-import com.nbs.utils.Base64CodecUtil;
+import io.nbs.commons.utils.Base64CodecUtil;
 import io.ipfs.api.IPFS;
 
 import org.apache.commons.lang3.StringUtils;

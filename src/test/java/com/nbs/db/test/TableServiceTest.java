@@ -1,15 +1,12 @@
 package com.nbs.db.test;
 
-import com.alibaba.fastjson.JSON;
 import com.nbs.biz.model.ContactsEntity;
-import com.nbs.biz.model.NBSTest;
 import com.nbs.biz.service.ContactsService;
 import com.nbs.biz.service.TableService;
-import com.nbs.utils.DbUtil;
+import io.nbs.commons.utils.DbUtil;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * @Package : com.nbs.db.test

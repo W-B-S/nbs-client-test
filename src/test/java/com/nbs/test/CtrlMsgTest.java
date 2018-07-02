@@ -2,8 +2,8 @@ package com.nbs.test;
 
 import com.alibaba.fastjson.JSON;
 import com.nbs.entity.PeerBoradcastInfo;
-import com.nbs.utils.Base64CodecUtil;
-import io.ipfs.nbs.utils.RadomCharactersHelper;
+import io.nbs.commons.utils.Base64CodecUtil;
+import io.nbs.commons.helper.RadomCharactersHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

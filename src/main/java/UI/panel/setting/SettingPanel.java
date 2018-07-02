@@ -5,7 +5,7 @@ import UI.ConstantsUI;
 import UI.common.NBSAbstractPanel;
 import UI.common.ToolbarStatsPanel;
 import com.alibaba.fastjson.JSON;
-import io.ipfs.nbs.cnsts.ColorCnst;
+import io.nbs.client.cnsts.ColorCnst;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

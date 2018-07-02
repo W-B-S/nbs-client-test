@@ -1,11 +1,11 @@
 package com.nbs.ui.holder;
 
 import UI.AppMainWindow;
-import io.ipfs.nbs.ui.components.NBSIconButton;
+import io.nbs.client.ui.components.NBSIconButton;
 import com.nbs.tools.ConfigHelper;
-import io.ipfs.nbs.cnsts.FontUtil;
-import io.ipfs.nbs.cnsts.ColorCnst;
-import io.ipfs.nbs.ui.components.GBC;
+import io.nbs.client.cnsts.FontUtil;
+import io.nbs.client.cnsts.ColorCnst;
+import io.nbs.client.ui.components.GBC;
 import com.nbs.ui.components.SizeAutoAdjustTextArea;
 import com.nbs.ui.components.messages.NBSRightImageMessageBubble;
 import com.nbs.ui.frames.MainFrame;

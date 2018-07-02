@@ -2,13 +2,12 @@ package io.ipfs.nbs.helper;
 
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
-import io.ipfs.nbs.Launcher;
-import io.ipfs.nbs.cnsts.AppGlobalCnst;
+import io.nbs.client.Launcher;
+import io.nbs.client.cnsts.AppGlobalCnst;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.imageio.ImageIO;
 import javax.imageio.stream.FileImageOutputStream;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;

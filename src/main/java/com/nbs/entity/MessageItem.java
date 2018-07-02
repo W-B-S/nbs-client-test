@@ -1,6 +1,7 @@
 package com.nbs.entity;
 
 import com.nbs.ipfs.entity.IpfsMessage;
+import io.nbs.client.vo.ContactsItem;
 
 /**
  * @Package : com.nbs.entity
@@ -65,7 +66,7 @@ public class MessageItem implements Comparable<MessageItem> {
      * @param item
      * @param message
      */
-    public MessageItem(ContactsItem item,IpfsMessage message) {
+    public MessageItem(ContactsItem item, IpfsMessage message) {
         this.senderUsername = senderUsername;
     }
 

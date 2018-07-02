@@ -2,8 +2,6 @@ package com.nbs.biz.service;
 
 import com.nbs.biz.data.dao.PeerContactsDao;
 import com.nbs.biz.data.entity.PeerContactsEntity;
-import io.ipfs.nbs.peers.PeerInfo;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 
 /**

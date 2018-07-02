@@ -1,7 +1,7 @@
 package UI.panel.about;
 
 import UI.ConstantsUI;
-import io.ipfs.nbs.ui.components.NBSIconButton;
+import io.nbs.client.ui.components.NBSIconButton;
 import com.nbs.tools.ConfigHelper;
 import com.nbs.tools.PropertyUtil;
 import org.slf4j.Logger;

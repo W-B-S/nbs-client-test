@@ -1,8 +1,8 @@
 package com.nbs.ui.panels;
 
-import io.ipfs.nbs.cnsts.ColorCnst;
-import io.ipfs.nbs.ui.components.NbsListView;
-import io.ipfs.nbs.ui.panels.ParentAvailablePanel;
+import io.nbs.client.cnsts.ColorCnst;
+import io.nbs.client.ui.components.NbsListView;
+import io.nbs.client.ui.panels.ParentAvailablePanel;
 
 import javax.swing.*;
 import java.awt.*;

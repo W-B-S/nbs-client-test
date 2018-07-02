@@ -2,7 +2,7 @@ package UI.panel.fm;
 
 import UI.AppMainWindow;
 import UI.ConstantsUI;
-import io.ipfs.nbs.ui.components.NBSIconButton;
+import io.nbs.client.ui.components.NBSIconButton;
 import UI.common.NBSAbstractPanel;
 import UI.common.ToolbarStatsPanel;
 import UI.panel.ContentJLabel;
@@ -11,7 +11,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.nbs.entity.NbsChainFile;
 import com.nbs.tools.PropertyUtil;
-import com.nbs.utils.MerkleHashHelper;
+import io.nbs.commons.helper.MerkleHashHelper;
 import io.ipfs.api.MerkleNode;
 import io.ipfs.api.NamedStreamable;
 import io.ipfs.multihash.Multihash;

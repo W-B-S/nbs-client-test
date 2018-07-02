@@ -2,17 +2,17 @@ package com.nbs.ui.panels;
 
 import UI.AppMainWindow;
 import UI.ConstantsUI;
-import io.ipfs.nbs.ui.components.NBSIconButton;
-import io.ipfs.nbs.ui.components.NBSButton;
-import io.ipfs.nbs.cnsts.FontUtil;
-import io.ipfs.nbs.cnsts.OSUtil;
-import io.ipfs.nbs.cnsts.ColorCnst;
-import io.ipfs.nbs.ui.components.GBC;
+import io.nbs.client.ui.components.NBSIconButton;
+import io.nbs.client.ui.components.NBSButton;
+import io.nbs.client.cnsts.FontUtil;
+import io.nbs.client.cnsts.OSUtil;
+import io.nbs.client.cnsts.ColorCnst;
+import io.nbs.client.ui.components.GBC;
 import com.nbs.ui.components.NBSTextEditor;
-import io.ipfs.nbs.ui.components.ScrollUI;
+import io.nbs.client.ui.components.ScrollUI;
 import com.nbs.ui.frames.ScreenShot;
-import com.nbs.ui.icons.NBSIcon;
-import io.ipfs.nbs.ui.panels.ParentAvailablePanel;
+import io.nbs.client.ui.components.NBSIcon;
+import io.nbs.client.ui.panels.ParentAvailablePanel;
 
 import javax.swing.*;
 import java.awt.*;
