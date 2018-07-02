@@ -32,6 +32,9 @@ public class MainFrame extends JFrame {
     private PeerInfo currentPeer;
     public static final int W_SIZE = 900;
     public static final int H_SIZE = 650;
+    public int currentWindowWidth = W_SIZE;
+    public int currentWindowHeight = H_SIZE;
+
     public static final  int TOOLBAR_WIDTH = 52;
     public static final  int LEFT_WIDTH = 260;
 

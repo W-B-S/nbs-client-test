@@ -1,6 +1,6 @@
 package com.nbs.biz.data.dao;
 
-import com.nbs.biz.data.entity.BasicModel;
+import com.nbs.biz.data.entity.BasicEntity;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
@@ -30,7 +30,7 @@ public class BasicDao {
         this.className = clazz.getName();
     }
 
-    public int insert(BasicModel model)
+    public int insert(BasicEntity model)
     {
         return session.insert(className + ".insert", model);
     }
@@ -60,12 +60,12 @@ public class BasicDao {
         }
     }
 
-    public BasicModel findById(String id)
+    public BasicEntity findById(String id)
     {
         return _findById(id, 0);
     }
 
-    private BasicModel _findById(String id, int time)
+    private BasicEntity _findById(String id, int time)
     {
         if (time > 10)
         {
@@ -75,7 +75,7 @@ public class BasicDao {
 
         try
         {
-            return (BasicModel) session.selectOne(className + ".findById", id);
+            return (BasicEntity) session.selectOne(className + ".findById", id);
         } catch (PersistenceException exception)
         {
             System.out.println("没有查询到 BasicModel 对象，继续查询");
@@ -110,12 +110,12 @@ public class BasicDao {
         return session.delete(className + ".deleteAll");
     }
 
-    public int update(BasicModel model)
+    public int update(BasicEntity model)
     {
         return session.update(className + ".update", model);
     }
 
-    public int updateIgnoreNull(BasicModel model)
+    public int updateIgnoreNull(BasicEntity model)
     {
         return session.update(className + ".updateIgnoreNull", model);
     }

@@ -1,4 +1,4 @@
-package com.nbs.ui.holder;
+package io.nbs.client.ui.panels.im.messages;
 
 import io.nbs.client.cnsts.FontUtil;
 import io.nbs.client.cnsts.ColorCnst;

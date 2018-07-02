@@ -118,7 +118,7 @@ public class ContactsItemAdapter extends BaseAdapter<ContactsItemViewHolder> {
             {
                 //JOptionPane.showMessageDialog(AppMainWindow.frame,item.getName());
                 System.out.println(this.getClass().getName()+">>>>>>>>>>>>"+item.getName());
-
+                System.out.println(item.getId());
    //             IMPanel.getContext().contactsItemChanged(item);
 
                 //TODO  右侧聊天面板加载切换

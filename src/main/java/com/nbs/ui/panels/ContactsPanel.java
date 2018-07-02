@@ -16,7 +16,7 @@ import io.nbs.client.adapter.ContactsItemAdapter;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.ui.components.GBC;
 import io.nbs.client.ui.components.NbsListView;
-import io.nbs.commons.utils.Base64CodecUtil;
+import UI.common.Base64CodecUtil;
 import io.nbs.commons.utils.DbUtil;
 import io.nbs.client.ui.panels.ParentAvailablePanel;
 import io.nbs.commons.helper.RadomCharactersHelper;

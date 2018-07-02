@@ -1,15 +1,16 @@
-package com.nbs.ui.panels;
+package io.nbs.client.ui.panels.im;
 
-import com.nbs.entity.MessageItem;
+import io.nbs.sdk.beans.MessageItem;
 import com.nbs.ipfs.IPFSHelper;
 import com.nbs.tools.MessageViewHolderCacheHelper;
+import io.nbs.client.ui.panels.im.messages.MessageEditorPanel;
+import io.nbs.client.ui.panels.im.messages.MessagePanel;
 import io.nbs.client.adapter.MessageAdapter;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.ui.components.GBC;
 import com.nbs.ui.components.NbsBorder;
 import io.nbs.client.ui.components.NbsListView;
-import com.nbs.ui.frames.MainFrame;
-import io.nbs.commons.utils.Base64CodecUtil;
+import UI.common.Base64CodecUtil;
 import io.ipfs.api.IPFS;
 import io.nbs.client.ui.panels.ParentAvailablePanel;
 import org.slf4j.Logger;
@@ -48,7 +49,7 @@ public class ChatPanel extends ParentAvailablePanel {
     private MessageEditorPanel messageEditorPanel;
 
     // 每次加载的消息条数
-    private static final int PAGE_LENGTH = 10;
+    private static final int PAGE_LENGTH = 20;
 
     /**
      * TOPIC ID
@@ -78,7 +79,6 @@ public class ChatPanel extends ParentAvailablePanel {
         initData();
     }
 
-
     private void initComponents(){
         messagePanel = new MessagePanel(this);
         messagePanel.setBorder(new NbsBorder(NbsBorder.BOTTOM,ColorCnst.LIGHT_GRAY));
@@ -87,13 +87,13 @@ public class ChatPanel extends ParentAvailablePanel {
         messagePanel.getListView().setAdapter(adapter);
 
         messageEditorPanel = new MessageEditorPanel(this);
-        messageEditorPanel.setPreferredSize(new Dimension(MainFrame.DEFAULT_WIDTH*2/5,MainFrame.DEFAULT_HEIGHT/4));
+       // messageEditorPanel.setPreferredSize(new Dimension(MainFrame.DEFAULT_WIDTH*2/5,200));
 
     }
     private void initView(){
         this.setLayout(new GridBagLayout());
-        add(messagePanel,new GBC(0,0).setFill(GBC.BOTH).setWeight(1,4));
-        add(messageEditorPanel,new GBC(0,1).setFill(GBC.BOTH).setWeight(1,1));
+        add(messagePanel,new GBC(0,0).setFill(GBC.BOTH).setWeight(1,7));
+        add(messageEditorPanel,new GBC(0,1).setFill(GBC.BOTH).setWeight(1,2));
     }
 
     /**

@@ -2,7 +2,7 @@ package com.nbs.biz.service;
 
 
 import com.nbs.biz.data.dao.BasicDao;
-import com.nbs.biz.data.entity.BasicModel;
+import com.nbs.biz.data.entity.BasicEntity;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * Copyright (c) 2018, NBS , lambor.c<lanbery@gmail.com>.
  * All rights reserved.
  */
-public class BasicService<T extends BasicDao, E extends BasicModel> {
+public class BasicService<T extends BasicDao, E extends BasicEntity> {
     T dao;
 
     public void setDao(T dao)
@@ -22,9 +22,9 @@ public class BasicService<T extends BasicDao, E extends BasicModel> {
         this.dao = dao;
     }
 
-    public int insert(BasicModel model)
+    public int insert(BasicEntity entity)
     {
-        return dao.insert(model);
+        return dao.insert(entity);
     }
 
     public List<E> findAll()
@@ -52,14 +52,14 @@ public class BasicService<T extends BasicDao, E extends BasicModel> {
         return dao.deleteAll();
     }
 
-    public int update(BasicModel model)
+    public int update(BasicEntity entity)
     {
-        return dao.update(model);
+        return dao.update(entity);
     }
 
-    public int updateIgnoreNull(BasicModel model)
+    public int updateIgnoreNull(BasicEntity entity)
     {
-        return dao.updateIgnoreNull(model);
+        return dao.updateIgnoreNull(entity);
     }
 
     public int count()

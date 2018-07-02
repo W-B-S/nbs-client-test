@@ -1,6 +1,6 @@
 package com.nbs.ipfs.entity;
 
-import io.nbs.commons.utils.Base64CodecUtil;
+import UI.common.Base64CodecUtil;
 
 /**
  * @Package : com.nbs.ipfs.entity

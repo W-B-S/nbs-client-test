@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nbs.biz.data.dao.PeerMessageDao">
+    <resultMap id="BaseResultMap" type="com.nbs.biz.data.entity.PeerMessageEntity">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="seqno" property="seqno" jdbcType="VARCHAR"/>
+        <result column="fromid" property="fromid" jdbcType="VARCHAR"/>
+        <result column="fromhash" property="fromhash" jdbcType="VARCHAR"/>
+        <result column="self" property="self" jdbcType="VARCHAR"/>
+        <result column="topic" property="topic" jdbcType="VARCHAR"/>
+        <result column="roomid" property="roomid" jdbcType="VARCHAR"/>
+        <result column="msg" property="msg" jdbcType="VARCHAR"/>
+        <result column="mtype" property="mtype" jdbcType="VARCHAR"/>
+        <result column="ip" property="ip" jdbcType="VARCHAR"/>
+        <result column="recvtime" property="recvtime" jdbcType="INTEGER"/>
+        <result column="ctime" property="ctime" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO p_messages (id,seqno ,fromid, fromhash,self,topic,roomid,msg,mtype,ip,recvtime,ctime)
+        VALUES (#{id}, #{seqno}, #{fromid}, #{fromhash}, #{self}, #{topic}, #{roomid}, #{msg}, #{mtype}, #{ip}, #{recvtime}, #{ctime})
+    </insert>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT * FROM p_messages where id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT * FROM p_messages
+    </select>
+
+    <select id="find" resultMap="BaseResultMap" statementType="STATEMENT" parameterType="map">
+        SELECT * FROM p_messages where ${field} = ${val}
+    </select>
+
+    <delete id="delete" parameterType="java.lang.String">
+        DELETE * from p_messages WHERE id=#{id}
+    </delete>
+
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(1) FROM p_messages
+    </select>
+
+    <select id="exist" resultType="java.lang.Integer">
+        SELECT count(1) FROM p_messages where id = #{id}
+    </select>
+
+    <delete id="deleteAll">
+        delete from p_messages
+    </delete>
+
+
+    <update id="update">
+        UPDATE p_messages
+        <set>
+            seqno=#{seqno},
+            fromid=#{fromid},
+            msg=#{msg},
+            fromhash=#{fromhash},
+        </set>
+        WHERE id=#{id}
+    </update>
+
+    <update id="updateIgnoreNull">
+        UPDATE p_messages
+        <set>
+            <if test="seqno!= null">seqno=#{seqno},</if>
+            <if test="fromid!= null">fromid=#{fromid},</if>
+            <if test="ip != null">ip=#{ip},</if>
+            <if test="recvtime!= null">recvtime=#{recvtime},</if>
+        </set>
+        WHERE id=#{id}
+    </update>
+</mapper>

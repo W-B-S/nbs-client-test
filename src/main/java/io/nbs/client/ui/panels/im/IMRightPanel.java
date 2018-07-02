@@ -6,6 +6,7 @@ import io.nbs.client.ui.panels.ParentAvailablePanel;
 import io.nbs.client.ui.panels.TitlePanel;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 
 /**
@@ -19,6 +20,15 @@ import java.awt.*;
 public class IMRightPanel extends ParentAvailablePanel {
 
     private static IMRightPanel context;
+
+    private JPanel contentPanel;
+    private ChatPanel chatPanel;
+    private JPanel tipPanel;
+
+    public static final String MESSAGE = "MESSAGE";
+    public static final String TIP = "TIP";
+
+    private CardLayout cardLayout;
     /**
      * win 窗口控制
      */
@@ -33,17 +43,31 @@ public class IMRightPanel extends ParentAvailablePanel {
     private void initComponents(){
         winTitlePanel = new TitlePanel(this);
         winTitlePanel.setTitle(ConfigurationHelper.getInstance().getI18nProperty("nbs.ui.panel.im.label","NBS World IM"));
+        cardLayout = new CardLayout();
+        contentPanel = new JPanel();
+        contentPanel.setLayout(cardLayout);
 
+        chatPanel = new ChatPanel(this);
+        tipPanel = new JPanel();
 
+        setBorder(new LineBorder(ColorCnst.SHADOW));
     }
 
     private void initView(){
         setLayout(new BorderLayout());
         setBackground(ColorCnst.WINDOW_BACKGROUND);
-        //setBorder(MainFrame.redBorder);
+
+        contentPanel.add(chatPanel,MESSAGE);
+        contentPanel.add(tipPanel,TIP);
+
+        cardLayout.show(contentPanel,MESSAGE);
+
 
         add(winTitlePanel,BorderLayout.NORTH);
+        this.add(contentPanel,BorderLayout.CENTER);
     }
+
+
 
     public static IMRightPanel getContext() {
         return context;

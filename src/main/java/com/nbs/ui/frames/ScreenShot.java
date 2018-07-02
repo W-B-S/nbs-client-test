@@ -1,7 +1,7 @@
 package com.nbs.ui.frames;
 
 import io.nbs.client.cnsts.ColorCnst;
-import com.nbs.ui.panels.ChatPanel;
+import io.nbs.client.ui.panels.im.ChatPanel;
 import io.nbs.commons.utils.ClipboardUtil;
 import io.nbs.commons.utils.IconUtil;
 

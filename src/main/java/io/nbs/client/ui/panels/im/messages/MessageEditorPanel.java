@@ -1,4 +1,4 @@
-package com.nbs.ui.panels;
+package io.nbs.client.ui.panels.im.messages;
 
 import UI.AppMainWindow;
 import UI.ConstantsUI;

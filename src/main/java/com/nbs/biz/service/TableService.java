@@ -1,6 +1,6 @@
 package com.nbs.biz.service;
 
-import com.nbs.biz.dao.NBSTableDao;
+import com.nbs.biz.data.dao.NBSTableDao;
 import com.nbs.biz.model.NBSTest;
 import org.apache.ibatis.session.SqlSession;
 

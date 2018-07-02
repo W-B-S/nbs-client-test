@@ -1,6 +1,6 @@
 package io.nbs.client.adapter;
 
-import com.nbs.entity.MessageItem;
+import io.nbs.sdk.beans.MessageItem;
 import com.nbs.tools.MessageViewHolderCacheHelper;
 import io.nbs.client.ui.components.NbsListView;
 import io.nbs.client.ui.holders.BaseMessageViewHolder;

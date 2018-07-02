@@ -1,4 +1,4 @@
-package io.nbs.commons.utils;
+package UI.common;
 
 import com.alibaba.fastjson.JSON;
 import com.nbs.entity.PeerBoradcastInfo;

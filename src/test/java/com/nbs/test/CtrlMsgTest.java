@@ -2,7 +2,7 @@ package com.nbs.test;
 
 import com.alibaba.fastjson.JSON;
 import com.nbs.entity.PeerBoradcastInfo;
-import io.nbs.commons.utils.Base64CodecUtil;
+import UI.common.Base64CodecUtil;
 import io.nbs.commons.helper.RadomCharactersHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

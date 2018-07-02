@@ -1,6 +1,6 @@
 package com.nbs.biz.model;
 
-import com.nbs.biz.data.entity.BasicModel;
+import com.nbs.biz.data.entity.BasicEntity;
 
 /**
  * @Package : com.nbs.biz.model
@@ -11,7 +11,7 @@ import com.nbs.biz.data.entity.BasicModel;
  * Copyright (c) 2018, NBS , lambor.c<lanbery@gmail.com>.
  * All rights reserved.
  */
-public class ContactsEntity extends BasicModel {
+public class ContactsEntity extends BasicEntity {
 
     private String id;
     private String fromid;

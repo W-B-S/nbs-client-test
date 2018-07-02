@@ -8,6 +8,8 @@ import io.ipfs.api.JSONParser;
 import io.nbs.client.Launcher;
 import io.nbs.commons.helper.RadomCharactersHelper;
 import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,6 +24,8 @@ import java.util.List;
  * All rights reserved.
  */
 public class PeerServiceImpl {
+
+    private static final Logger logger = LoggerFactory.getLogger(PeerServiceImpl.class);
 
     private IPFS ipfs;
     private PeerContactsService contactsService;
@@ -58,6 +62,7 @@ public class PeerServiceImpl {
         List<PeerContactsEntity> needInsert = new ArrayList<>();
         RadomCharactersHelper radomCharactersHelper = RadomCharactersHelper.getInstance();
         if(onlinePeers==null||onlinePeers.size()==0)return contactsItems;
+
         if(contactsEntities!=null&&contactsEntities.size()>0){
             for(String peerId : onlinePeers){
                 boolean notFind = true;
@@ -115,6 +120,9 @@ public class PeerServiceImpl {
             Object o = ipfs.pubsub.peers();
                     //ipfs.pubsub.peers(IPFSHelper.NBSWORLD_IMS_TOPIC);
             result = (List<String>)JSONParser.getValue(o,"Strings");
+            for(String p : result){
+                logger.info(">>>>>>>GET {} peers",p);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,4 +1,4 @@
-package com.nbs.biz.dao;
+package com.nbs.biz.data.dao;
 
 import com.nbs.biz.model.NBSTest;
 import org.apache.ibatis.session.SqlSession;

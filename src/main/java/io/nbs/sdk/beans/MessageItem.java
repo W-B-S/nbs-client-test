@@ -1,4 +1,4 @@
-package com.nbs.entity;
+package io.nbs.sdk.beans;
 
 import com.nbs.ipfs.entity.IpfsMessage;
 import io.nbs.client.vo.ContactsItem;

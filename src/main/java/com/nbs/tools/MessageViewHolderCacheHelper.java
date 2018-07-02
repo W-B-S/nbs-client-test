@@ -1,8 +1,8 @@
 package com.nbs.tools;
 
-import com.nbs.ui.holder.MessageLeftTextViewHolder;
-import com.nbs.ui.holder.MessageRightTextViewHolder;
-import com.nbs.ui.holder.MessageSystemMessageViewHolder;
+import io.nbs.client.ui.panels.im.messages.MessageLeftTextViewHolder;
+import io.nbs.client.ui.panels.im.messages.MessageRightTextViewHolder;
+import io.nbs.client.ui.panels.im.messages.MessageSystemMessageViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;

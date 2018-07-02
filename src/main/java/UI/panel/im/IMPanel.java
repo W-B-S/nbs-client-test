@@ -13,8 +13,8 @@ import com.nbs.ipfs.IPFSHelper;
 import com.nbs.ipfs.entity.IpfsMessage;
 import io.nbs.commons.helper.DateHelper;
 import io.nbs.client.cnsts.ColorCnst;
-import com.nbs.ui.panels.ChatPanel;
-import io.nbs.commons.utils.Base64CodecUtil;
+import io.nbs.client.ui.panels.im.ChatPanel;
+import UI.common.Base64CodecUtil;
 import io.ipfs.api.IPFS;
 
 import org.apache.commons.lang3.StringUtils;

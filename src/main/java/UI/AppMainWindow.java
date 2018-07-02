@@ -14,8 +14,8 @@ import com.nbs.ipfs.IPFSHelper;
 import com.nbs.ipfs.entity.IpfsMessage;
 import com.nbs.tools.ConfigHelper;
 import com.nbs.tools.PropertyUtil;
-import com.nbs.ui.frames.MainFrame;
-import io.nbs.commons.utils.Base64CodecUtil;
+import com.nbs.ui.frames.MainFrameOld;
+import UI.common.Base64CodecUtil;
 import io.nbs.commons.utils.BaseURLUtil;
 import io.nbs.commons.helper.RadomCharactersHelper;
 import io.ipfs.api.IPFS;
@@ -26,6 +26,7 @@ import io.ipfs.multihash.Multihash;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -60,7 +61,7 @@ public class AppMainWindow {
 
     private static boolean boradcastSuccess = false;
 
-    public static MainFrame frame;
+    public static MainFrameOld frame;
     /**
      * 主窗口
      */
@@ -213,7 +214,7 @@ public class AppMainWindow {
             e.printStackTrace();
         }
 
-        frame = new MainFrame();
+        frame = new MainFrameOld();
         //set window Size
         frame.setBounds(ConstantsUI.MAIN_WINDOW_X,ConstantsUI.MAIN_WINDOW_Y
                 ,ConstantsUI.MAIN_WINDOW_WIDTH,ConstantsUI.MAIN_WINDOW_HEIGHT);

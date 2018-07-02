@@ -1,4 +1,4 @@
-package com.nbs.ui.holder;
+package io.nbs.client.ui.panels.im.messages;
 
 import UI.AppMainWindow;
 import io.nbs.client.ui.components.NBSIconButton;
@@ -8,7 +8,7 @@ import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.ui.components.GBC;
 import com.nbs.ui.components.SizeAutoAdjustTextArea;
 import com.nbs.ui.components.messages.NBSRightImageMessageBubble;
-import com.nbs.ui.frames.MainFrame;
+import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.holders.BaseMessageViewHolder;
 
 import javax.swing.*;

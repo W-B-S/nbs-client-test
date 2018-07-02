@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.nbs.biz.dao.NBSTableDao">
+<mapper namespace="com.nbs.biz.data.dao.NBSTableDao">
 
     <select id="tableExist" resultType="java.lang.Integer">
 		select count(1) AS c from sqlite_master where type = 'table' and name = #{name}
@@ -42,9 +42,10 @@
 
     <update id="createPeerMessages">
         CREATE table p_messages (
-        id varchar(20) PRIMARY KEY,
-        formid varchar (100),
-        formhash varchar (100),
+        id integer PRIMARY KEY autoincrement,
+        seqno varchar(20) ,
+        fromid varchar (100),
+        fromhash varchar (100),
         self integer default 0,
         topic varchar (100),
         roomid varchar(36),

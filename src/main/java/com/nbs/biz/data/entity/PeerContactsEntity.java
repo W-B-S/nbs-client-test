@@ -8,7 +8,7 @@ package com.nbs.biz.data.entity;
  * Copyright (c) 2018, NBS , lambor.c<lanbery@gmail.com>.
  * All rights reserved.
  */
-public class PeerContactsEntity extends BasicModel {
+public class PeerContactsEntity extends BasicEntity {
     private String id;
     private String fromid;
     private String nick;

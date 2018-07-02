@@ -1,4 +1,4 @@
-package com.nbs.ui.panels;
+package io.nbs.client.ui.panels.im.messages;
 
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.ui.components.NbsListView;

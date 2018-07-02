@@ -1,7 +1,7 @@
 package com.nbs.ipfs;
 
 import com.nbs.tools.ConfigHelper;
-import io.nbs.commons.utils.Base64CodecUtil;
+import UI.common.Base64CodecUtil;
 import io.ipfs.api.IPFS;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
