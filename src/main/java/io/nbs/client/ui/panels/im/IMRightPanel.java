@@ -17,12 +17,15 @@ import java.awt.*;
  * All rights reserved.
  */
 public class IMRightPanel extends ParentAvailablePanel {
+
+    private static IMRightPanel context;
     /**
      * win 窗口控制
      */
     public static TitlePanel winTitlePanel;
     public IMRightPanel(JPanel parent) {
         super(parent);
+        context = this;
         initComponents();
         initView();
     }
@@ -30,6 +33,8 @@ public class IMRightPanel extends ParentAvailablePanel {
     private void initComponents(){
         winTitlePanel = new TitlePanel(this);
         winTitlePanel.setTitle(ConfigurationHelper.getInstance().getI18nProperty("nbs.ui.panel.im.label","NBS World IM"));
+
+
     }
 
     private void initView(){
@@ -38,5 +43,9 @@ public class IMRightPanel extends ParentAvailablePanel {
         //setBorder(MainFrame.redBorder);
 
         add(winTitlePanel,BorderLayout.NORTH);
+    }
+
+    public static IMRightPanel getContext() {
+        return context;
     }
 }

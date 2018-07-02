@@ -3,6 +3,7 @@ package com.nbs.ui.holder;
 import io.nbs.client.cnsts.FontUtil;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.ui.components.VerticalFlowLayout;
+import io.nbs.client.ui.holders.BaseMessageViewHolder;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +16,7 @@ import java.awt.*;
  * Copyright (c) 2018, NBS , lambor.c<lanbery@gmail.com>.
  * All rights reserved.
  */
-public class MessageSystemMessageViewHolder extends  BaseMessageViewHolder{
+public class MessageSystemMessageViewHolder extends BaseMessageViewHolder {
     public JLabel text = new JLabel();
     private JPanel timePanel = new JPanel();
     private JPanel textPanel;

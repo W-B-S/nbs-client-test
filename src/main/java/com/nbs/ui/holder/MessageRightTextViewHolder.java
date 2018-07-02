@@ -9,6 +9,7 @@ import io.nbs.client.ui.components.GBC;
 import com.nbs.ui.components.SizeAutoAdjustTextArea;
 import com.nbs.ui.components.messages.NBSRightImageMessageBubble;
 import com.nbs.ui.frames.MainFrame;
+import io.nbs.client.ui.holders.BaseMessageViewHolder;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,7 +22,7 @@ import java.awt.*;
  * Copyright (c) 2018, NBS , lambor.c<lanbery@gmail.com>.
  * All rights reserved.
  */
-public class MessageRightTextViewHolder extends  BaseMessageViewHolder{
+public class MessageRightTextViewHolder extends BaseMessageViewHolder {
     public SizeAutoAdjustTextArea text;
     ImageIcon defaltIcon = new ImageIcon(ConfigHelper.PROFILE_ROOT+"avatars/default_avatar.png");
     public NBSIconButton messageButton = new NBSIconButton(defaltIcon,defaltIcon,"");

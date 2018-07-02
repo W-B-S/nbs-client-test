@@ -12,4 +12,5 @@ import io.nbs.client.ui.holders.ViewHolder;
  * All rights reserved.
  */
 public abstract class AvatarViewHolder extends ViewHolder {
+
 }

@@ -2,7 +2,7 @@ package com.nbs.biz;
 
 import com.nbs.biz.data.entity.PeerContactsEntity;
 import com.nbs.biz.service.PeerContactsService;
-import com.nbs.tools.DateHelper;
+import io.nbs.commons.helper.DateHelper;
 import io.nbs.sdk.beans.PeerInfo;
 import org.apache.ibatis.session.SqlSession;
 

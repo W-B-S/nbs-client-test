@@ -3,7 +3,7 @@ package io.nbs.client.adapter;
 import com.nbs.entity.MessageItem;
 import com.nbs.tools.MessageViewHolderCacheHelper;
 import io.nbs.client.ui.components.NbsListView;
-import com.nbs.ui.holder.BaseMessageViewHolder;
+import io.nbs.client.ui.holders.BaseMessageViewHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

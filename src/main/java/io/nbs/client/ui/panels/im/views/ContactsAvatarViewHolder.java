@@ -1,4 +1,4 @@
-package io.nbs.client.ui.holders;
+package io.nbs.client.ui.panels.im.views;
 
 import io.nbs.client.ui.holders.AvatarViewHolder;
 

@@ -1,4 +1,4 @@
-package com.nbs.ui.holder;
+package io.nbs.client.ui.holders;
 
 import io.nbs.client.ui.holders.ViewHolder;
 

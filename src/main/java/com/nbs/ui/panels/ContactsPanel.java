@@ -11,7 +11,7 @@ import com.nbs.entity.PeerInfoBase;
 import com.nbs.ipfs.IPFSHelper;
 import com.nbs.ipfs.entity.IpfsMessage;
 import com.nbs.tools.ConfigHelper;
-import com.nbs.tools.DateHelper;
+import io.nbs.commons.helper.DateHelper;
 import io.nbs.client.adapter.ContactsItemAdapter;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.ui.components.GBC;

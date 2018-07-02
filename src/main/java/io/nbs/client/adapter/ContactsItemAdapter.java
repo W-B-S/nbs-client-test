@@ -2,10 +2,10 @@ package io.nbs.client.adapter;
 
 import io.nbs.client.vo.ContactsItem;
 import io.nbs.client.ui.holders.AvatarViewHolder;
-import io.nbs.client.ui.holders.ContactsItemViewHolder;
+import io.nbs.client.ui.panels.im.views.ContactsItemViewHolder;
 import io.nbs.client.cnsts.ColorCnst;
 import com.nbs.ui.components.NbsBorder;
-import io.nbs.client.ui.holders.ContactsAvatarViewHolder;
+import io.nbs.client.ui.panels.im.views.ContactsAvatarViewHolder;
 import io.nbs.client.listener.AbstractMouseListener;
 import io.nbs.commons.utils.AvatarUtil;
 import io.nbs.commons.helper.CharacterParser;

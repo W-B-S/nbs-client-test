@@ -9,7 +9,7 @@
  *
  */
 
-package com.nbs.tools;
+package io.nbs.commons.helper;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 

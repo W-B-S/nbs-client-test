@@ -11,7 +11,7 @@ import io.nbs.client.vo.ContactsItem;
 import com.nbs.entity.PeerInfoBase;
 import com.nbs.ipfs.IPFSHelper;
 import com.nbs.ipfs.entity.IpfsMessage;
-import com.nbs.tools.DateHelper;
+import io.nbs.commons.helper.DateHelper;
 import io.nbs.client.cnsts.ColorCnst;
 import com.nbs.ui.panels.ChatPanel;
 import io.nbs.commons.utils.Base64CodecUtil;

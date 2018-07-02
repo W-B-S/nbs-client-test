@@ -7,6 +7,7 @@ import com.nbs.ui.components.SizeAutoAdjustTextArea;
 import io.nbs.client.ui.components.VerticalFlowLayout;
 import com.nbs.ui.components.messages.NBSLeftImageMessageBubble;
 import com.nbs.ui.frames.MainFrame;
+import io.nbs.client.ui.holders.BaseMessageViewHolder;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +20,7 @@ import java.awt.*;
  * Copyright (c) 2018, NBS , lambor.c<lanbery@gmail.com>.
  * All rights reserved.
  */
-public class MessageLeftTextViewHolder extends BaseMessageViewHolder{
+public class MessageLeftTextViewHolder extends BaseMessageViewHolder {
     public JLabel sender = new JLabel();
     public SizeAutoAdjustTextArea text;
     public NBSLeftImageMessageBubble messageBubble = new NBSLeftImageMessageBubble();
