@@ -13,6 +13,7 @@ import io.nbs.client.cnsts.AppGlobalCnst;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.cnsts.FontUtil;
 import io.nbs.client.cnsts.OSUtil;
+import io.nbs.client.ui.filters.ImagesFiltFilter;
 import io.nbs.commons.helper.AvatarImageHandler;
 import io.nbs.commons.helper.ConfigurationHelper;
 import io.nbs.sdk.beans.PeerInfo;
@@ -399,7 +400,10 @@ public class InitialFrame extends JFrame {
         avatarLabel.addMouseListener(new AbstractMouseListener(){
             @Override
             public void mouseClicked(MouseEvent e) {
-                uploadAvatar();
+                boolean res = uploadAvatar();
+                if(!res){
+
+                }
                 super.mouseClicked(e);
             }
 
@@ -535,13 +539,17 @@ public class InitialFrame extends JFrame {
      * 64*64 .nbs/profile/avatars/thumbs/peerId
      * 40*40 .nbs/cache/avatars/thumbs/hash
      */
-    private void uploadAvatar(){
+    private boolean uploadAvatar(){
         fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.showDialog(this,"选择图片");
-       // fileChooser.setFileFilter(new ImageFileFilter());
+        ImagesFiltFilter filtFilter = new ImagesFiltFilter();
+        fileChooser.addChoosableFileFilter(filtFilter);
+        fileChooser.setFileFilter(filtFilter);
+
         File file = fileChooser.getSelectedFile();
-        if(file!=null){
+        if(file!=null)
+        {
             String name = file.getName();//源文件名
             String avatarPeerName = tempInfo.getId() + name.substring(name.lastIndexOf("."));
             new Thread(()->{
@@ -550,8 +558,8 @@ public class InitialFrame extends JFrame {
                 FileOutputStream fos = null;
                 try {
                     //上传前先压缩
-                    imageHandler.createdAvatar4Profile(file,avatarPeerName);
-                    File file128 = new File(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),avatarPeerName));
+                    imageHandler.createdAvatar4Profile(file,null);
+                    File file128 = new File(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),name));
                     NamedStreamable.FileWrapper fileWrapper = new NamedStreamable.FileWrapper(file128);
 
                     nodes = ipfs.add(fileWrapper);
@@ -563,7 +571,7 @@ public class InitialFrame extends JFrame {
                     String avatarFileName = fileHash+ name.substring(name.lastIndexOf("."));
                     try {
                         imageHandler.createContactsAvatar(file,avatarFileName);
-                        ImageIcon icon = new ImageIcon(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),avatarPeerName));
+                        ImageIcon icon = new ImageIcon(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),name));
                         if(icon!=null){
                             logger.info(fileHash);
                             avatarLabel.setIcon(icon);
@@ -580,6 +588,10 @@ public class InitialFrame extends JFrame {
                    statusPanel.setVisible(true);
                 }
             }).start();
+            return true;
+        }else {
+            JOptionPane.showMessageDialog(this,"请选择图片类型文件.");
+            return false;
         }
     }
 }

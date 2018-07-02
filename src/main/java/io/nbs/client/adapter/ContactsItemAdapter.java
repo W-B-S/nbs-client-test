@@ -82,13 +82,13 @@ public class ContactsItemAdapter extends BaseAdapter<ContactsItemViewHolder> {
     public void onBindHeaderViewHolder(AvatarViewHolder viewHolder, int position) {
         ContactsAvatarViewHolder holder = (ContactsAvatarViewHolder) viewHolder;
         holder.setPreferredSize(new Dimension(100, 25));
-        holder.setBackground(ColorCnst.ITEM_SELECTED_LIGHT);
-        holder.setBorder(new NbsBorder(NbsBorder.BOTTOM));
+        holder.setBackground(ColorCnst.CONTACTS_ITEM_GRAY_MAIN);//字母分类背景
+        holder.setBorder(new NbsBorder(NbsBorder.BOTTOM,ColorCnst.CONTACTS_ITEM_LINE_GRAY));
         holder.setOpaque(true);
 
         holder.letterLabel = new JLabel();
         holder.letterLabel.setText(holder.getLetter());
-        holder.letterLabel.setForeground(ColorCnst.FONT_GRAY);
+        holder.letterLabel.setForeground(ColorCnst.FONT_GRAY_DARKER);
 
         holder.setLayout(new BorderLayout());
         holder.add(holder.letterLabel, BorderLayout.WEST);

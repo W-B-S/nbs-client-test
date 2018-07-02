@@ -94,7 +94,7 @@ public class ToolbarPanel extends JPanel {
         ImageIcon icon;
         if(peer!=null&&StringUtils.isNotBlank(peer.getId())
                 &&StringUtils.isNotBlank(peer.getAvatarSuffix())){
-            String a48Path = AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),"thumbs",peer.getId()+peer.getAvatarSuffix());
+            String a48Path = AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),"thumbs",peer.getAvatarName());
             System.out.println(a48Path);
             if((new File(a48Path)).exists()){
                 icon = new ImageIcon(a48Path);

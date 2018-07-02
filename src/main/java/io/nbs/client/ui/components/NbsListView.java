@@ -79,7 +79,7 @@ public class NbsListView extends JScrollPane {
             scrollMouseListener = new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
-                    setScrollBarColor(ColorCnst.SCROLL_BAR_THUMB,ColorCnst.WINDOW_BACKGROUND);
+                    setScrollBarColor(ColorCnst.SCROLL_BAR_THUMB,ColorCnst.SCROLL_BAR_TTRACK);
                     getVerticalScrollBar().repaint();
                     super.mouseEntered(e);
                 }

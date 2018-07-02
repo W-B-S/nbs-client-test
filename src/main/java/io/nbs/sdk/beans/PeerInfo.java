@@ -15,6 +15,10 @@ public class PeerInfo {
     private String avatar;
     private String avatarSuffix;
     /**
+     * 文件名
+     */
+    private String avatarName;
+    /**
      * IP
      */
     private String ip;
@@ -77,5 +81,13 @@ public class PeerInfo {
 
     public void setLocations(String locations) {
         this.locations = locations;
+    }
+
+    public String getAvatarName() {
+        return avatarName;
+    }
+
+    public void setAvatarName(String avatarName) {
+        this.avatarName = avatarName;
     }
 }

@@ -137,14 +137,15 @@ public class AvatarImageHandler {
      */
     public void createdAvatar4Profile(File srcFile,String hashFileName) throws Exception {
         if(!srcFile.exists())throw new Exception("图片源不存在.");
+        String originName = StringUtils.isBlank(hashFileName) ? srcFile.getName() : hashFileName;
         /**
          * 128*128
          */
-        String target128 = AppGlobalCnst.consturactPath(AVATAR_PROFILE_HOME,hashFileName);
+        String target128 = AppGlobalCnst.consturactPath(AVATAR_PROFILE_HOME,originName);
         File targetFile128 = new File(target128);
         generateThumbScale(srcFile,targetFile128,DEFAULT_PROFILE_AVATAR_SIZE);
 
-        File target64 = new File(AppGlobalCnst.consturactPath(AVATAR_PROFILE_HOME,"thumbs",hashFileName));
+        File target64 = new File(AppGlobalCnst.consturactPath(AVATAR_PROFILE_HOME,"thumbs",originName));
         generateThumbScale(srcFile,target64,DEFAULT_PROFILE_THUMB_SIZE);
     }
 

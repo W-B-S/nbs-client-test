@@ -32,12 +32,12 @@ public class ContactsItemViewHolder extends ViewHolder {
     private void initComponents(){
         setPreferredSize(new Dimension(100,50));
         setBackground(ColorCnst.CONTACTS_ITEM_GRAY_MAIN);
-        setBorder(new NbsBorder(NbsBorder.BOTTOM,ColorCnst.CONTACTS_ITEM_LINE_GRAY));
+        setBorder(new NbsBorder(NbsBorder.BOTTOM,ColorCnst.LIGHT_GRAY));
         setOpaque(true);
         setForeground(ColorCnst.FONT_WHITE);
 
         roomName.setFont(FontUtil.getDefaultFont(13));
-        roomName.setForeground(ColorCnst.ITEM_SELECTED);
+        roomName.setForeground(ColorCnst.FONT_BLACK);//ITEM_SELECTED
     }
 
     /**

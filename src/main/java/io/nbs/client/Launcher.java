@@ -96,7 +96,7 @@ public class Launcher {
         try{
             ipfs =  new IPFS(cfgHelper.getIPFSAddress());
             boolean first = needInitConfig(ipfs);
-           // first = true;
+            //first = true;
             if(first){
                 currentFrame = new InitialFrame(ipfs);
             }else {
@@ -156,6 +156,8 @@ public class Launcher {
                 currentPeer.setAvatar(avatar.toString());
                 currentPeer.setAvatarSuffix(avatarSuffix.toString());
             }
+            Object avatarName = cfg.get(ConfigurationHelper.JSON_AVATAR_NAME_KEY);
+            if(avatarName!=null)currentPeer.setAvatarName((String)avatarName);
             return false;
         }else {
             return true;

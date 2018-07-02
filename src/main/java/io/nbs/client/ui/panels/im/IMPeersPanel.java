@@ -61,6 +61,9 @@ public class IMPeersPanel extends ParentAvailablePanel {
      */
     private void initComponents() {
         peerlistView = new NbsListView();
+        peerlistView.setScrollBarColor(ColorCnst.SCROLL_BAR_THUMB,ColorCnst.SCROLL_BAR_TRACK_LIGHT);
+        peerlistView.setContentPanelBackground(ColorCnst.DARK);
+
 
         peerService = new PeerServiceImpl(Launcher.getContext().getIpfs());
 

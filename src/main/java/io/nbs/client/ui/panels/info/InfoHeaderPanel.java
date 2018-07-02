@@ -11,6 +11,7 @@ import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.cnsts.FontUtil;
 import io.nbs.commons.helper.AvatarImageHandler;
 import io.nbs.commons.helper.ConfigurationHelper;
+import io.nbs.commons.utils.IconUtil;
 import io.nbs.sdk.beans.PeerInfo;
 import io.nbs.client.ui.components.GBC;
 import io.nbs.client.ui.components.LCJlabel;
@@ -18,6 +19,7 @@ import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.panels.ParentAvailablePanel;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -90,8 +92,11 @@ public class InfoHeaderPanel extends ParentAvailablePanel {
         /**
          * avatar
          */
-        String avatar128Path = AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),self.getId()+self.getAvatarSuffix());
+        String avatar128Path = AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),self.getAvatarName());
         ImageIcon avatar = new ImageIcon(avatar128Path);
+        if(avatar.getImage().getWidth(null)<=0||avatar.getImage().getHeight(null)<=0){
+            avatar = IconUtil.getIcon(this,"/icons/nbs128.png");
+        }
         avatarLabel.setIcon(avatar);
 
         leftPanel.setPreferredSize(new Dimension(150,150));
@@ -198,20 +203,21 @@ public class InfoHeaderPanel extends ParentAvailablePanel {
         if(file!=null) {
             String name = file.getName();//源文件名
             String avatarPeerName = self.getId() + name.substring(name.lastIndexOf("."));
-            new Thread(()->{
                 List<MerkleNode> nodes;
 
                 FileOutputStream fos = null;
                 try {
                     //上传前先压缩
-                    imageHandler.createdAvatar4Profile(file,avatarPeerName);
-                    File file128 = new File(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),avatarPeerName));
+                    imageHandler.createdAvatar4Profile(file,name);
+                    File file128 = new File(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),name));
+                    file128.getAbsolutePath();
                     NamedStreamable.FileWrapper fileWrapper = new NamedStreamable.FileWrapper(file128);
-
+                    //上传ipfs
                     nodes = ipfs.add(fileWrapper);
                     String fileHash = nodes.get(0).hash.toBase58();
 
                     self.setAvatar(fileHash);
+                    self.setAvatarName(name);
                     self.setAvatarSuffix(name.substring(name.lastIndexOf(".")));
 
                     ipfs.config.set(ConfigurationHelper.JSON_AVATAR_KEY,fileHash);
@@ -219,13 +225,19 @@ public class InfoHeaderPanel extends ParentAvailablePanel {
                     ipfs.config.set(ConfigurationHelper.JSON_AVATAR_NAME_KEY,name);
 
                     //TODO 存数据库upload
-                    String avatarFileName = fileHash+ name.substring(name.lastIndexOf("."));
+                    /**
+                     * 40*40
+                     */
+                    String hashFileName = fileHash+ name.substring(name.lastIndexOf("."));
                     try {
-                        imageHandler.createContactsAvatar(file,avatarFileName);
-                        ImageIcon icon = new ImageIcon(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),avatarPeerName));
+                        imageHandler.createContactsAvatar(file,hashFileName);
+                        Image img =Toolkit.getDefaultToolkit().getImage(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),name));
+                        ImageIcon icon = new ImageIcon(img);
+                        logger.warn(icon.getDescription());
                         if(icon!=null){
                             logger.info(fileHash);
                             avatarLabel.setIcon(icon);
+                            avatarLabel.validate();
                             avatarLabel.updateUI();
                             MainFrame.getContext().refreshAvatar();
                         }
@@ -238,7 +250,7 @@ public class InfoHeaderPanel extends ParentAvailablePanel {
                     JOptionPane.showMessageDialog(context,"上传失败");
                     return;
                 }
-            }).start();
+           // new Thread(()->{ }).start();
         }
     }
 

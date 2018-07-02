@@ -51,7 +51,7 @@ public class ScrollUI extends BasicScrollBarUI {
     @Override
     protected void configureScrollBarColors() {
         //滑道
-        setThumbBounds(0,0,3,10);
+        setThumbBounds(0,0,2,5);
     }
 
     /**
@@ -65,7 +65,7 @@ public class ScrollUI extends BasicScrollBarUI {
      */
     @Override
     public Dimension getPreferredSize(JComponent c) {
-        c.setPreferredSize(new Dimension(7,0));
+        c.setPreferredSize(new Dimension(5,0));
         return super.getPreferredSize(c);
     }
 
