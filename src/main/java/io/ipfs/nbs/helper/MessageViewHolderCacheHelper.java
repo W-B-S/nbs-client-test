@@ -1,9 +1,12 @@
 package io.ipfs.nbs.helper;
 
+import io.nbs.client.ui.components.adapters.MessageMouseListener;
 import io.nbs.client.ui.panels.im.messages.MessageLeftTextViewHolder;
 import io.nbs.client.ui.panels.im.messages.MessageRightTextViewHolder;
 import io.nbs.client.ui.panels.im.messages.MessageSystemMessageViewHolder;
 
+import javax.swing.*;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +26,9 @@ public class MessageViewHolderCacheHelper {
     private final int CACHE_CAPACITY = 20;
     private List<MessageRightTextViewHolder> rightTextViewHolders = new ArrayList<>();
 
+
     private List<MessageLeftTextViewHolder> leftTextViewHolders = new ArrayList<>();
+
 
     private List<MessageSystemMessageViewHolder> systemMessageViewHolders = new ArrayList<>();
 
@@ -56,6 +61,95 @@ public class MessageViewHolderCacheHelper {
     private void initLeftTextViewHolder(){
         for(int i=0;i<CACHE_CAPACITY;i++){
             leftTextViewHolders.add(new MessageLeftTextViewHolder());
+        }
+    }
+
+    /**
+     *
+     * @return
+     */
+    public synchronized MessageRightTextViewHolder tryGetRightTextViewHolder(){
+        MessageRightTextViewHolder holder =null;
+        if(rightTextPosition <CACHE_CAPACITY && rightTextViewHolders.size()>0){
+            holder = rightTextViewHolders.get(rightTextPosition);
+        }
+        return holder;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public synchronized MessageLeftTextViewHolder tryGetLeftTextViewHolder()
+    {
+        MessageLeftTextViewHolder holder = null;
+        if (leftTextPosition < CACHE_CAPACITY && leftTextViewHolders.size() > 0)
+        {
+            holder = leftTextViewHolders.get(leftTextPosition);
+            leftTextPosition++;
+        }
+
+        return holder;
+    }
+
+    /**
+     * @Date    : 2018/7/3 0:04
+     * @Author  : lanbery
+     * @Decription :
+     * <p></p>
+     * @Param   :
+     * @return
+     * @throws
+     */
+    public synchronized MessageSystemMessageViewHolder tryGetSystemMessageViewHolder()
+    {
+        MessageSystemMessageViewHolder holder = null;
+        if (systemMessagePosition < CACHE_CAPACITY && systemMessageViewHolders.size() > 0)
+        {
+            holder = systemMessageViewHolders.get(systemMessagePosition);
+            systemMessagePosition++;
+        }
+
+        return holder;
+    }
+
+    public synchronized void reset(){
+        for (int i = 0; i < rightTextPosition; i++)
+        {
+            MessageRightTextViewHolder viewHolder = rightTextViewHolders.get(i);
+            clearMouseListener(viewHolder.messageBubble);
+            clearMouseListener(viewHolder.resend);
+            clearMouseListener(viewHolder.text);
+        }
+
+        for (int i = 0; i < leftTextPosition; i++)
+        {
+            MessageLeftTextViewHolder viewHolder = leftTextViewHolders.get(i);
+
+            clearMouseListener(viewHolder.text);
+            clearMouseListener(viewHolder.messageBubble);
+            clearMouseListener(viewHolder.avatar);
+        }
+
+        rightTextPosition = 0;
+        rightImagePosition = 0;
+        rightAttachmentPosition = 0;
+
+        leftTextPosition = 0;
+        leftImagePosition = 0;
+        leftAttachmentPosition = 0;
+
+        systemMessagePosition = 0;
+    }
+
+    private void clearMouseListener(JComponent component)
+    {
+        for (MouseListener l : component.getMouseListeners())
+        {
+            if (l instanceof MessageMouseListener)
+            {
+                component.removeMouseListener(l);
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 package io.nbs.client.ui.panels.im.messages;
 
 import UI.AppMainWindow;
+import io.nbs.client.Launcher;
 import io.nbs.client.ui.components.NBSIconButton;
 import com.nbs.tools.ConfigHelper;
 import io.nbs.client.cnsts.FontUtil;
@@ -23,8 +24,13 @@ import java.awt.*;
  * All rights reserved.
  */
 public class MessageRightTextViewHolder extends BaseMessageViewHolder {
+
+
     public SizeAutoAdjustTextArea text;
-    ImageIcon defaltIcon = new ImageIcon(ConfigHelper.PROFILE_ROOT+"avatars/default_avatar.png");
+    /**
+     * TODO
+     */
+    ImageIcon defaltIcon = new ImageIcon(Launcher.appBasePath +"avatars/default_avatar.png");
     public NBSIconButton messageButton = new NBSIconButton(defaltIcon,defaltIcon,"");
     public JLabel resend = new JLabel(); // 重发按钮
     public JLabel sendingProgress = new JLabel(); // 正在发送
@@ -32,7 +38,7 @@ public class MessageRightTextViewHolder extends BaseMessageViewHolder {
     private JPanel timePanel = new JPanel();
     private JPanel messageAvatarPanel = new JPanel();
 
-    private IMRightImageMessageBubble messageBubble = new IMRightImageMessageBubble();
+    public IMRightImageMessageBubble messageBubble = new IMRightImageMessageBubble();
 
     public MessageRightTextViewHolder(){
         initComponents();
