@@ -1,7 +1,5 @@
-package io.nbs.commons.helper;
+package io.nbs.client.helper;
 
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import io.nbs.client.Launcher;
 import io.nbs.client.cnsts.AppGlobalCnst;
 import io.nbs.commons.utils.IconUtil;
@@ -215,8 +213,9 @@ public class AvatarImageHandler {
         BufferedImage image = new BufferedImage(w,h,BufferedImage.SCALE_SMOOTH);
         image.getGraphics().drawImage(img,0,0,w,h,null);
         FileOutputStream out = new FileOutputStream(destFile);
-        JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-        encoder.encode(image);
+        String destName = destFile.getName();
+        String suffix = destName.substring(destName.lastIndexOf(".")+1);
+        ImageIO.write(image,suffix,destFile);
         out.close();
     }
 

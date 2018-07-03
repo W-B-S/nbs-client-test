@@ -69,10 +69,10 @@ public class Launcher {
         FILE_SEPARATOR = System.getProperty("file.separator");
     }
 
-    public Launcher(){
+    public Launcher(ConfigurationHelper helper){
         context = this;
         logo = IconUtil.getIcon(this,"/icons/nbs.png");
-        cfgHelper = ConfigurationHelper.getInstance();
+        cfgHelper =helper;
     }
     public Launcher(String[] args){
         context = this;

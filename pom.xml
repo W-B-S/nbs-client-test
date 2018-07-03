@@ -12,6 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <main-class>io.nbs.client.App</main-class>
         <!-- dependency version -->
         <ipfs.api.version>v1.2.0</ipfs.api.version>
         <logback.version>1.2.3</logback.version>
@@ -99,11 +100,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.1</version>
+                <version>3.7.0</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
                     <encoding>UTF-8</encoding>
+                    <compilerArgument>-XDignore.symbol.file</compilerArgument>
                 </configuration>
             </plugin>
             <plugin>
@@ -139,7 +141,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>UI.AppMainWindow</mainClass>
+                            <mainClass>io.nbs.client.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -167,7 +169,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>UI.AppMainWindow</mainClass>
+                            <mainClass>${main-class}</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
@@ -213,7 +215,7 @@
                     <repositoryName>lib</repositoryName>
                     <programs>
                         <program>
-                            <mainClass>UI.AppMainWindow</mainClass>
+                            <mainClass>${main-class}</mainClass>
                             <name>nbs-client4j</name>
                             <jvmSettings>
                                 <extraArguments>

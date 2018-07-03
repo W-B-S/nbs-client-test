@@ -48,8 +48,18 @@ public class ConfigurationHelper {
     private static int stats = 0;
 
     private ConfigurationHelper(){
-        initLoadEnv();
-        initLoadI18n();
+        switch (stats){
+            case 0:
+                initLoadEnv();
+                initLoadI18n();
+                break;
+            case 1:
+                initLoadI18n();
+                break;
+            case 2:
+                initLoadEnv();
+                break;
+        }
     }
 
     private static class ConfigHolder{
@@ -79,6 +89,8 @@ public class ConfigurationHelper {
      * @return
      */
     public static ConfigurationHelper getInstance(){
+        ConfigurationHelper instance = ConfigHolder.instance;
+
         return ConfigHolder.instance;
     }
 
@@ -186,4 +198,11 @@ public class ConfigurationHelper {
         return gwUrl+hash;
     }
 
+    public Properties getCfgProps() {
+        return cfgProps;
+    }
+
+    public Properties getI18nProps() {
+        return i18nProps;
+    }
 }

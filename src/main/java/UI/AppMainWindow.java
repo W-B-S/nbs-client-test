@@ -116,7 +116,7 @@ public class AppMainWindow {
     public static void main(String[] args){
         String basedir = System.getProperty("app.home");
         System.out.println("nbs-client-dir>>>>>>>>>>"+basedir);
-        EventQueue.invokeLater(
+      /*  EventQueue.invokeLater(
                 new Runnable() {
                     @Override
                     public void run() {
@@ -129,7 +129,7 @@ public class AppMainWindow {
 
                     }
                 }
-        );
+        );*/
     }
 
 

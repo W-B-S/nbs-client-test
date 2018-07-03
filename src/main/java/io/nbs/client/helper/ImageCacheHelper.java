@@ -1,9 +1,5 @@
 package io.nbs.client.helper;
 
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
-import io.ipfs.api.IPFS;
-import io.ipfs.multihash.Multihash;
 import io.nbs.client.Launcher;
 import io.nbs.client.cnsts.AppGlobalCnst;
 import io.nbs.commons.helper.ConfigurationHelper;
@@ -20,7 +16,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -185,8 +180,9 @@ public class ImageCacheHelper {
 
             File cacheFile = new File(AppGlobalCnst.consturactPath(IMAGE_CACHE_ROOT_PATH,identify + "_thumb") );
             FileOutputStream out = new FileOutputStream(cacheFile);
-            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-            encoder.encode(tag);
+           // JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
+            //ImageIO.write(tag,"png",cacheFile);
+
             out.close();
         }
         catch (IOException ex)

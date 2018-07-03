@@ -3,7 +3,7 @@ package io.nbs.client.ui.panels;
 import io.nbs.client.ui.components.VerticalFlowLayout;
 import io.nbs.client.cnsts.AppGlobalCnst;
 import io.nbs.client.cnsts.ColorCnst;
-import io.nbs.commons.helper.AvatarImageHandler;
+import io.nbs.client.helper.AvatarImageHandler;
 import io.nbs.sdk.beans.PeerInfo;
 import io.nbs.client.ui.components.GBC;
 import io.nbs.client.ui.components.NBSIconButton;

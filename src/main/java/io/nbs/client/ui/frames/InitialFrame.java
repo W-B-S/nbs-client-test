@@ -14,7 +14,7 @@ import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.cnsts.FontUtil;
 import io.nbs.client.cnsts.OSUtil;
 import io.nbs.client.ui.filters.ImagesFiltFilter;
-import io.nbs.commons.helper.AvatarImageHandler;
+import io.nbs.client.helper.AvatarImageHandler;
 import io.nbs.commons.helper.ConfigurationHelper;
 import io.nbs.sdk.beans.PeerInfo;
 import io.nbs.client.ui.components.GBC;

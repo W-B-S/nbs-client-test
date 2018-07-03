@@ -9,7 +9,7 @@ import io.nbs.client.Launcher;
 import io.nbs.client.cnsts.AppGlobalCnst;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.cnsts.FontUtil;
-import io.nbs.commons.helper.AvatarImageHandler;
+import io.nbs.client.helper.AvatarImageHandler;
 import io.nbs.commons.helper.ConfigurationHelper;
 import io.nbs.commons.utils.IconUtil;
 import io.nbs.sdk.beans.PeerInfo;
@@ -19,7 +19,6 @@ import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.panels.ParentAvailablePanel;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
