@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Base64Utils;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 /**
@@ -35,7 +36,7 @@ public class IPMParser {
     public static String encode(String data) throws IllegalIPFSMessageException, UnsupportedEncodingException {
         if(StringUtils.isBlank(data))throw new IllegalIPFSMessageException("数据类型不符合要求{}."+data);
         String sendData = IPMTypes.nomarl.protocolContact(data);
-        return URLEncoder.encode(data,DEFAULT_ENCODING);
+        return URLEncoder.encode(sendData,DEFAULT_ENCODING);
     }
 
     /**
@@ -115,9 +116,11 @@ public class IPMParser {
      * @return
      * @throws IllegalIPFSMessageException
      */
-    public static StandardIPFSMessage decodeStandardIPFSMessage(String json) throws IllegalIPFSMessageException {
+    public static StandardIPFSMessage decodeStandardIPFSMessage(String json) throws IllegalIPFSMessageException, UnsupportedEncodingException {
         if(json==null||json.length()==0)throw new IllegalIPFSMessageException("json 数据为null或空串.");
         StandardIPFSMessage simsg = JSON.parseObject(json,StandardIPFSMessage.class);
+        String fromid = URLDecoder.decode(simsg.getFrom(),DEFAULT_ENCODING);
+        simsg.setFrom(fromid);
         String endata = simsg.getData();
         String deData = Base64CodecUtil.decode(endata);
         IPMTypes types = IPMTypes.parserProtocol(deData);
@@ -126,6 +129,7 @@ public class IPMParser {
         }else {
             simsg.setContent(types.protocolSplit(deData));
         }
+        simsg.setMtype(types.name());
         return simsg;
     }
 

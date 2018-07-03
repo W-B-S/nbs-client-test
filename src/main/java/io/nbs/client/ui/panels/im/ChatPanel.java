@@ -1,6 +1,7 @@
 package io.nbs.client.ui.panels.im;
 
 import com.nbs.ui.components.NbsBorder;
+import io.nbs.client.adapter.ReceiverMessageAdapter;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.services.IpfsMessageSender;
 import io.nbs.client.ui.frames.MainFrame;
@@ -70,6 +71,8 @@ public class ChatPanel extends ParentAvailablePanel {
     private TMChatShowPanel chatShowPanel;
     private PeerInfo current;
 
+    private ReceiverMessageAdapter receiverMessageAdapter;
+
     /**
      *
      * @param parent
@@ -79,10 +82,16 @@ public class ChatPanel extends ParentAvailablePanel {
         context = this;
         current = MainFrame.getContext().getCurrentPeer();
         messageViewHolderCacheHelper = new MessageViewHolderCacheHelper();
+
         initComponents();
         initView();
         setListeners();
         initData();
+        /**
+         * 消息接收
+         */
+        receiverMessageAdapter = new ReceiverMessageAdapter(messages,messagePanel.getListView());
+        IMMasterPanel.setSubscribeListener(receiverMessageAdapter);
     }
 
     private void initComponents(){
@@ -188,7 +197,7 @@ public class ChatPanel extends ParentAvailablePanel {
                     congtent = randonHelper.generated("欢迎 ",5);
                     break;
                 case 0:
-                    congtent = "系统提示你傻逼.";
+                    congtent = "系统提示你上线.";
                     break;
             }
             item.setMessageContent(congtent);
@@ -234,7 +243,7 @@ public class ChatPanel extends ParentAvailablePanel {
      * 发送消息添加到最后
      * @param item
      */
-    private void addMessageItemToEnd(MessageItem item){
+    public void addMessageItemToEnd(MessageItem item){
         this.messages.add(item);
         messagePanel.getListView().notifyItemInserted(messages.size()-1,true);
         messagePanel.getListView().setAutoScrollToBottom();

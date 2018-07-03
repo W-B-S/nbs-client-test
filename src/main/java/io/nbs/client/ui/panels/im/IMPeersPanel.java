@@ -1,5 +1,6 @@
 package io.nbs.client.ui.panels.im;
 
+import io.nbs.client.adapter.ContactOnlineAdapter;
 import io.nbs.client.vo.ContactsItem;
 import io.nbs.client.services.PeerServiceImpl;
 import io.nbs.client.Launcher;
@@ -40,6 +41,10 @@ public class IMPeersPanel extends ParentAvailablePanel {
     private NbsListView peerlistView;
 
     private PeerServiceImpl peerService;
+    /**
+     *
+     */
+    private ContactOnlineAdapter onlineAdapter;
 
     /**
      * construction
@@ -51,7 +56,6 @@ public class IMPeersPanel extends ParentAvailablePanel {
 
         initData();
         peerlistView.setAdapter(new ContactsItemAdapter(contactItems));
-
     }
 
     /**
@@ -102,5 +106,13 @@ public class IMPeersPanel extends ParentAvailablePanel {
      */
     public static IMPeersPanel getContext() {
         return context;
+    }
+
+    public List<ContactsItem> getContactItems() {
+        return contactItems;
+    }
+
+    public NbsListView getPeerlistView() {
+        return peerlistView;
     }
 }

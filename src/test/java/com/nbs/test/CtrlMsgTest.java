@@ -2,8 +2,9 @@ package com.nbs.test;
 
 import com.alibaba.fastjson.JSON;
 import com.nbs.entity.PeerBoradcastInfo;
-import UI.common.Base64CodecUtil;
+import io.nbs.commons.utils.Base64CodecUtil;
 import io.nbs.commons.helper.RadomCharactersHelper;
+import io.nbs.sdk.prot.IPMTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +25,11 @@ public class CtrlMsgTest {
        /*long l = System.currentTimeMillis()/1000;
        System.out.println(">>>"+l);*/
        //cmt.GetCtrlOnline();
+       String str = "$IMN.UE.S$njsf76283-sdisdfs$";
+       IPMTypes types = IPMTypes.parserProtocol(str);
+       System.out.println(types.name());
+       str = types.protocolSplit(str);
+       System.out.println(str);
 
        String name = "kasdfsadf.txt";
        System.out.println(name.substring(name.lastIndexOf(".")));

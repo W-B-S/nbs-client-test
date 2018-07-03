@@ -3,17 +3,24 @@ package io.nbs.client.services;
 import com.alibaba.fastjson.JSON;
 import io.ipfs.api.IPFS;
 import io.ipfs.api.exceptions.IllegalIPFSMessageException;
+import io.ipfs.multibase.Base16;
+import io.nbs.client.Launcher;
 import io.nbs.client.listener.IPFSSubscribeListener;
-import io.nbs.sdk.beans.MessageItem;
-import io.nbs.sdk.beans.OnlineMessage;
-import io.nbs.sdk.beans.StandardIPFSMessage;
-import io.nbs.sdk.beans.SystemCtrlMessageBean;
+import io.nbs.client.listener.OnlineNotifier;
+import io.nbs.client.ui.frames.MainFrame;
+import io.nbs.client.ui.panels.im.ChatPanel;
+import io.nbs.commons.helper.ConfigurationHelper;
+import io.nbs.commons.utils.Base64CodecUtil;
+import io.nbs.sdk.beans.*;
 import io.nbs.sdk.prot.IPMParser;
 import io.nbs.sdk.prot.IPMTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,6 +39,7 @@ public class IpfsMessageReceiver{
 
     private static final Logger logger = LoggerFactory.getLogger(IpfsMessageReceiver.class);
     private IPFSSubscribeListener subscribeListener;
+    private OnlineNotifier onlineNotifier;
     List<Map<String, Object>> resList = Collections.synchronizedList(new ArrayList<>());
     private IPFS ipfs;
 
@@ -41,10 +49,11 @@ public class IpfsMessageReceiver{
     boolean ctrlSign = true;
     private static boolean runing = false;
 
-    public IpfsMessageReceiver(IPFSSubscribeListener subscribeListener,IPFS ipfs) {
+    public IpfsMessageReceiver(IPFSSubscribeListener subscribeListener,OnlineNotifier onlineNotifier) {
         this.subscribeListener = subscribeListener;
         worldTopic = IpfsMessageSender.NBSWORLD_IMS_TOPIC;
-        ipfs = ipfs;
+        ipfs = new IPFS(ConfigurationHelper.getInstance().getIPFSAddress());
+        onlineNotifier = onlineNotifier;
     }
 
     public void startReceiver(){
@@ -80,10 +89,14 @@ public class IpfsMessageReceiver{
                     logger.info("收到{}条消息.",resList.size());
                     List<String> jsonList = new ArrayList<>();
                     for(Map<String,Object> msg : resList){
+                        Object from = msg.get("from");
+                        logger.info(from.toString());
                         String json = JSON.toJSONString(msg);
+                        logger.info(json);
                         jsonList.add(json);
                     }
                     resList.clear();
+                    proccessMessage(jsonList);
                 }
             }
         }).start();
@@ -95,12 +108,17 @@ public class IpfsMessageReceiver{
      * @param jsonMessages
      */
     private void proccessMessage(List<String> jsonMessages){
-        new Thread(()->{
+       // new Thread(()->{
             for(String json: jsonMessages){
+                logger.info("处理消息....");
                 StandardIPFSMessage standardIPFSMessage = null;
                 try {
                     standardIPFSMessage = IPMParser.decodeStandardIPFSMessage(json);
                 } catch (IllegalIPFSMessageException e) {
+                    logger.warn("消息JSON ：{}解析失败，忽略.可能原因:{}",json,e.getMessage());
+                    continue;
+                } catch (UnsupportedEncodingException e) {
+
                     logger.warn("消息JSON ：{}解析失败，忽略.可能原因:{}",json,e.getMessage());
                     continue;
                 }
@@ -108,22 +126,34 @@ public class IpfsMessageReceiver{
                     logger.warn("消息JSON ：{}解析失败，忽略.",json);
                     continue;
                 }
-                if(standardIPFSMessage.getMtype().equals(IPMTypes.online.name())){
-                    MessageItem item = IPMParser.convertMessageItem(standardIPFSMessage);
-                    subscribeListener.notifyRecvMessage(item);
-                }
                 if(standardIPFSMessage.getMtype().equals(IPMTypes.nomarl.name())){
+                    if(subscribeListener==null)continue;
+                    MessageItem item = IPMParser.convertMessageItem(standardIPFSMessage);
+                    item.setMessageType(1);
+                    PeerInfo info =Launcher.currentPeer;
+                    logger.info("{}<=====>{}",info.getId(),item.getFrom());
+
+                    if(item.getFrom().equals(info.getFrom())){
+
+                    }else {
+                        item.setMessageType(1);
+                        ChatPanel.getContext().addMessageItemToEnd(item);
+                    }
+
+                    //subscribeListener.notifyRecvMessage(item);
+                }
+                if(standardIPFSMessage.getMtype().equals(IPMTypes.online.name())){
                     try {
                         SystemCtrlMessageBean<OnlineMessage> ctrlMessageBean = IPMParser.convertOnlineMessage(standardIPFSMessage);
-                        if(ctrlMessageBean==null)continue;
-                        subscribeListener.notifyRecvSystemMessage(ctrlMessageBean);
+                        if(ctrlMessageBean==null||onlineNotifier==null)continue;
+                        onlineNotifier.notifyRecvSystemMessage(ctrlMessageBean);
                     } catch (IllegalIPFSMessageException e) {
                         logger.warn("消息JSON ：{}解析失败，忽略.",json);
                         continue;
                     }
                 }
             }
-        }).start();
+        //}).start();
     }
 
     public void stopRecived(){
@@ -136,5 +166,13 @@ public class IpfsMessageReceiver{
      */
     public static boolean isRuning() {
         return runing;
+    }
+
+    public void setSubscribeListener(IPFSSubscribeListener subscribeListener) {
+        this.subscribeListener = subscribeListener;
+    }
+
+    public void setOnlineNotifier(OnlineNotifier onlineNotifier) {
+        this.onlineNotifier = onlineNotifier;
     }
 }

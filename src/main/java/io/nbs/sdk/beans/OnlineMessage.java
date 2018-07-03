@@ -20,11 +20,16 @@ public class OnlineMessage {
     private String locations;
     private long ts = System.currentTimeMillis();
 
+    public OnlineMessage() {
+
+    }
+
     public OnlineMessage(String id, String nick, String from) {
         this.id = id;
         this.nick = nick;
         this.from = from;
     }
+
 
     public OnlineMessage(String id, String nick, String from, String avatar, String avatarFile, String avatarSuffix) {
         this.id = id;

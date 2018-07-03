@@ -35,6 +35,7 @@ public class ContactsItem implements Comparable<ContactsItem> {
      */
     private Integer online;
 
+
     public ContactsItem() { }
 
     /**
