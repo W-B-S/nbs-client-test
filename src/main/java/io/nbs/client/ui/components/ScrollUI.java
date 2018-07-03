@@ -37,7 +37,7 @@ public class ScrollUI extends BasicScrollBarUI {
      */
     public ScrollUI() {
         this.thumbColor = ColorCnst.SCROLL_BAR_THUMB;
-        this.trackColor = ColorCnst.SCROLL_BAR_TTRACK;
+        this.trackColor = ColorCnst.SCROLL_BAR_TRACK_LIGHT;
     }
 
     public void setThumbColor(Color thumbColor) {

@@ -1,7 +1,5 @@
 package io.nbs.client.ui.holders;
 
-import io.nbs.client.ui.holders.ViewHolder;
-
 /**
  * @Package : com.nbs.ui
  * @Description :

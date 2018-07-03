@@ -1,9 +1,10 @@
 package io.nbs.client.services;
 
-import UI.common.Base64CodecUtil;
+import io.nbs.commons.utils.Base64CodecUtil;
 import io.ipfs.api.IPFS;
 import io.nbs.sdk.beans.OnlineMessage;
 import io.nbs.sdk.prot.IPMParser;
+import io.nbs.sdk.prot.IPMTypes;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,19 +38,6 @@ public class IpfsMessageSender {
         this.ipfs = ipfs;
     }
 
-    /**
-     *
-     * @param data
-     * @param types
-     * @return
-     * @throws Exception
-     */
-    public String sendControlMessage(Object data, IPMParser.IPMTypes types) throws Exception {
-        String encodeData = IPMParser.encode(data,types);
-        logger.info(NBSWORLD_IMS_TOPIC);
-        ipfs.pubsub.pub(NBSWORLD_IMS_TOPIC,encodeData);
-        return encodeData;
-    }
 
     /**
      * 发送上线通知
@@ -58,7 +46,7 @@ public class IpfsMessageSender {
      * @throws Exception
      */
     public String sendOnline(OnlineMessage message) throws Exception {
-        String encodeData = IPMParser.encode(message,IPMParser.IPMTypes.online);
+        String encodeData = IPMParser.encode(message,IPMTypes.online);
         logger.info(NBSWORLD_IMS_TOPIC);
         ipfs.pubsub.pub(NBSWORLD_IMS_TOPIC,encodeData);
         return encodeData;
@@ -71,6 +59,7 @@ public class IpfsMessageSender {
      * @throws Exception
      */
     public Object ipfsSendMessage(String message) throws Exception {
+        logger.info("向{}频道发送消息：{}",NBSWORLD_IMS_TOPIC,message);
         String sendData = IPMParser.encode(message);
         return ipfs.pubsub.pub(NBSWORLD_IMS_TOPIC,sendData);
     }

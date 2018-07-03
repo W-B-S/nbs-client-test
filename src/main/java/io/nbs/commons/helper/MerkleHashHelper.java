@@ -12,7 +12,6 @@
 package io.nbs.commons.helper;
 
 import UI.ConstantsUI;
-import com.nbs.tools.ConfigHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +20,7 @@ import java.io.*;
 import java.util.Properties;
 
 public class MerkleHashHelper {
-    private static final Logger logger = LoggerFactory.getLogger(ConfigHelper.class);
+    private static final Logger logger = LoggerFactory.getLogger(MerkleHashHelper.class);
 
     private static final String MERKLE_FILE =".merkle";
 

@@ -22,6 +22,7 @@ import io.nbs.client.ui.components.NBSButton;
 import io.nbs.commons.utils.DataBaseUtil;
 import io.nbs.commons.utils.IconUtil;
 import io.nbs.commons.helper.RadomCharactersHelper;
+import io.nbs.sdk.prot.IPMParser;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
@@ -447,11 +448,15 @@ public class InitialFrame extends JFrame {
     private boolean saveIpfsConfig(String originAvatarName){
         if(tempInfo==null||tempInfo.getId()==null||StringUtils.isBlank(tempInfo.getFrom()))return false;
         try {
-            ipfs.config.set(ConfigurationHelper.JSON_NICKNAME_KEY,tempInfo.getNick());
+            String nick = IPMParser.urlEncode(tempInfo.getNick());
+            ipfs.config.set(ConfigurationHelper.JSON_NICKNAME_KEY,nick);
             ipfs.config.set(ConfigurationHelper.JSON_CFG_FROMID_KEY,tempInfo.getFrom());
             ipfs.config.set(ConfigurationHelper.JSON_AVATAR_KEY,tempInfo.getAvatar());
             ipfs.config.set(ConfigurationHelper.JSON_AVATAR_SUFFIX_KEY,tempInfo.getAvatarSuffix());
-            if(StringUtils.isNotBlank(originAvatarName))ipfs.config.set(ConfigurationHelper.JSON_AVATAR_NAME_KEY,originAvatarName);
+            if(StringUtils.isNotBlank(originAvatarName)){
+                String enFileName =  IPMParser.urlEncode(originAvatarName);
+                ipfs.config.set(ConfigurationHelper.JSON_AVATAR_NAME_KEY,enFileName);
+            }
             return true;
         } catch (IOException e) {
             e.printStackTrace();

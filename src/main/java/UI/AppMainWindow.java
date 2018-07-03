@@ -12,16 +12,14 @@ import com.nbs.entity.PeerBoradcastInfo;
 import com.nbs.entity.PeerInfoBase;
 import com.nbs.ipfs.IPFSHelper;
 import com.nbs.ipfs.entity.IpfsMessage;
-import com.nbs.tools.ConfigHelper;
 import com.nbs.tools.PropertyUtil;
 import com.nbs.ui.frames.MainFrameOld;
-import UI.common.Base64CodecUtil;
+import io.nbs.commons.utils.Base64CodecUtil;
+import io.nbs.commons.helper.ConfigurationHelper;
 import io.nbs.commons.utils.BaseURLUtil;
 import io.nbs.commons.helper.RadomCharactersHelper;
 import io.ipfs.api.IPFS;
 import io.ipfs.api.JSONParser;
-import io.ipfs.api.MerkleNode;
-import io.ipfs.api.NamedStreamable;
 import io.ipfs.multihash.Multihash;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -112,6 +110,7 @@ public class AppMainWindow {
      * 联系人缓存
      */
     public static Map<String,ContactsItem> peerItems = new HashMap<>();
+    private ConfigurationHelper configurationHelper;
 
     public static void main(String[] args){
         String basedir = System.getProperty("app.home");
@@ -143,7 +142,7 @@ public class AppMainWindow {
      * @throws
      */
     public AppMainWindow(){
-
+        configurationHelper = ConfigurationHelper.getInstance();
         initialize();
         //订阅世界消息
        // subCtrlWorld();
@@ -166,7 +165,7 @@ public class AppMainWindow {
         AtomicInteger size = new AtomicInteger(0);
         new Thread(()->{
             logger.info("Start up the World Controller Message........");
-            IPFS worldIpfs = new IPFS(ConfigHelper.getInstance().getIpfsAddress());
+            IPFS worldIpfs = new IPFS(ConfigurationHelper.getInstance().getIPFSAddress());
             while (true){
                 try{
                     TimeUnit.MILLISECONDS.sleep(100);
@@ -266,27 +265,27 @@ public class AppMainWindow {
         logger.info(BaseURLUtil.getAppBaseDir());
         logger.info(BaseURLUtil.getAppJarPath());
         logger.info("=====>>>>>>> NBS Chain Client4J ENV initializing......");
-        Properties props = ConfigHelper.getInstance().getEnv();
+        Properties props = ConfigurationHelper.getInstance().getCfgProps();
         for(String k : props.stringPropertyNames()){
             String v = props.getProperty(k);
             logger.info(k+"="+v);
         }
 
-        /**
+/*        *//**
          * 初始化文件目录
-         */
-        File ipfsDir = new File(ConfigHelper.NBS_FILES_IPFS_ROOT);
+         *//*
+        File ipfsDir = new File(AppGlobalCnst.consturactPath(AppGlobalCnst.NBS_ROOT));
         if(ipfsDir.isDirectory()&& !ipfsDir.exists()){
             ipfsDir.mkdirs();
         }
 
-        /**
+        *//**
          * 初始化
-         */
-        File f = new File(ConfigHelper.NBS_CACHE_AVATAR_ROOT_PATH);
+         *//*
+        File f = new File(configurationHelper.);
         if(!f.exists()){
             f.mkdirs();
-        }
+        }*/
 
         /**
          * 构造id SELF
@@ -308,10 +307,10 @@ public class AppMainWindow {
         try {
             String avatarHash,suffix,fileName;
             Map cfgMap = ipfs.config.show();
-            if(cfgMap.containsKey(ConfigHelper.JSON_AVATAR_KEY)&&cfgMap.containsKey(ConfigHelper.JSON_AVATAR_SUFFIX_KEY)){
+            if(cfgMap.containsKey(ConfigurationHelper.JSON_AVATAR_KEY)&&cfgMap.containsKey(ConfigurationHelper.JSON_AVATAR_SUFFIX_KEY)){
                 //
             }else {
-                File defaultAvatarImage = new File(ConfigHelper.PROFILE_ROOT+ "defaults/nbs.png");
+               /* File defaultAvatarImage = new File(ConfigurationHelper.PROFILE_ROOT+ "defaults/nbs.png");
                 if(!defaultAvatarImage.exists()||defaultAvatarImage.isDirectory())return;
                 fileName = defaultAvatarImage.getName();
                 suffix = fileName.substring(fileName.lastIndexOf("."));
@@ -330,6 +329,7 @@ public class AppMainWindow {
                 }
                 SEFL_BASE.setAvatarHash(avatarHash);
                 SEFL_BASE.setAvatarSuffix(suffix);
+                */
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -402,7 +402,7 @@ public class AppMainWindow {
             @Override
             public void run() {
                 //TODO save sqlite
-                String headRootPath = ConfigHelper.NBS_CACHE_AVATAR_ROOT_PATH;
+                String headRootPath = ".nbs";
                 try {
                     if(StringUtils.isNotBlank(item.getAvatar())){
                         FileOutputStream fos ;
@@ -515,7 +515,7 @@ public class AppMainWindow {
         String tempNick = RadomCharactersHelper.getInstance().generated("NBSChain_",6);
         try {
             Map cfgMap = ipfs.config.show();
-            if(cfgMap.containsKey(ConfigHelper.JSON_NICKNAME_KEY)){
+           /* if(cfgMap.containsKey(ConfigHelper.JSON_NICKNAME_KEY)){
                 Object no = cfgMap.get(ConfigHelper.JSON_NICKNAME_KEY);
                 if(no!=null&&no.toString().trim().length()<=0){
                     Map res = ipfs.config.set(ConfigHelper.JSON_NICKNAME_KEY,tempNick);
@@ -526,7 +526,8 @@ public class AppMainWindow {
             }else {
                 Map res = ipfs.config.set(ConfigHelper.JSON_NICKNAME_KEY,tempNick);
                 return tempNick;
-            }
+            }*/
+           return null;
         } catch (IOException e) {
             logger.error("GET NICKNAME ERROR :",e.getMessage());
             return null;
@@ -550,11 +551,11 @@ public class AppMainWindow {
     }
 
 
-    /**-------------------------------------------------*/
-    /**
+   /* *//**-------------------------------------------------*//*
+    *//**
      * 订阅世界主题
      * 控制
-     */
+     *//*
     private void subCtrlWorld(){
         new Thread(new Runnable() {
             @Override
@@ -568,5 +569,5 @@ public class AppMainWindow {
                 }
             }
         }).start();
-    }
+    }*/
 }

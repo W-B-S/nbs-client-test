@@ -1,6 +1,7 @@
 package io.nbs.commons.utils;
 
-import com.nbs.tools.ConfigHelper;
+import io.nbs.client.Launcher;
+import io.nbs.client.cnsts.AppGlobalCnst;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -26,7 +27,7 @@ public class ClipboardUtil {
     public static final String CLIPBOARD_TEMP_DIR;
 
     static {
-        CLIPBOARD_TEMP_DIR = ConfigHelper.NBS_TEMP_ROOT + "clipboard_temp";
+        CLIPBOARD_TEMP_DIR = AppGlobalCnst.consturactPath(Launcher.appBasePath,"clipboard_temp");
         File file = new File(CLIPBOARD_TEMP_DIR);
         if(!file.exists()){
             file.mkdirs();

@@ -2,8 +2,10 @@ package io.nbs.sdk.prot;
 
 import com.alibaba.fastjson.JSON;
 import io.ipfs.api.exceptions.IllegalIPFSMessageException;
-import io.nbs.sdk.beans.OnlineMessage;
+import io.nbs.commons.utils.Base64CodecUtil;
+import io.nbs.sdk.beans.*;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.Base64Utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -23,9 +25,10 @@ public class IPMParser {
     private static final String DEFAULT_ENCODING = "UTF-8";
 
     /**
-     *
+     * 默认NORMAL
+     * 纯文本采用URL
      * @param data
-     * @return
+     * @return String
      * @throws IllegalIPFSMessageException
      * @throws UnsupportedEncodingException
      */
@@ -36,19 +39,29 @@ public class IPMParser {
     }
 
     /**
+     * 直接URL
+     * @param content
+     * @return
+     */
+    public static String urlEncode(String content){
+        if(StringUtils.isBlank(content))return null;
+        try {
+            return URLEncoder.encode(content,DEFAULT_ENCODING);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return content;
+        }
+    }
+    /**
      *
      * @param data
      * @return
      * @throws IllegalIPFSMessageException
      * @throws UnsupportedEncodingException
      */
-    public static String encode(Object data) throws IllegalIPFSMessageException, UnsupportedEncodingException {
+    public static String encodeOnline(OnlineMessage data) throws IllegalIPFSMessageException, UnsupportedEncodingException {
         if(data==null) throw new IllegalIPFSMessageException("数据为空.");
-        IPMTypes types = IPMTypes.nomarl;
-        if(data instanceof OnlineMessage){
-            types = IPMTypes.online;
-        }
-        return encode(data,types);
+        return encode(data,IPMTypes.online);
     }
 
     /**
@@ -84,6 +97,8 @@ public class IPMParser {
                 }
                 break;
             case unkonw:
+                sendData = data.toString();
+                break;
             case image:
             default:
                 throw new IllegalIPFSMessageException("暂不支持的数据格式{}."+types.name());
@@ -92,56 +107,79 @@ public class IPMParser {
         return URLEncoder.encode(sendData,DEFAULT_ENCODING);
     }
 
-    public static enum  IPMTypes{
-        /**
-         * $ON.B64.J$xxxxxsssds$
-         */
-        online("ON.B64.J","$"),
-        /**
-         * $PC.B64.J$xxxxxxxx$
-         */
-        pctrl("PC.B64.J","$"),
-        /**
-         * $PC.B64.J$xxxxxxxx$
-         */
-        nomarl("IMN.URLEN.S","$"),
-        /**
-         *
-         */
-        image("FIM.N.S","$"),
-        /**
-         *
-         */
-        unkonw("","");
-        private String separator;
-        private String tag;
 
-        IPMTypes(String tag,String separator) {
-            this.separator = separator;
-            this.tag = tag;
+    /**
+     * 将data 内容解析到Content
+     * type 和content优质
+     * @param json
+     * @return
+     * @throws IllegalIPFSMessageException
+     */
+    public static StandardIPFSMessage decodeStandardIPFSMessage(String json) throws IllegalIPFSMessageException {
+        if(json==null||json.length()==0)throw new IllegalIPFSMessageException("json 数据为null或空串.");
+        StandardIPFSMessage simsg = JSON.parseObject(json,StandardIPFSMessage.class);
+        String endata = simsg.getData();
+        String deData = Base64CodecUtil.decode(endata);
+        IPMTypes types = IPMTypes.parserProtocol(deData);
+        if(types==IPMTypes.unkonw){
+            simsg.setContent(deData);
+        }else {
+            simsg.setContent(types.protocolSplit(deData));
         }
+        return simsg;
+    }
 
-        public String getPrefix(){
-            return this.separator+this.tag+this.separator;
-        }
+    /**
+     *
+     * @param message
+     * @return
+     */
+    public static IMMessageBean convertIMMessageBean(StandardIPFSMessage message){
 
-        public int getPrefixLength(){
-            return getPrefix().length();
-        }
+        IMMessageBean bean = new IMMessageBean();
+        bean.setFrom(message.getFrom());
+        bean.setSeqno(message.getSeqno());
+        bean.setMtype(message.getMtype());
+        bean.setTopics(message.getTopicIDs());
+        bean.setContent(message.getContent());
+        bean.setTs(System.currentTimeMillis());
+        return bean;
+    }
 
-        /**
-         *
-         * @param indata
-         * @return
-         */
-        public String protocolContact(String indata){
-            if(this!= IPMTypes.unkonw){
-                StringBuilder sb = new StringBuilder();
-                sb.append(separator).append(tag).append(separator).append(indata).append(separator);
-                return sb.toString();
-            }else {
-                return indata;
-            }
-        }
+    /**
+     *
+     * @param message
+     * @return
+     */
+    public static MessageItem convertMessageItem(StandardIPFSMessage message){
+        MessageItem bean = new MessageItem();
+        bean.setNeedToResend(false);
+        bean.setTimestamp(System.currentTimeMillis());
+        bean.setFrom(message.getFrom());
+        bean.setSeqno(message.getSeqno());
+        bean.setMessageContent(message.getContent());
+        bean.setUpdatedAt(System.currentTimeMillis());
+        return bean;
+    }
+
+    /**
+     *
+     * @param message
+     * @return
+     * @throws IllegalIPFSMessageException
+     */
+    public static SystemCtrlMessageBean convertOnlineMessage(StandardIPFSMessage message) throws IllegalIPFSMessageException {
+        if(!message.getMtype().equals(IPMTypes.online.name()))throw new IllegalIPFSMessageException("数据类型不对，无法转换成系统消息.");
+        if(StringUtils.isBlank(message.getContent()))throw new IllegalIPFSMessageException("数据内容不存在，无法转换成系统消息.");
+        OnlineMessage onlineMessage = JSON.parseObject(message.getContent(),OnlineMessage.class);
+        if(onlineMessage==null||onlineMessage.getId()==null)throw new IllegalIPFSMessageException("数据内容无效，无法转换成系统消息.");
+        SystemCtrlMessageBean ctrlMessageBean = new SystemCtrlMessageBean(onlineMessage);
+        ctrlMessageBean.setFrom(message.getFrom());
+        ctrlMessageBean.setMtype(message.getMtype());
+        ctrlMessageBean.setSeqno(message.getSeqno());
+        ctrlMessageBean.setTopics(message.getTopicIDs());
+        ctrlMessageBean.setTs(System.currentTimeMillis());
+        ctrlMessageBean.setPid(onlineMessage.getId());
+        return ctrlMessageBean;
     }
 }

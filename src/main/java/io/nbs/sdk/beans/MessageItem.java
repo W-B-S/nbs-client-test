@@ -22,13 +22,18 @@ public class MessageItem implements Comparable<MessageItem> {
     public static final int RIGHT_ATTACHMENT = -3;
 
     /**
+     * uuid
+     */
+    private String id;
+    /**
      *
      */
     private String seqno;
     /**
-     * 群聊
+     * 群聊 TOPIC
      */
     private String roomId;
+
     /**
      * 消息内容
      */
@@ -39,14 +44,22 @@ public class MessageItem implements Comparable<MessageItem> {
      */
     private String senderUsername;
     /**
-     * peerID
+     * 发送者peerID
      */
     private String senderId;
     /**
-     *
+     * 发送者from
      */
     private String from;
     private boolean needToResend;
+    /**
+     * 0系统
+     * 1,2,3 左边
+     * -1,-2,-3右边
+     */
+    private int messageType;
+
+    private long updatedAt;
 
     public MessageItem() {
     }
@@ -137,5 +150,33 @@ public class MessageItem implements Comparable<MessageItem> {
 
     public void setFrom(String from) {
         this.from = from;
+    }
+
+    public static int getSystemMessage() {
+        return SYSTEM_MESSAGE;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public int getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(int messageType) {
+        this.messageType = messageType;
+    }
+
+    public long getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(long updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

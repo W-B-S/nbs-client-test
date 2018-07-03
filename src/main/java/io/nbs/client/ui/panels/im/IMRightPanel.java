@@ -60,8 +60,7 @@ public class IMRightPanel extends ParentAvailablePanel {
         contentPanel.add(chatPanel,MESSAGE);
         contentPanel.add(tipPanel,TIP);
 
-        cardLayout.show(contentPanel,MESSAGE);
-
+       // cardLayout.show(chatPanel,MESSAGE);
 
         add(winTitlePanel,BorderLayout.NORTH);
         this.add(contentPanel,BorderLayout.CENTER);

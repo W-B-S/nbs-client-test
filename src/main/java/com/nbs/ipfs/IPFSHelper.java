@@ -1,8 +1,8 @@
 package com.nbs.ipfs;
 
-import com.nbs.tools.ConfigHelper;
-import UI.common.Base64CodecUtil;
+import io.nbs.commons.utils.Base64CodecUtil;
 import io.ipfs.api.IPFS;
+import io.nbs.commons.helper.ConfigurationHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class IPFSHelper {
     public static final String NBSWORLD_IMS_TOPIC = Base64CodecUtil.encode("nbsio.net");
 
     public IPFSHelper() {
-        ipfs = new IPFS(ConfigHelper.getInstance().getIpfsAddress());
+        ipfs = new IPFS(ConfigurationHelper.getInstance().getIPFSAddress());
         try {
             Map m = ipfs.id();
             secMap.putAll(m);
@@ -62,7 +62,7 @@ public class IPFSHelper {
      * @return
      */
     public IPFS rebuild(){
-        ipfs = new IPFS(ConfigHelper.getInstance().getIpfsAddress());
+        ipfs = new IPFS(ConfigurationHelper.getInstance().getIPFSAddress());
         return ipfs;
     }
 
@@ -100,7 +100,7 @@ public class IPFSHelper {
     public String updateNick(String nick) throws IOException {
         if(ipfs==null||StringUtils.isBlank(nick))return null;
         nick = nick.trim();
-        ipfs.config.set(ConfigHelper.JSON_NICKNAME_KEY,nick);
+        ipfs.config.set(ConfigurationHelper.JSON_NICKNAME_KEY,nick);
         return nick;
     }
 

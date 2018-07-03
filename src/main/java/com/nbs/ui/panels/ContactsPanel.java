@@ -10,13 +10,13 @@ import com.nbs.entity.PeerBoradcastInfo;
 import com.nbs.entity.PeerInfoBase;
 import com.nbs.ipfs.IPFSHelper;
 import com.nbs.ipfs.entity.IpfsMessage;
-import com.nbs.tools.ConfigHelper;
+import io.nbs.commons.helper.ConfigurationHelper;
 import io.nbs.commons.helper.DateHelper;
 import io.nbs.client.adapter.ContactsItemAdapter;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.ui.components.GBC;
 import io.nbs.client.ui.components.NbsListView;
-import UI.common.Base64CodecUtil;
+import io.nbs.commons.utils.Base64CodecUtil;
 import io.nbs.commons.utils.DbUtil;
 import io.nbs.client.ui.panels.ParentAvailablePanel;
 import io.nbs.commons.helper.RadomCharactersHelper;
@@ -156,11 +156,8 @@ public class ContactsPanel extends ParentAvailablePanel {
 
         try {
             Object obj = null;
-            if(ConfigHelper.getInstance().subWorldPeers()){
-                obj = ipfs.pubsub.peers(IPFSHelper.NBSWORLD_IMS_TOPIC);
-            }else {
-                obj = ipfs.pubsub.peers();
-            }
+
+            obj = ipfs.pubsub.peers();
             if(obj==null)return contacts;
             List<String> peers = (List<String>)JSONParser.getValue(obj,"Strings");
             if(peers!=null&&peers.size()>0){
@@ -200,7 +197,7 @@ public class ContactsPanel extends ParentAvailablePanel {
         AtomicInteger size = new AtomicInteger(0);
         new Thread(()->{
             logger.warn(DateHelper.currentTime()+">>>>>>>启动订阅 NBSWorld..."+IPFSHelper.NBSWORLD_IMS_TOPIC);
-            IPFS ipfs = new IPFS(ConfigHelper.getInstance().getIpfsAddress());
+            IPFS ipfs = new IPFS(ConfigurationHelper.getInstance().getIPFSAddress());
 
             while (true){
                 try {
@@ -272,17 +269,17 @@ public class ContactsPanel extends ParentAvailablePanel {
      */
     private void proccessIpfsMessage(IpfsMessage im){
 
-        if(im==null)return;
+  /*      if(im==null)return;
         Base64CodecUtil.CtrlTypes types =im.getTypes();
         if(types==null)types = Base64CodecUtil.CtrlTypes.unkonw;
         im = Base64CodecUtil.parseIpmsMessageCtrlType(im);
         switch (types){
             case online:
 
-                /**
+                *//**
                  * $ON.B64.J$eyJpZCI6IlFtU29BaURTR1g0dnFaZWcyS29ESHNKcEZTR1AyU21hRXQxM05CUFJGZ3BRZnkiLCJuaWNrIjoiTkJTQ2hhaW5fbGFuYmVyeSJ9$
                  * 解析更新列表
-                 */
+                 *//*
                 PeerBoradcastInfo peerInfo = JSON.parseObject(im.getContents(),PeerBoradcastInfo.class);
                 if(peerInfo.getId().equals(AppMainWindow.currentPeerInfo().getPeerID())){
                     logger.info("忽略自己上线");
@@ -298,7 +295,7 @@ public class ContactsPanel extends ParentAvailablePanel {
                 im.setContents(Base64CodecUtil.decode(im.getContents()));
                 IMPanel.appendMsgShow(peerItems,im);
                 return;
-        }
+        }*/
     }
 
     /**

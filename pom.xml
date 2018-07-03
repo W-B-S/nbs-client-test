@@ -81,7 +81,12 @@
             <artifactId>android.nine.patch</artifactId>
             <version>1.0</version>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/com.miglayout/miglayout-swing -->
+        <dependency>
+            <groupId>com.miglayout</groupId>
+            <artifactId>miglayout-swing</artifactId>
+            <version>5.1</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -199,7 +204,7 @@
                     <repositoryLayout>flat</repositoryLayout>
                     <repositoryName>lib</repositoryName>
                     <binFolder>bin</binFolder>
-                    <copyConfigurationDirectory>true</copyConfigurationDirectory>
+                    <copyConfigurationDirectory>false</copyConfigurationDirectory>
                     <configurationDirectory>resources</configurationDirectory>
                     <configurationSourceDirectory>src/main/resources</configurationSourceDirectory>
                     <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>

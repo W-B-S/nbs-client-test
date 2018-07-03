@@ -17,6 +17,7 @@ import io.nbs.client.ui.components.GBC;
 import io.nbs.client.ui.components.LCJlabel;
 import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.panels.ParentAvailablePanel;
+import io.nbs.sdk.prot.IPMParser;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
@@ -171,7 +172,8 @@ public class InfoHeaderPanel extends ParentAvailablePanel {
                 IPFS ipfs = Launcher.getContext().getIpfs();
                 if(ipfs==null)return;
                 try {
-                    ipfs.config.set(ConfigurationHelper.JSON_NICKNAME_KEY,upText);
+                    String enUpText = IPMParser.urlEncode(upText);
+                    ipfs.config.set(ConfigurationHelper.JSON_NICKNAME_KEY,enUpText);
                     MainFrame.getContext().getCurrentPeer().setNick(upText);
                     nickLabel.setText(upText);
 

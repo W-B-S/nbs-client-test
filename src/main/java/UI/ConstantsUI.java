@@ -1,6 +1,5 @@
 package UI;
 
-import com.nbs.tools.ConfigHelper;
 import com.nbs.tools.PropertyUtil;
 
 import javax.swing.*;

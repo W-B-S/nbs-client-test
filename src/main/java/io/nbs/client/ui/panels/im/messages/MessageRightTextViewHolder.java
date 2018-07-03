@@ -3,7 +3,6 @@ package io.nbs.client.ui.panels.im.messages;
 import UI.AppMainWindow;
 import io.nbs.client.Launcher;
 import io.nbs.client.ui.components.NBSIconButton;
-import com.nbs.tools.ConfigHelper;
 import io.nbs.client.cnsts.FontUtil;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.ui.components.GBC;

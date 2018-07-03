@@ -1,6 +1,7 @@
 package io.nbs.commons.utils;
 
-import com.nbs.tools.ConfigHelper;
+import io.nbs.client.Launcher;
+import io.nbs.client.cnsts.AppGlobalCnst;
 import io.nbs.client.cnsts.FontUtil;
 import io.nbs.client.cnsts.ColorCnst;
 
@@ -58,7 +59,7 @@ public class AvatarUtil {
 
     static
     {
-        AVATAR_CACHE_ROOT = ConfigHelper.NBS_CACHE_AVATAR_ROOT_PATH ;
+        AVATAR_CACHE_ROOT = AppGlobalCnst.consturactPath(Launcher.appBasePath,"avatars");
 
         File file = new File(AVATAR_CACHE_ROOT);
         if (!file.exists())

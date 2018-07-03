@@ -30,7 +30,7 @@ public class MessagePanel extends ParentAvailablePanel {
 
     private void initComponents(){
         listView = new NbsListView(0,15);
-        listView.setScrollBarColor(ColorCnst.WINDOW_BACKGROUND,ColorCnst.WINDOW_BACKGROUND);
+        listView.setScrollBarColor(ColorCnst.SCROLL_BAR_THUMB,ColorCnst.SCROLL_BAR_TRACK_LIGHT);
         listView.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         listView.setScrollHiddenOnMouseLeave(listView);
     }

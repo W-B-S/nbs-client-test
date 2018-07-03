@@ -46,6 +46,7 @@ public class MainFrame extends JFrame {
     public static final int H_SIZE = 650;
     public int currentWindowWidth = W_SIZE;
     public int currentWindowHeight = H_SIZE;
+    public static  int RIGHT_EIDTH = 540;
 
     public static final  int TOOLBAR_WIDTH = 52;
 

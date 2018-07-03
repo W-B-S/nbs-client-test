@@ -1,8 +1,6 @@
 package io.nbs.client;
 
-import io.nbs.commons.helper.ConfigurationHelper;
 
-import java.util.Properties;
 
 /**
  * @Package : UI
@@ -18,13 +16,13 @@ import java.util.Properties;
 public class App {
 
     public static void main(String[] agrs){
-        ConfigurationHelper configHelper = ConfigurationHelper.getInstance();
-        Properties cfg = configHelper.getCfgProps();
+      /*  ConfigurationHelper configHelper = ConfigurationHelper.getInstance();
+        Properties cfg = configHelper.getCfgProps();*/
    /*     for(String k : cfg.stringPropertyNames()){
             System.out.println(k+"="+cfg.getProperty(k));
         }*/
 
-        Launcher launcher = new Launcher(configHelper);
+        Launcher launcher = new Launcher();
         launcher.launch();
 
     }

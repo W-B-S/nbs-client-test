@@ -41,8 +41,6 @@ public class ConfigurationHelper {
     public static String JSON_AVATAR_SUFFIX_KEY = "suffix";
 
 
-
-
     private Properties cfgProps = new Properties();
     private Properties i18nProps = new Properties();
     private static int stats = 0;
@@ -90,8 +88,7 @@ public class ConfigurationHelper {
      */
     public static ConfigurationHelper getInstance(){
         ConfigurationHelper instance = ConfigHolder.instance;
-
-        return ConfigHolder.instance;
+        return instance;
     }
 
 
@@ -204,5 +201,17 @@ public class ConfigurationHelper {
 
     public Properties getI18nProps() {
         return i18nProps;
+    }
+
+    /**
+     * 控制显示会员
+     * @return
+     */
+    public boolean subWorldPeers(){
+        String stats = cfgProps.getProperty("nbs.client.im.topic.subworld","enabled");
+        return(stats.equalsIgnoreCase("enabled")
+                || stats.equalsIgnoreCase("true")
+                || stats.equalsIgnoreCase("1")
+        )  ? true : false;
     }
 }

@@ -31,7 +31,7 @@ import java.util.Map;
  */
 public class Launcher {
 
-    private static final Logger logger = LoggerFactory.getLogger(Launcher.class);
+    private Logger logger = LoggerFactory.getLogger(Launcher.class);
     private static Launcher context;
     private static SqlSession sqlSession;
     private static final String APP_VERSION = "2.0";
@@ -69,17 +69,17 @@ public class Launcher {
         FILE_SEPARATOR = System.getProperty("file.separator");
     }
 
-    public Launcher(ConfigurationHelper helper){
+    public Launcher(){
         context = this;
         logo = IconUtil.getIcon(this,"/icons/nbs.png");
-        cfgHelper =helper;
+        cfgHelper = ConfigurationHelper.getInstance();
     }
     public Launcher(String[] args){
         context = this;
-        cfgHelper = ConfigurationHelper.getInstance();
-        if(args.length>0){
 
-        }
+        /*if(args.length>0){
+
+        }*/
     }
 
 
@@ -94,7 +94,8 @@ public class Launcher {
         ipfs = null;
 
         try{
-            ipfs =  new IPFS(cfgHelper.getIPFSAddress());
+            String apiURL = ConfigurationHelper.getInstance().getIPFSAddress();
+            ipfs =  new IPFS(apiURL);
             boolean first = needInitConfig(ipfs);
             //first = true;
             if(first){
