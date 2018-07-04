@@ -2,7 +2,9 @@ package io.nbs.client.helper;
 
 import io.nbs.client.Launcher;
 import io.nbs.client.cnsts.AppGlobalCnst;
+import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.commons.utils.IconUtil;
+import io.nbs.sdk.beans.PeerInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,6 +102,9 @@ public class AvatarImageHandler {
         ImageIcon icon = new ImageIcon(AppGlobalCnst.consturactPath(AVATAR_PROFILE_HOME,hashFileName));
         return icon;
     }
+
+
+
 
     /**
      * 下载文件

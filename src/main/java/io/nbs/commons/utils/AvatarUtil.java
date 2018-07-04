@@ -6,6 +6,8 @@ import io.nbs.client.cnsts.FontUtil;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.helper.AvatarImageHandler;
 import io.nbs.commons.helper.ConfigurationHelper;
+import io.nbs.sdk.beans.PeerInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,6 +88,9 @@ public class AvatarUtil {
         }
     }
 
+    public static void updateCacheIamge(String identify,Image image){
+        if(StringUtils.isNotBlank(identify)&&image!=null)avatarCache.put(identify,image);
+    }
 
     /**
      * 分组头像
@@ -137,7 +142,7 @@ public class AvatarUtil {
     /**
      * 获取联系人头像,如果是hash则先从IPFS获取
      * @param identify
-     * @param isHash
+     * @param isHash 是否hash
      * @param suffix
      * @return
      */
@@ -174,6 +179,24 @@ public class AvatarUtil {
 
         }
         return avatar;
+    }
+
+    /**
+     *
+     * @param info
+     * @return
+     * @throws IOException
+     */
+    public static Image getPeerAvatar(PeerInfo info) throws IOException {
+        if(info==null||StringUtils.isBlank(info.getAvatarName())){
+            return null;
+        }
+        if(avatarCache.containsKey(info.getAvatarName()))return avatarCache.get(info.getAvatarName());
+        File infoFile = new File(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),info.getAvatarName()));
+        if(infoFile.exists()&&infoFile.isFile()){
+            return ImageIO.read(infoFile);
+        }
+        return null;
     }
 
     /**

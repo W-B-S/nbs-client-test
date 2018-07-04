@@ -16,6 +16,7 @@ import io.ipfs.nbs.helper.MessageViewHolderCacheHelper;
 import io.nbs.client.ui.components.NbsListView;
 import io.nbs.client.ui.holders.BaseMessageViewHolder;
 import io.nbs.sdk.beans.PeerInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +24,7 @@ import javax.swing.*;
 import javax.swing.text.ViewFactory;
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -192,8 +194,7 @@ public class MessageAdapter extends BaseAdapter<BaseMessageViewHolder> {
      * @param preItem
      * @param holder
      */
-    private void processTimeAndAvatar(MessageItem item, MessageItem preItem, BaseMessageViewHolder holder)
-    {
+    private void processTimeAndAvatar(MessageItem item, MessageItem preItem, BaseMessageViewHolder holder) {
         // 如果当前消息的时间与上条消息时间相差大于1分钟，则显示当前消息的时间
         if(preItem!=null){
             if (TimeUtil.inTheSameMinute(item.getTimestamp(), preItem.getTimestamp()))
@@ -213,10 +214,27 @@ public class MessageAdapter extends BaseAdapter<BaseMessageViewHolder> {
         }
 
         if (holder.avatar != null) {
-
             ImageIcon icon = new ImageIcon();
-            Image image = AvatarUtil.createOrLoadUserAvatar(item.getSenderUsername()).getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-            icon.setImage(image);
+            Image image = null;
+            if(item.getMessageType()<0){
+                PeerInfo currentPeer = MainFrame.getContext().getCurrentPeer();
+                try {
+                    image =  AvatarUtil.getPeerAvatar(currentPeer);
+                    AvatarUtil.updateCacheIamge(currentPeer.getAvatarName(),image);
+                } catch (IOException e) {
+
+                }
+            }
+            if(image == null){
+                boolean bflag = false;
+                String identify = item.getSenderUsername();
+                if(StringUtils.isNotBlank(item.getAvatar())){
+                    identify = item.getAvatar();
+                    bflag = true;
+                }
+                image = AvatarUtil.createOrLoadUserAvatar(identify,bflag,item.getSuffix());
+            }
+            icon.setImage( image.getScaledInstance(36,36,Image.SCALE_SMOOTH));
             holder.avatar.setIcon(icon);
 
             //如果不是自己

@@ -66,7 +66,7 @@ public class MessageItem implements Comparable<MessageItem> {
      */
     private String avatar;
 
-
+    private String suffix;
 
     public MessageItem() {
     }
@@ -193,5 +193,13 @@ public class MessageItem implements Comparable<MessageItem> {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getSuffix() {
+        return suffix;
+    }
+
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
     }
 }

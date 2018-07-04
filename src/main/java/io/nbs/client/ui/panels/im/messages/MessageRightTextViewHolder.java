@@ -39,7 +39,7 @@ public class MessageRightTextViewHolder extends BaseMessageViewHolder {
     public IMRightImageMessageBubble messageBubble = new IMRightImageMessageBubble();
 
     public MessageRightTextViewHolder(){
-        defaltIcon.setImage(defaltIcon.getImage().getScaledInstance(30,30,Image.SCALE_SMOOTH));
+       // defaltIcon.setImage(defaltIcon.getImage().getScaledInstance(30,30,Image.SCALE_SMOOTH));
         initComponents();
         initView();
     }
