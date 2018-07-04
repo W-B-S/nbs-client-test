@@ -229,7 +229,7 @@ public class InfoHeaderPanel extends ParentAvailablePanel {
                     /**
                      * 40*40
                      */
-                    String hashFileName = fileHash+ name.substring(name.lastIndexOf("."));
+                    String hashFileName = fileHash+".png";
                     try {
                         imageHandler.createContactsAvatar(file,hashFileName);
                         Image img =Toolkit.getDefaultToolkit().getImage(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),name));

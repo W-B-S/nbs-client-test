@@ -43,13 +43,13 @@ public class AvatarImageHandler {
     /**
      * 联系人头像 32 *32
      * 40*40
-     * .nbs/cache/avatars/thumbs
+     * .nbs/cache/avatars/custom
      */
-    private static String AVATAR_THUMB_HOME;
+    private static String AVATAR_CUSTOM_HOME;
     /**
-     * 用户配置头标
+     *  用户配置头标
      * .nbs/profile/avatars/
-     * 放置128*128 上传IPFS
+     *  放置128*128 上传IPFS
      * .nbs/profile/avatars/thumbs
      * 64*64 hashFileName
      */
@@ -64,7 +64,7 @@ public class AvatarImageHandler {
     private AvatarImageHandler() {
         AVATAR_PROFILE_HOME = AppGlobalCnst.consturactPath(Launcher.appBasePath,"profile","avatars");
         AVATAR_ORIGIN_HOME = AppGlobalCnst.consturactPath(Launcher.appBasePath,"profile","origin");
-        AVATAR_THUMB_HOME = AppGlobalCnst.consturactPath(Launcher.appBasePath,"cache","avatars","thumbs");
+        AVATAR_CUSTOM_HOME = AppGlobalCnst.consturactPath(Launcher.appBasePath,"cache","avatars","custom");
     }
 
     /**
@@ -84,7 +84,7 @@ public class AvatarImageHandler {
         destFile = new File(AVATAR_ORIGIN_HOME);
         if(!destFile.exists())destFile.mkdirs();
 
-        destFile = new File(AVATAR_THUMB_HOME);
+        destFile = new File(AVATAR_CUSTOM_HOME);
         if(!destFile.exists())destFile.mkdirs();
     }
 
@@ -148,14 +148,14 @@ public class AvatarImageHandler {
     }
 
     /**
-     * 40
+     * 40*40png
      * @param srcFile
      * @param hashFileName
      * @return
      */
     public ImageIcon createContactsAvatar(File srcFile,String hashFileName){
         if(srcFile==null||!srcFile.exists())return null;
-        String targetPath = AppGlobalCnst.consturactPath(AVATAR_THUMB_HOME,hashFileName);
+        String targetPath = AppGlobalCnst.consturactPath(AVATAR_CUSTOM_HOME,hashFileName);
         File thumbs4Contacts = new File(targetPath);
         try {
             generateThumbScale(srcFile,thumbs4Contacts,DEFAULT_CONTACTS_THUMB_SIZE);
@@ -222,10 +222,9 @@ public class AvatarImageHandler {
     /**
      * 联系人头像 32 *32
      * 40*40
-     * .nbs/cache/avatars/thumbs
-     */
-    public static String getAvatarThumbHome() {
-        return AVATAR_THUMB_HOME;
+     * .nbs/cache/avatars/custom
+    public static String getAvatarCustomHome() {
+        return AVATAR_CUSTOM_HOME;
     }
 
     /**

@@ -573,7 +573,7 @@ public class InitialFrame extends JFrame {
                     tempInfo.setAvatar(fileHash);
                     tempInfo.setAvatarSuffix(name.substring(name.lastIndexOf(".")));
                     //TODO 存数据库upload
-                    String avatarFileName = fileHash+ name.substring(name.lastIndexOf("."));
+                    String avatarFileName = fileHash+".png";
                     try {
                         imageHandler.createContactsAvatar(file,avatarFileName);
                         ImageIcon icon = new ImageIcon(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),name));
