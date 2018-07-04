@@ -54,9 +54,12 @@ public class AvatarUtil {
                 new Color(255, 87, 34),
                 new Color(121, 85, 72),
                 new Color(158, 158, 158),
-                new Color(96, 125, 139)
+                new Color(96, 125, 139),
+                new Color(3, 169, 244),
+                new Color(3, 169, 244),
         };
     }
+    private static String CHARACTERS = "abcdefghijklmnopqrstuvwxyz";
 
     private static final String AVATAR_CACHE_ROOT;
     private static final String CUSTOM_AVATAR_CACHE_ROOT;
@@ -259,7 +262,7 @@ public class AvatarUtil {
             // 抗锯齿
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             // 画图
-            g2d.setBackground(getColor(name));
+            g2d.setBackground(getRuleColor(name));
             g2d.clearRect(0, 0, width, height);
 
             // 文字
@@ -290,9 +293,26 @@ public class AvatarUtil {
         return null;
     }
 
+    /**
+     *
+     * @param identify
+     * @return
+     */
+    private static Color getRuleColor(String identify){
+        int pos = CHARACTERS.lastIndexOf(identify.substring(0,1).toLowerCase());
+        if(pos==-1){
+            pos = (int)Math.round(Math.random()*colorArr.length);
+        }else if(pos>=colorArr.length){
+            pos = pos - colorArr.length;
+           // pos = CHARACTERS.length()%colorArr.length;
+        }
+        if(pos==colorArr.length)pos = colorArr.length-1;
+        return colorArr[pos];
+    }
 
     private static Color getColor(String username)
     {
+
         int position = username.length() % colorArr.length;
         return colorArr[position];
     }
