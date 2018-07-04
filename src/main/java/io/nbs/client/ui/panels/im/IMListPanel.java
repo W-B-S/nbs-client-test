@@ -47,7 +47,7 @@ public class IMListPanel extends ParentAvailablePanel {
      */
     public IMListPanel(JPanel parent) {
         super(parent);
-
+        context = this;
         initComponents();
         initView();
         setListeners();

@@ -30,6 +30,10 @@ public class AppGlobalCnst {
      */
     public static String TOOL_ICON_PATH = "/icons/tools/";
 
+    /**
+     * 非NBS客户端区分
+     */
+    public static String NOTNBS_PEER_MIDDLE= "_NBSChain_";
 
     /**
      * 构造路径

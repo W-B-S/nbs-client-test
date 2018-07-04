@@ -1,6 +1,7 @@
 package io.nbs.client.ui.panels.im;
 
 import io.nbs.client.adapter.ContactOnlineAdapter;
+import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.vo.ContactsItem;
 import io.nbs.client.services.PeerServiceImpl;
 import io.nbs.client.Launcher;
@@ -51,11 +52,15 @@ public class IMPeersPanel extends ParentAvailablePanel {
      */
     public IMPeersPanel(JPanel parent) {
         super(parent);
+        context = this;
         initComponents();
         initView();
 
         initData();
         peerlistView.setAdapter(new ContactsItemAdapter(contactItems));
+
+        onlineAdapter = new ContactOnlineAdapter(Launcher.getSqlSession());
+        IMMasterPanel.getContext().setOnlineNotifier(onlineAdapter);
     }
 
     /**
@@ -67,9 +72,8 @@ public class IMPeersPanel extends ParentAvailablePanel {
         peerlistView = new NbsListView();
         peerlistView.setScrollBarColor(ColorCnst.SCROLL_BAR_THUMB,ColorCnst.SCROLL_BAR_TRACK_LIGHT);
         peerlistView.setContentPanelBackground(ColorCnst.DARK);
-
-
         peerService = new PeerServiceImpl(Launcher.getContext().getIpfs());
+
 
     }
 
@@ -114,5 +118,9 @@ public class IMPeersPanel extends ParentAvailablePanel {
 
     public NbsListView getPeerlistView() {
         return peerlistView;
+    }
+
+    public ContactOnlineAdapter getOnlineAdapter() {
+        return onlineAdapter;
     }
 }

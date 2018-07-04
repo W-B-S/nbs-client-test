@@ -1,18 +1,14 @@
 package io.nbs.client.ui.panels.im;
 
-import io.nbs.client.Launcher;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.listener.IPFSSubscribeListener;
 import io.nbs.client.listener.OnlineNotifier;
 import io.nbs.client.services.IpfsMessageReceiver;
 import io.nbs.client.ui.frames.MainFrame;
-import io.nbs.client.vo.ContactsItem;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @Package : io.ipfs.nbs.ui.panels
@@ -35,7 +31,7 @@ public class IMMasterPanel extends JPanel {
     private IMLeftPanel leftPanel;
     private IMRightPanel rightPanel;
 
-    private static OnlineNotifier onlineNotifier;
+    private OnlineNotifier onlineNotifier;
     private static IPFSSubscribeListener subscribeListener;
     /**
      * 消息接收器
@@ -44,11 +40,12 @@ public class IMMasterPanel extends JPanel {
 
     public IMMasterPanel() {
         context = this;
+        messageReceiver = new IpfsMessageReceiver();
         initComponents();
         initView();
 
+
         //保持在最后
-        messageReceiver = new IpfsMessageReceiver(subscribeListener,onlineNotifier);
         messageReceiver.startReceiver();
     }
 
@@ -72,11 +69,17 @@ public class IMMasterPanel extends JPanel {
         return context;
     }
 
-    public static void setOnlineNotifier(OnlineNotifier onlineNotifier) {
-        IMMasterPanel.onlineNotifier = onlineNotifier;
+    /**
+     *
+     * @param onlineNotifier
+     */
+    public void setOnlineNotifier(OnlineNotifier onlineNotifier) {
+        this.messageReceiver.setOnlineNotifier(onlineNotifier);
     }
 
-    public static void setSubscribeListener(IPFSSubscribeListener subscribeListener) {
-        IMMasterPanel.subscribeListener = subscribeListener;
+    public void setSubscribeListener(IPFSSubscribeListener subscribeListener) {
+        this.messageReceiver.setSubscribeListener(subscribeListener);
     }
+
+
 }

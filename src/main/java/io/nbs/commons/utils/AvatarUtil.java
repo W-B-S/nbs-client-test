@@ -253,6 +253,9 @@ public class AvatarUtil {
 
             g2d.dispose();
             File file = new File(AVATAR_CACHE_ROOT + "/" + sign + ".png");
+            if(!file.exists()&&file.isFile()){
+                file.createNewFile();
+            }
             ImageIO.write(roundImage, "png", file);
 
             return roundImage;

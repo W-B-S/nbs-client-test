@@ -211,7 +211,7 @@ public class NbsListView extends JScrollPane {
         scrollToBottom = true;
     }
 
-    public void setAutoScroll2Top(){
+    public void sdfsdsetAutoScroll2Top(){
         scrollToBottom = false;
         getVerticalScrollBar().setValue(1);
     }

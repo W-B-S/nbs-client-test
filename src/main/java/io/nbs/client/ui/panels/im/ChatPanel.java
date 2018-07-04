@@ -86,14 +86,15 @@ public class ChatPanel extends ParentAvailablePanel {
         messageViewHolderCacheHelper = new MessageViewHolderCacheHelper();
 
         initComponents();
-        initView();
-        setListeners();
-        initData();
         /**
          * 消息接收
          */
+        initView();
         receiverMessageAdapter = new ReceiverMessageAdapter(messages,messagePanel.getListView());
-        IMMasterPanel.setSubscribeListener(receiverMessageAdapter);
+        IMMasterPanel.getContext().setSubscribeListener(receiverMessageAdapter);
+        setListeners();
+        initData();
+
     }
 
     private void initComponents(){

@@ -15,9 +15,14 @@ public class ContactsItem implements Comparable<ContactsItem> {
      * hash58
      */
     private String id;
-
+    /**
+     * nick
+     */
     private String name;
 
+    /**
+     *
+     */
     private String type;
 
     private String formid;

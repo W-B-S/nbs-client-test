@@ -2,6 +2,7 @@ package io.nbs.client.services;
 
 import com.nbs.biz.data.entity.PeerContactsEntity;
 import com.nbs.biz.service.PeerContactsService;
+import io.nbs.client.cnsts.AppGlobalCnst;
 import io.nbs.client.vo.ContactsItem;
 import io.ipfs.api.IPFS;
 import io.ipfs.api.JSONParser;
@@ -54,6 +55,10 @@ public class PeerServiceImpl {
         //return init4Test(25);
     }
 
+    /**
+     *
+     * @return
+     */
     private  List<ContactsItem> mergeContacts(){
         List<ContactsItem>  contactsItems = new ArrayList<>();
         List<String> onlinePeers = getOnlinePeers();
@@ -89,8 +94,9 @@ public class PeerServiceImpl {
 
     private ContactsItem constructionItemByPeerId(String peerId){
         ContactsItem itemOnlyId = new ContactsItem();
-        String nickTemp = peerId.substring(2,6)+"..."+ peerId.substring(peerId.length()-4);
+        String nickTemp = peerId.substring(2,6)+AppGlobalCnst.NOTNBS_PEER_MIDDLE + peerId.substring(peerId.length()-4);
         itemOnlyId.setId(peerId);
+        itemOnlyId.setOnline(1);
         itemOnlyId.setName(nickTemp);
         return itemOnlyId;
     }

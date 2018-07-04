@@ -3,14 +3,12 @@ package io.nbs.client.services;
 import com.alibaba.fastjson.JSON;
 import io.ipfs.api.IPFS;
 import io.ipfs.api.exceptions.IllegalIPFSMessageException;
-import io.ipfs.multibase.Base16;
 import io.nbs.client.Launcher;
 import io.nbs.client.listener.IPFSSubscribeListener;
 import io.nbs.client.listener.OnlineNotifier;
-import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.panels.im.ChatPanel;
 import io.nbs.commons.helper.ConfigurationHelper;
-import io.nbs.commons.utils.Base64CodecUtil;
+
 import io.nbs.sdk.beans.*;
 import io.nbs.sdk.prot.IPMParser;
 import io.nbs.sdk.prot.IPMTypes;
@@ -19,8 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLDecoder;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -49,11 +46,9 @@ public class IpfsMessageReceiver{
     boolean ctrlSign = true;
     private static boolean runing = false;
 
-    public IpfsMessageReceiver(IPFSSubscribeListener subscribeListener,OnlineNotifier onlineNotifier) {
-        this.subscribeListener = subscribeListener;
+    public IpfsMessageReceiver() {
         worldTopic = IpfsMessageSender.NBSWORLD_IMS_TOPIC;
         ipfs = new IPFS(ConfigurationHelper.getInstance().getIPFSAddress());
-        onlineNotifier = onlineNotifier;
     }
 
     public void startReceiver(){
@@ -108,7 +103,7 @@ public class IpfsMessageReceiver{
      * @param jsonMessages
      */
     private void proccessMessage(List<String> jsonMessages){
-       // new Thread(()->{
+        new Thread(()->{
             for(String json: jsonMessages){
                 logger.info("处理消息....");
                 StandardIPFSMessage standardIPFSMessage = null;
@@ -133,27 +128,29 @@ public class IpfsMessageReceiver{
                     PeerInfo info =Launcher.currentPeer;
                     logger.info("{}<=====>{}",info.getId(),item.getFrom());
 
-                    if(item.getFrom().equals(info.getFrom())){
+     /*               if(item.getFrom().equals(info.getFrom())){
 
                     }else {
                         item.setMessageType(1);
                         ChatPanel.getContext().addMessageItemToEnd(item);
-                    }
+                    }*/
 
-                    //subscribeListener.notifyRecvMessage(item);
+                    subscribeListener.notifyRecvMessage(item);
                 }
                 if(standardIPFSMessage.getMtype().equals(IPMTypes.online.name())){
                     try {
                         SystemCtrlMessageBean<OnlineMessage> ctrlMessageBean = IPMParser.convertOnlineMessage(standardIPFSMessage);
-                        if(ctrlMessageBean==null||onlineNotifier==null)continue;
-                        onlineNotifier.notifyRecvSystemMessage(ctrlMessageBean);
+                        if(ctrlMessageBean==null||onlineNotifier==null){
+                            continue;
+                        }
+                        onlineNotifier.notifyRecvystemMessage(ctrlMessageBean);
                     } catch (IllegalIPFSMessageException e) {
                         logger.warn("消息JSON ：{}解析失败，忽略.",json);
                         continue;
                     }
                 }
             }
-        //}).start();
+        }).start();
     }
 
     public void stopRecived(){

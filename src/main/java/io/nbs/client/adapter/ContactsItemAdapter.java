@@ -106,8 +106,8 @@ public class ContactsItemAdapter extends BaseAdapter<ContactsItemViewHolder> {
         ContactsItem item = contactsItems.get(position);
         String avatarFile = StringUtils.isBlank(item.getFormid()) ? item.getName() : item.getFormid();
         Image image;
-        if(StringUtils.isNotBlank(item.getFormid())){
-            image = AvatarUtil.createOrLoadUserAvatar(item.getFormid(),true,item.getAvatarSuffix());
+        if(StringUtils.isNotBlank(item.getAvatar())){
+            image = AvatarUtil.createOrLoadUserAvatar(item.getAvatar(),true,item.getAvatarSuffix());
         }else {
             image = AvatarUtil.createOrLoadUserAvatar(item.getName(),false,null);
         }

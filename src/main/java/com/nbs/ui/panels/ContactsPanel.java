@@ -136,7 +136,7 @@ public class ContactsPanel extends ParentAvailablePanel {
 
 
     /**
-     * 初始化Demo TODO
+     * 初始化 TODO 数据库匹配补全信息
      * @return
      */
     private List<ContactsEntity> getContacts(){

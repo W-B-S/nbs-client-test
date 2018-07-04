@@ -1,5 +1,6 @@
 package io.nbs.client.listener;
 
+import io.nbs.sdk.beans.OnlineMessage;
 import io.nbs.sdk.beans.SystemCtrlMessageBean;
 
 /**
@@ -16,4 +17,6 @@ public interface OnlineNotifier {
      * @param messageBean
      */
     void notifyRecvSystemMessage(SystemCtrlMessageBean messageBean);
+
+    void notifyRecvystemMessage(SystemCtrlMessageBean<OnlineMessage> ctrlMessageBean);
 }
