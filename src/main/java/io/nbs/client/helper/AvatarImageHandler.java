@@ -32,7 +32,7 @@ public class AvatarImageHandler {
     private static final int DEFAULT_THUMB_SIZE = 128;
     private static final int DEFAULT_PROFILE_AVATAR_SIZE = 128;
     private static final int DEFAULT_PROFILE_THUMB_SIZE = 48;
-    private static final int DEFAULT_CONTACTS_THUMB_SIZE = 40;
+    private static final int DEFAULT_CONTACTS_THUMB_SIZE = 64;
     private static AvatarImageHandler ourInstance = new AvatarImageHandler();
 
     public static AvatarImageHandler getInstance() {
@@ -63,7 +63,7 @@ public class AvatarImageHandler {
 
     private AvatarImageHandler() {
         AVATAR_PROFILE_HOME = AppGlobalCnst.consturactPath(Launcher.appBasePath,"profile","avatars");
-        AVATAR_ORIGIN_HOME = AppGlobalCnst.consturactPath(Launcher.appBasePath,"profile","origin");
+        AVATAR_ORIGIN_HOME = AppGlobalCnst.consturactPath(Launcher.appBasePath,"cache","avatars");
         AVATAR_CUSTOM_HOME = AppGlobalCnst.consturactPath(Launcher.appBasePath,"cache","avatars","custom");
     }
 
@@ -143,8 +143,6 @@ public class AvatarImageHandler {
         File targetFile128 = new File(target128);
         generateThumbScale(srcFile,targetFile128,DEFAULT_PROFILE_AVATAR_SIZE);
 
-        File target64 = new File(AppGlobalCnst.consturactPath(AVATAR_PROFILE_HOME,"thumbs",originName));
-        generateThumbScale(srcFile,target64,DEFAULT_PROFILE_THUMB_SIZE);
     }
 
     /**
@@ -239,10 +237,57 @@ public class AvatarImageHandler {
     }
 
     /**
+     * 获取联系人缓存目录
+     * @return
+     */
+    public static String getAvatarCustomHome() {
+        return AVATAR_CUSTOM_HOME;
+    }
+
+    /**
      *
      * @return
      */
     public static String getAvatarOriginHome() {
         return AVATAR_ORIGIN_HOME;
+    }
+
+    /**
+     *
+     * @param srcFile
+     * @param size
+     * @return
+     */
+    public ImageIcon getAvatarScaleIcon(File srcFile,int size){
+        if(!srcFile.exists()||srcFile.isDirectory())return null;
+        if(size<20)size=20;
+        try {
+            String fineName = srcFile.getName();
+            BufferedImage image = ImageIO.read(srcFile);
+            int oriWidth = image.getWidth();
+            int oriHeight = image.getHeight();
+            float oriScale = oriWidth*1.0F/oriHeight;
+            int nW=32,nH=32;
+            float zipScale = 1.0F;
+            if(oriScale>=1.0F){
+                //按宽压缩
+                nW= size;
+                zipScale = size*1.0F/oriWidth;
+                nH = (int)(oriHeight*zipScale);
+            }else{
+                nH = size;
+                zipScale = size*1.0F/oriHeight;
+                nW = (int)(oriWidth*zipScale);
+            }
+
+            ImageIcon newIcon = new ImageIcon(AppGlobalCnst.consturactPath(AVATAR_CUSTOM_HOME,"f"+size,fineName));
+            image.getScaledInstance(nW,nH,Image.SCALE_SMOOTH);
+            newIcon.setImage(image);
+            return newIcon;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 }

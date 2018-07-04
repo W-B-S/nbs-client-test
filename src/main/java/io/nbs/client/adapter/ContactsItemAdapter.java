@@ -9,6 +9,7 @@ import io.nbs.client.ui.panels.im.views.ContactsAvatarViewHolder;
 import io.nbs.client.listener.AbstractMouseListener;
 import io.nbs.commons.utils.AvatarUtil;
 import io.nbs.commons.helper.CharacterParser;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -103,10 +104,15 @@ public class ContactsItemAdapter extends BaseAdapter<ContactsItemViewHolder> {
     public void onBindViewHolder(ContactsItemViewHolder viewHolder, int position) {
         viewHolders.add(position, viewHolder);
         ContactsItem item = contactsItems.get(position);
-
+        String avatarFile = StringUtils.isBlank(item.getFormid()) ? item.getName() : item.getFormid();
+        Image image;
+        if(StringUtils.isNotBlank(item.getFormid())){
+            image = AvatarUtil.createOrLoadUserAvatar(item.getFormid(),true,item.getAvatarSuffix());
+        }else {
+            image = AvatarUtil.createOrLoadUserAvatar(item.getName(),false,null);
+        }
         ImageIcon icon = new ImageIcon();
-        icon.setImage(AvatarUtil.createOrLoadUserAvatar(item.getName())
-                .getScaledInstance(40, 40, Image.SCALE_SMOOTH));
+        icon.setImage(image.getScaledInstance(40, 40, Image.SCALE_SMOOTH));
         viewHolder.avatar.setIcon(icon);
 
         viewHolder.roomName.setText(item.getName());

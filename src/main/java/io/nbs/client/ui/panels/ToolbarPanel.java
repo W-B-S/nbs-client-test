@@ -12,6 +12,7 @@ import io.nbs.commons.utils.ButtonIconUtil;
 import io.nbs.commons.utils.IconUtil;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -94,10 +95,12 @@ public class ToolbarPanel extends JPanel {
         ImageIcon icon;
         if(peer!=null&&StringUtils.isNotBlank(peer.getId())
                 &&StringUtils.isNotBlank(peer.getAvatarSuffix())){
-            String a48Path = AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),"thumbs",peer.getAvatarName());
-            System.out.println(a48Path);
+            String a48Path = AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),peer.getAvatarName());
+            //System.out.println(a48Path);
             if((new File(a48Path)).exists()){
                 icon = new ImageIcon(a48Path);
+                Image image = icon.getImage().getScaledInstance(42,48,Image.SCALE_SMOOTH);
+                icon.setImage(image);
             }else {
                 icon = IconUtil.getIcon(this,"/icons/lambor48.png");
             }

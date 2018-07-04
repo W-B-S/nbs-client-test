@@ -61,6 +61,10 @@ public class MessageItem implements Comparable<MessageItem> {
     private int messageType;
 
     private long updatedAt;
+    /**
+     * 头像hash
+     */
+    private String avatar;
 
 
 
@@ -181,5 +185,13 @@ public class MessageItem implements Comparable<MessageItem> {
 
     public void setUpdatedAt(long updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

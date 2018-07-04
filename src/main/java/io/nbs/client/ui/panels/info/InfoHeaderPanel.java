@@ -20,10 +20,12 @@ import io.nbs.client.ui.panels.ParentAvailablePanel;
 import io.nbs.sdk.prot.IPMParser;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -211,7 +213,7 @@ public class InfoHeaderPanel extends ParentAvailablePanel {
                     //上传前先压缩
                     imageHandler.createdAvatar4Profile(file,name);
                     File file128 = new File(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),name));
-                    file128.getAbsolutePath();
+
                     NamedStreamable.FileWrapper fileWrapper = new NamedStreamable.FileWrapper(file128);
                     //上传ipfs
                     nodes = ipfs.add(fileWrapper);
@@ -227,17 +229,18 @@ public class InfoHeaderPanel extends ParentAvailablePanel {
 
                     //TODO 存数据库upload
                     /**
-                     * 40*40
+                     * 创建Hash 头像 :cache/avatar/custom
                      */
                     String hashFileName = fileHash+".png";
                     try {
                         imageHandler.createContactsAvatar(file,hashFileName);
-                        Image img =Toolkit.getDefaultToolkit().getImage(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),name));
-                        ImageIcon icon = new ImageIcon(img);
-                        logger.warn(icon.getDescription());
-                        if(icon!=null){
+                        BufferedImage image = ImageIO.read(file128);
+                        ImageIcon avatarIcon = AvatarImageHandler.getInstance().getAvatarScaleIcon(file128,128);
+
+                        logger.info( file128.getAbsolutePath());
+                        if(avatarIcon!=null){
                             logger.info(fileHash);
-                            avatarLabel.setIcon(icon);
+                            avatarLabel.setIcon(avatarIcon);
                             avatarLabel.validate();
                             avatarLabel.updateUI();
                             MainFrame.getContext().refreshAvatar();

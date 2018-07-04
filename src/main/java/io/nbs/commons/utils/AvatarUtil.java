@@ -4,14 +4,20 @@ import io.nbs.client.Launcher;
 import io.nbs.client.cnsts.AppGlobalCnst;
 import io.nbs.client.cnsts.FontUtil;
 import io.nbs.client.cnsts.ColorCnst;
+import io.nbs.client.helper.AvatarImageHandler;
+import io.nbs.commons.helper.ConfigurationHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +31,7 @@ import java.util.Map;
  */
 public class AvatarUtil {
     private static final Color[] colorArr;
-
+    private static Logger logger = LoggerFactory.getLogger(AvatarUtil.class);
     static
     {
         colorArr = new Color[]{
@@ -62,7 +68,7 @@ public class AvatarUtil {
 
     static
     {
-        AVATAR_CACHE_ROOT = AppGlobalCnst.consturactPath(Launcher.appBasePath,"cache","avatars");
+        AVATAR_CACHE_ROOT = AvatarImageHandler.getAvatarOriginHome();
 
         File file = new File(AVATAR_CACHE_ROOT);
         if (!file.exists())
@@ -71,7 +77,7 @@ public class AvatarUtil {
             System.out.println("创建头像缓存目录：" + file.getAbsolutePath());
         }
 
-        CUSTOM_AVATAR_CACHE_ROOT = AVATAR_CACHE_ROOT + "/custom";
+        CUSTOM_AVATAR_CACHE_ROOT = AvatarImageHandler.getAvatarCustomHome();
         file = new File(CUSTOM_AVATAR_CACHE_ROOT);
         if (!file.exists())
         {
@@ -125,6 +131,48 @@ public class AvatarUtil {
             avatarCache.put(groupName, avatar);
         }
 
+        return avatar;
+    }
+
+    /**
+     * 获取联系人头像,如果是hash则先从IPFS获取
+     * @param identify
+     * @param isHash
+     * @param suffix
+     * @return
+     */
+    public static Image createOrLoadUserAvatar(String identify,boolean isHash,String suffix){
+        String avatarPath;
+        Image avatar;
+        avatar = avatarCache.get(identify);
+        if(avatar!=null)return avatar;
+
+        if(isHash){
+            avatarPath = AppGlobalCnst.consturactPath(CUSTOM_AVATAR_CACHE_ROOT,identify+".png");
+            File temFile = new File(avatarPath);
+            try {
+                if(temFile.exists()){
+                    avatar = ImageIO.read(temFile);
+                    avatarCache.put(identify,avatar);
+                    return avatar;
+                }else {//不存在下载
+                    File temCacheFile = new File(AppGlobalCnst.consturactPath(AVATAR_CACHE_ROOT,identify+suffix));
+                    URL url = new URL(ConfigurationHelper.getInstance().getGateWayURL()+identify);
+                    AvatarImageHandler.getInstance().getFileFromIPFS(url,temCacheFile);
+                    avatar = ImageIO.read(url);
+                    avatarCache.put(identify,avatar);
+                    return avatar;
+                }
+            } catch (Exception e) {
+                logger.warn(e.getMessage(),e.getCause());
+                avatar = null;
+            }
+        }
+        if(avatar==null){
+            avatar = createAvatar(identify,identify);
+            avatarCache.put(identify,avatar);
+
+        }
         return avatar;
     }
 
