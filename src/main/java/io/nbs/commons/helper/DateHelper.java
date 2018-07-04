@@ -36,4 +36,10 @@ public class DateHelper {
     public static int currentSecond(){
         return (int)(System.currentTimeMillis()/1000);
     }
+
+    /**
+     *
+     * @return
+     */
+    public static long timestamp(){return System.currentTimeMillis();}
 }

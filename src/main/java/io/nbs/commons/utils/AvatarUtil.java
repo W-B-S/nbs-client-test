@@ -55,11 +55,14 @@ public class AvatarUtil {
     private static final int DEFAULT_AVATAR = 0;
     private static final int CUSTOM_AVATAR = 1;
 
+    /**
+     * 头像缓存
+     */
     private static Map<String, Image> avatarCache = new HashMap<>();
 
     static
     {
-        AVATAR_CACHE_ROOT = AppGlobalCnst.consturactPath(Launcher.appBasePath,"avatars");
+        AVATAR_CACHE_ROOT = AppGlobalCnst.consturactPath(Launcher.appBasePath,"cache","avatars");
 
         File file = new File(AVATAR_CACHE_ROOT);
         if (!file.exists())
@@ -78,6 +81,13 @@ public class AvatarUtil {
     }
 
 
+    /**
+     * 分组头像
+     * @param groupName
+     * @param members
+     * @param type
+     * @return
+     */
     public static Image createOrLoadGroupAvatar(String groupName, String[] members, String type)
     {
         Image avatar;
@@ -118,6 +128,11 @@ public class AvatarUtil {
         return avatar;
     }
 
+    /**
+     *
+     * @param username
+     * @return
+     */
     public static Image createOrLoadUserAvatar(String username)
     {
         Image avatar;

@@ -6,7 +6,9 @@ import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.services.IpfsMessageSender;
 import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.panels.im.chatstmp.TMChatShowPanel;
+import io.nbs.commons.helper.DateHelper;
 import io.nbs.commons.helper.RadomCharactersHelper;
+import io.nbs.commons.utils.UUIDGenerator;
 import io.nbs.sdk.beans.IMMessageBean;
 import io.nbs.sdk.beans.MessageItem;
 import io.ipfs.nbs.helper.MessageViewHolderCacheHelper;
@@ -236,6 +238,9 @@ public class ChatPanel extends ParentAvailablePanel {
         item.setMessageType(MessageItem.RIGHT_TEXT);
         item.setSenderUsername(current.getNick());
         item.setNeedToResend(false);
+        item.setId(UUIDGenerator.getUUID());
+        item.setSenderId(current.getId());
+        item.setTimestamp(DateHelper.timestamp());
         addMessageItemToEnd(item);
     }
 

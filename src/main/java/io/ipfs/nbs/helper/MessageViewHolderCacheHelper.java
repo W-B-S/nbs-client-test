@@ -72,6 +72,7 @@ public class MessageViewHolderCacheHelper {
         MessageRightTextViewHolder holder =null;
         if(rightTextPosition <CACHE_CAPACITY && rightTextViewHolders.size()>0){
             holder = rightTextViewHolders.get(rightTextPosition);
+            rightTextPosition++;
         }
         return holder;
     }

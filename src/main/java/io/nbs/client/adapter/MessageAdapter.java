@@ -1,5 +1,8 @@
 package io.nbs.client.adapter;
 
+import io.nbs.client.Launcher;
+import io.nbs.client.cnsts.AppGlobalCnst;
+import io.nbs.client.helper.AvatarImageHandler;
 import io.nbs.client.ui.components.adapters.MessageMouseListener;
 import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.holders.ViewHolder;
@@ -70,8 +73,7 @@ public class MessageAdapter extends BaseAdapter<BaseMessageViewHolder> {
         if(viewHolder==null)return;
         final MessageItem item = messageItems.get(position);
         MessageItem prevItem = 0 == position ? null : messageItems.get(position-1);
-
-
+        processTimeAndAvatar(item, prevItem, viewHolder);
         if(viewHolder instanceof MessageSystemMessageViewHolder){
             processSystemMessage(viewHolder,item);
         }
@@ -131,6 +133,9 @@ public class MessageAdapter extends BaseAdapter<BaseMessageViewHolder> {
         holder.text.setTag(item.getId());
 
         holder.sender.setText(item.getSenderUsername());
+        ImageIcon selfIcon = new ImageIcon(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),currentPeer.getAvatarName()));
+        selfIcon.setImage(selfIcon.getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH));
+        holder.avatar.setIcon(selfIcon);
 
         listView.setScrollHiddenOnMouseLeave(holder.messageBubble);
         listView.setScrollHiddenOnMouseLeave(holder.text);
@@ -208,16 +213,17 @@ public class MessageAdapter extends BaseAdapter<BaseMessageViewHolder> {
         }
 
         if (holder.avatar != null) {
+
             ImageIcon icon = new ImageIcon();
             Image image = AvatarUtil.createOrLoadUserAvatar(item.getSenderUsername()).getScaledInstance(40, 40, Image.SCALE_SMOOTH);
             icon.setImage(image);
             holder.avatar.setIcon(icon);
 
-            //如果是自己
-            if (item.getMessageType() == MessageItem.LEFT_ATTACHMENT
+            //如果不是自己
+            if (item.getMessageType() == MessageItem.LEFT_TEXT
                     || item.getMessageType() == MessageItem.LEFT_IMAGE
                     || item.getMessageType() == MessageItem.LEFT_TEXT) {
-                bindAvatarAction(holder.avatar, item.getSenderUsername());
+               // bindAvatarAction(holder.avatar, item.getSenderUsername());
             }
 
         }

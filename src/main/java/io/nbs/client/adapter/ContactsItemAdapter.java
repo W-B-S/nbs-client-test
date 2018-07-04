@@ -106,7 +106,7 @@ public class ContactsItemAdapter extends BaseAdapter<ContactsItemViewHolder> {
 
         ImageIcon icon = new ImageIcon();
         icon.setImage(AvatarUtil.createOrLoadUserAvatar(item.getName())
-                .getScaledInstance(32, 32, Image.SCALE_SMOOTH));
+                .getScaledInstance(40, 40, Image.SCALE_SMOOTH));
         viewHolder.avatar.setIcon(icon);
 
         viewHolder.roomName.setText(item.getName());

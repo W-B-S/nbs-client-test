@@ -1,6 +1,5 @@
 package io.nbs.client.ui.panels.im.messages;
 
-import UI.AppMainWindow;
 import io.nbs.client.Launcher;
 import io.nbs.client.ui.components.NBSIconButton;
 import io.nbs.client.cnsts.FontUtil;
@@ -29,7 +28,7 @@ public class MessageRightTextViewHolder extends BaseMessageViewHolder {
     /**
      * TODO
      */
-    ImageIcon defaltIcon = new ImageIcon(Launcher.appBasePath +"avatars/default_avatar.png");
+    public ImageIcon defaltIcon = new ImageIcon("/icons/nbs128.png");
     public NBSIconButton messageButton = new NBSIconButton(defaltIcon,defaltIcon,"");
     public JLabel resend = new JLabel(); // 重发按钮
     public JLabel sendingProgress = new JLabel(); // 正在发送
@@ -40,6 +39,7 @@ public class MessageRightTextViewHolder extends BaseMessageViewHolder {
     public IMRightImageMessageBubble messageBubble = new IMRightImageMessageBubble();
 
     public MessageRightTextViewHolder(){
+        defaltIcon.setImage(defaltIcon.getImage().getScaledInstance(30,30,Image.SCALE_SMOOTH));
         initComponents();
         initView();
     }
@@ -54,11 +54,7 @@ public class MessageRightTextViewHolder extends BaseMessageViewHolder {
 
         time.setForeground(ColorCnst.FONT_GRAY);
         time.setFont(FontUtil.getDefaultFont(12));
-
-        ImageIcon resendIcon = new ImageIcon(AppMainWindow.class.getResource("/icon/zh_cn/resend.png"));
-
-        resendIcon.setImage(resendIcon.getImage().getScaledInstance(20,20,Image.SCALE_SMOOTH));
-        resend.setIcon(resendIcon);
+       // resend.setIcon(resendIcon);
         resend.setVisible(false);
         resend.setToolTipText("消息发送失败.");
         resend.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -71,21 +67,25 @@ public class MessageRightTextViewHolder extends BaseMessageViewHolder {
 
         timePanel.add(time);
 
+        avatar.setIcon(defaltIcon);
+        avatar.setVisible(true);
+
         messageBubble.add(text,BorderLayout.CENTER);
 
         //JPanel res
         JPanel resendTextPanel = new JPanel();
         resendTextPanel.setBackground(ColorCnst.WINDOW_BACKGROUND);
-
         resendTextPanel.add(resend, BorderLayout.WEST);
         resendTextPanel.add(sendingProgress, BorderLayout.WEST);
         resendTextPanel.add(messageBubble, BorderLayout.CENTER);
 
         messageAvatarPanel.setLayout(new GridBagLayout());
+
+        //messageAvatarPanel.setBorder(MainFrame.redBorder);
         messageAvatarPanel.add(resendTextPanel,
                 new GBC(1,0).setWeight(1000,1).setAnchor(GBC.EAST).setInsets(0,0,5,0));
         messageAvatarPanel.add(avatar,new GBC(2,0).setWeight(1,1).setAnchor(GBC.NORTH).setInsets(5,0,0,10));
-        add(timePanel,BorderLayout.NORTH);
+        add(timePanel,BorderLayout.NORTH);//
         add(messageAvatarPanel,BorderLayout.CENTER);
     }
 

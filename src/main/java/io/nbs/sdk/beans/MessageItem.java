@@ -25,6 +25,7 @@ public class MessageItem implements Comparable<MessageItem> {
      * uuid
      */
     private String id;
+
     /**
      *
      */
@@ -60,6 +61,8 @@ public class MessageItem implements Comparable<MessageItem> {
     private int messageType;
 
     private long updatedAt;
+
+
 
     public MessageItem() {
     }
