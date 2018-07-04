@@ -167,7 +167,7 @@ public class ChatPanel extends ParentAvailablePanel {
      */
     private void initData(){
         //autoLoadMessage();
-        autoLoadMessage();
+        //autoLoadMessage();
     }
 
 

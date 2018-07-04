@@ -149,8 +149,8 @@ public class MessageAdapter extends BaseAdapter<BaseMessageViewHolder> {
                 //TODO 数据库
             }
 
-            holder.sendingProgress.setVisible(true);
-            holder.resend.setVisible(true);
+            holder.sendingProgress.setVisible(false);
+            holder.resend.setVisible(false);
 
         }
         else
