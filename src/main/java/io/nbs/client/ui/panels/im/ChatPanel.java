@@ -9,7 +9,6 @@ import io.nbs.client.ui.panels.im.chatstmp.TMChatShowPanel;
 import io.nbs.commons.helper.DateHelper;
 import io.nbs.commons.helper.RadomCharactersHelper;
 import io.nbs.commons.utils.UUIDGenerator;
-import io.nbs.sdk.beans.IMMessageBean;
 import io.nbs.sdk.beans.MessageItem;
 import io.ipfs.nbs.helper.MessageViewHolderCacheHelper;
 import io.nbs.client.ui.panels.im.messages.MessageEditorPanel;
@@ -56,16 +55,11 @@ public class ChatPanel extends ParentAvailablePanel {
     // 每次加载的消息条数
     private static final int PAGE_LENGTH = 20;
 
-    /**
-     * TOPIC ID
-     */
-    public static String CHAT_ROOM_OPEN_ID = "";
 
     private static List<String> remoteHistoryLoadedRooms = new ArrayList<>();
 
     private java.util.List<MessageItem> messages = new ArrayList<>();
 
-    List<IMMessageBean> messageBeanList = new ArrayList<>();
 
     private MessageViewHolderCacheHelper messageViewHolderCacheHelper;
     private MessageAdapter adapter;

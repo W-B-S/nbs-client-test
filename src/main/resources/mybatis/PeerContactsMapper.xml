@@ -12,7 +12,7 @@
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="online" property="online" jdbcType="INTEGER"/>
         <result column="ctime" property="ctime" jdbcType="INTEGER"/>
-        <result column="lmtime" property="lmtime" jdbcType="INTEGER"/>
+        <result column="lmtime" property="lmtime" jdbcType="BIGINT"/>
     </resultMap>
     <insert id="insert">
         INSERT INTO p_contacts (id, fromid, nick,avatar,avatar_suffix,ip,locations,remark,online)
@@ -52,6 +52,7 @@
         UPDATE p_contacts
         <set>
             nick=#{nick},
+            fromid=#{fromid},
             avatar=#{avatar},
             avatar_suffix=#{avatarSuffix},
             ip = #{ip},
@@ -74,7 +75,7 @@
             <if test="locations!= null">locations=#{locations},</if>
             <if test="remark!= null">remark=#{remark},</if>
             <if test="online!= null">online=#{remark},</if>
-            <if test="lmtime!= null">lmtime=#{lmtime},</if>
+            lmtime=#{lmtime},
         </set>
         WHERE id=#{id}
     </update>

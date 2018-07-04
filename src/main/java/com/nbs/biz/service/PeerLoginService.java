@@ -53,7 +53,7 @@ public class PeerLoginService extends BasicService<PeerLoginDao,PeerLoginEntity>
         entity.setIp(info.getIp());
         entity.setFromid(info.getFrom());
         entity.setSysuser(System.getProperty("user.name",""));
-        entity.setLmtime(DateHelper.currentSecond());
+        entity.setLmtime(DateHelper.timestamp());
         return entity;
     }
 }

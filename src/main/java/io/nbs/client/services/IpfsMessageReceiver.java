@@ -128,13 +128,6 @@ public class IpfsMessageReceiver{
                     PeerInfo info =Launcher.currentPeer;
                     logger.info("{}<=====>{}",info.getId(),item.getFrom());
 
-     /*               if(item.getFrom().equals(info.getFrom())){
-
-                    }else {
-                        item.setMessageType(1);
-                        ChatPanel.getContext().addMessageItemToEnd(item);
-                    }*/
-
                     subscribeListener.notifyRecvMessage(item);
                 }
                 if(standardIPFSMessage.getMtype().equals(IPMTypes.online.name())){

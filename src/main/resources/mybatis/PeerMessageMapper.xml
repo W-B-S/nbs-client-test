@@ -10,9 +10,9 @@
         <result column="topic" property="topic" jdbcType="VARCHAR"/>
         <result column="roomid" property="roomid" jdbcType="VARCHAR"/>
         <result column="msg" property="msg" jdbcType="VARCHAR"/>
-        <result column="mtype" property="mtype" jdbcType="VARCHAR"/>
+        <result column="mtype" property="mtype" jdbcType="INTEGER"/>
         <result column="ip" property="ip" jdbcType="VARCHAR"/>
-        <result column="recvtime" property="recvtime" jdbcType="INTEGER"/>
+        <result column="recvtime" property="recvtime" jdbcType="BIGINT"/>
         <result column="ctime" property="ctime" jdbcType="INTEGER"/>
     </resultMap>
 

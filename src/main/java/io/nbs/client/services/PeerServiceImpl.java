@@ -64,8 +64,6 @@ public class PeerServiceImpl {
         List<String> onlinePeers = getOnlinePeers();
         List<PeerContactsEntity> contactsEntities = contactsService.findAll();
 
-        List<PeerContactsEntity> needInsert = new ArrayList<>();
-        RadomCharactersHelper radomCharactersHelper = RadomCharactersHelper.getInstance();
         if(onlinePeers==null||onlinePeers.size()==0)return contactsItems;
 
         if(contactsEntities!=null&&contactsEntities.size()>0){
@@ -87,11 +85,14 @@ public class PeerServiceImpl {
             }
         }
 
-        //new ArrayList<>();
-        //saveAndUpdatePeerContacts(needInsert);
         return contactsItems;
     }
 
+    /**
+     *
+     * @param peerId
+     * @return
+     */
     private ContactsItem constructionItemByPeerId(String peerId){
         ContactsItem itemOnlyId = new ContactsItem();
         String nickTemp = peerId.substring(2,6)+AppGlobalCnst.NOTNBS_PEER_MIDDLE + peerId.substring(peerId.length()-4);

@@ -1,6 +1,8 @@
 package io.nbs.client.adapter;
 
 import com.alibaba.fastjson.JSON;
+import com.nbs.biz.data.entity.PeerContactsEntity;
+import com.nbs.biz.service.PeerContactsService;
 import io.nbs.client.listener.OnlineNotifier;
 import io.nbs.client.ui.components.NbsListView;
 import io.nbs.client.ui.frames.MainFrame;
@@ -35,10 +37,13 @@ public class ContactOnlineAdapter implements OnlineNotifier {
     private static Map<String,ContactsItem> contactsCacheMap ;
     private PeerInfo info;
 
+    private PeerContactsService peerContactsService;
+
     public ContactOnlineAdapter(SqlSession sqlSession) {
         this.sqlSession = sqlSession;
         info = MainFrame.getContext().getCurrentPeer();
         contactsCacheMap = new HashMap<>();
+        peerContactsService = new PeerContactsService(sqlSession);
     }
 
     @Override
@@ -51,6 +56,15 @@ public class ContactOnlineAdapter implements OnlineNotifier {
                     logger.info("收到自己的上线消息:{}",JSON.toJSONString(messageBean));
                     return;
                 }
+               /**
+                *  存库TODO
+                *  刷新contacts
+                *  异步刷新数据库
+                */
+               new Thread(()->{
+                   inssetOrUpdateOnlineDB(messageBean);
+               }).start();
+
                 ContactsItem item  = new ContactsItem();
                 item.setFormid(messageBean.getFrom());
                 item.setName(onlineMessage.getNick());
@@ -80,12 +94,6 @@ public class ContactOnlineAdapter implements OnlineNotifier {
      * @return
      */
     private int findOrAddContacts(ContactsItem item,List<ContactsItem> peerList,boolean exists){
-        /**
-         *  存库TODO
-         *  刷新contacts
-         *  异步刷新数据库
-         */
-        inssetOrUpdateDB(item);
 
         if(peerList==null){
             peerList = new ArrayList<>();
@@ -94,7 +102,7 @@ public class ContactOnlineAdapter implements OnlineNotifier {
         }
         int i=0;
         for(ContactsItem peer : peerList){
-            if(peer.getFormid()!=null&&peer.getFormid().equals(item.getFormid())){
+            if(peer.getId()!=null&&peer.getId().equals(item.getId())){
                 exists = true;
                 peer = item;
                 return i;
@@ -107,10 +115,43 @@ public class ContactOnlineAdapter implements OnlineNotifier {
 
     /**
      * 独立线程处理
-     * @param item
+     * 上线信息
+     * @param bean
      */
-    private void inssetOrUpdateDB(ContactsItem item){
-        //TODO
+    private void inssetOrUpdateOnlineDB(SystemCtrlMessageBean bean){
+        if(bean==null||bean.getContent()==null)return;
+        if(bean.getContent() instanceof OnlineMessage){
+            OnlineMessage onlineMessage = (OnlineMessage)bean.getContent();
+            String id = onlineMessage.getId();
+
+            PeerContactsEntity entity = peerContactsService.findById(id);
+            if(entity==null){
+                entity = new PeerContactsEntity();
+                entity.setId(onlineMessage.getId());
+                entity.setFromid(onlineMessage.getFrom());
+                entity.setNick(onlineMessage.getNick());
+                entity.setAvatar(onlineMessage.getAvatar());
+                entity.setAvatarSuffix(onlineMessage.getAvatarSuffix());
+                entity.setIp(onlineMessage.getIp());
+                entity.setLocations(onlineMessage.getLocations());
+                entity.setLmtime(System.currentTimeMillis());
+
+                peerContactsService.insert(entity);
+            }else {
+                if(StringUtils.isNotBlank(onlineMessage.getAvatar()))
+                    entity.setAvatar(onlineMessage.getAvatar());
+                if(StringUtils.isNotBlank(onlineMessage.getAvatarSuffix()))
+                    entity.setAvatarSuffix(onlineMessage.getAvatarSuffix());
+                if(StringUtils.isNotBlank(onlineMessage.getNick()))
+                    entity.setNick(onlineMessage.getNick());
+                entity.setIp(onlineMessage.getIp());
+                entity.setLocations(onlineMessage.getLocations());
+                entity.setLmtime(System.currentTimeMillis());
+                peerContactsService.update(entity);
+            }
+        }else {
+
+        }
     }
 
     /**

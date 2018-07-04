@@ -9,7 +9,10 @@ package com.nbs.biz.data.entity;
  * All rights reserved.
  */
 public class PeerMessageEntity extends BasicEntity {
-    private Integer id;
+    /**
+     * uuid
+     */
+    private String id;
     private String seqno;
     private String fromid;
     private String fromhash;
@@ -17,16 +20,16 @@ public class PeerMessageEntity extends BasicEntity {
     private String topic;
     private String roomid;
     private String msg;
-    private String mtype;
+    private Integer mtype;
     private String ip;
-    private Integer recvtime;
+    private Long recvtime;
     private Integer ctime;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -86,11 +89,11 @@ public class PeerMessageEntity extends BasicEntity {
         this.msg = msg;
     }
 
-    public String getMtype() {
+    public Integer getMtype() {
         return mtype;
     }
 
-    public void setMtype(String mtype) {
+    public void setMtype(Integer mtype) {
         this.mtype = mtype;
     }
 
@@ -102,11 +105,11 @@ public class PeerMessageEntity extends BasicEntity {
         this.ip = ip;
     }
 
-    public Integer getRecvtime() {
+    public Long getRecvtime() {
         return recvtime;
     }
 
-    public void setRecvtime(Integer recvtime) {
+    public void setRecvtime(Long recvtime) {
         this.recvtime = recvtime;
     }
 

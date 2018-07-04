@@ -14,7 +14,7 @@
         <result column="seckey" property="seckey" jdbcType="VARCHAR"/>
         <result column="sysuser" property="sysuser" jdbcType="VARCHAR"/>
         <result column="ctime" property="ctime" jdbcType="INTEGER"/>
-        <result column="lmtime" property="lmtime" jdbcType="INTEGER"/>
+        <result column="lmtime" property="lmtime" jdbcType="BIGINT"/>
     </resultMap>
 
     <sql id="BaseSqlColumns">

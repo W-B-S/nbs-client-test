@@ -19,7 +19,7 @@ public class PeerContactsEntity extends BasicEntity {
     private String remark;
     private Integer online;
     private Integer ctime;
-    private Integer lmtime;
+    private Long lmtime;
 
     public String getId() {
         return id;
@@ -101,11 +101,11 @@ public class PeerContactsEntity extends BasicEntity {
         this.ctime = ctime;
     }
 
-    public Integer getLmtime() {
+    public Long getLmtime() {
         return lmtime;
     }
 
-    public void setLmtime(Integer lmtime) {
+    public void setLmtime(Long lmtime) {
         this.lmtime = lmtime;
     }
 }

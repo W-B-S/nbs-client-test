@@ -1,6 +1,7 @@
 package io.nbs.client.listener;
 
 import io.nbs.sdk.beans.MessageItem;
+import io.nbs.sdk.beans.OnlineMessage;
 import io.nbs.sdk.beans.SystemCtrlMessageBean;
 
 /**
@@ -19,5 +20,9 @@ public interface IPFSSubscribeListener {
      */
     void notifyRecvMessage(MessageItem item);
 
-
+    /**
+     *
+     * @param message
+     */
+    void notifyOnlineMessage(OnlineMessage message);
 }

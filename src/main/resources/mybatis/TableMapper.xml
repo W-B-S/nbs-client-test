@@ -20,7 +20,7 @@
           seckey varchar (256),
           sysuser varchar (100),
           ctime TimeStamp NOT NULL DEFAULT (datetime('now','localtime')),
-          lmtime integer
+          lmtime bigint
         );
     </update>
 
@@ -36,13 +36,13 @@
         remark varchar(200),
         online integer default 0,
         ctime TimeStamp NOT NULL DEFAULT (datetime('now','localtime')),
-        lmtime integer
+        lmtime bigint
         );
     </update>
 
     <update id="createPeerMessages">
         CREATE table p_messages (
-        id integer PRIMARY KEY autoincrement,
+        id varchar (64) not null,
         seqno varchar(20) ,
         fromid varchar (100),
         fromhash varchar (100),
@@ -50,26 +50,27 @@
         topic varchar (100),
         roomid varchar(36),
         msg text,
-        mtype varchar (10) default 'text',
+        mtype integer default 1,
         ip varchar (32),
-        recvtime INTEGER ,
+        recvtime bigint,
         ctime TimeStamp NOT NULL DEFAULT (datetime('now','localtime'))
         );
     </update>
 
     <update id="createWorldMessages">
-        CREATE table w_messages (
-        id varchar(20) PRIMARY KEY,
-        formid varchar (100),
-        formhash varchar (100),
-        self integer default 0,
-        topic varchar (100),
-        roomid varchar(36),
-        msg text,
-        creator varchar (100),
-        ip varchar (32),
-        recvtime INTEGER ,
-        ctime TimeStamp NOT NULL DEFAULT (datetime('now','localtime'))
+       CREATE table w_messages (
+          id varchar(36) PRIMARY KEY,
+          formid varchar (100),
+          formhash varchar (100),
+          self integer default 0,
+          topic varchar (100),
+          roomid varchar(36),
+          msg text,
+          creator varchar (100),
+          mtype integer default 1,
+          ip varchar (32),
+          recvtime bigint ,
+          ctime TimeStamp NOT NULL DEFAULT (datetime('now','localtime'))
         );
     </update>
 

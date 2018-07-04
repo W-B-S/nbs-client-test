@@ -8,7 +8,10 @@ import org.apache.ibatis.session.SqlSession;
 
 /**
  * @Package : com.nbs.biz
- * @Description : <p></p>
+ * @Description :
+ * <p>
+ *
+ * </p>
  * @Author : lambor.c
  * @Date : 2018/6/30-14:18
  * Copyright (c) 2018, NBS , lambor.c<lanbery@gmail.com>.
@@ -58,7 +61,7 @@ public class PeersOperatorService {
         entity.setIp(info.getIp());
         entity.setLocations(info.getLocations());
         entity.setOnline(online==1 ? 1 : 0);
-        entity.setLmtime(DateHelper.currentSecond());
+        entity.setLmtime(DateHelper.timestamp());
         return entity;
     }
 }

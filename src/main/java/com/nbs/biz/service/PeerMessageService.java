@@ -27,7 +27,7 @@ public class PeerMessageService extends BasicService<PeerMessageDao,PeerMessageE
      */
     public int insert(PeerMessageEntity entity) {
         if(entity.getCtime()==null)entity.setCtime(DateHelper.currentSecond());
-        if(entity.getRecvtime()==null)entity.setRecvtime(DateHelper.currentSecond());
+        if(entity.getRecvtime()==null)entity.setRecvtime(DateHelper.timestamp());
         return super.insert(entity);
     }
 }
