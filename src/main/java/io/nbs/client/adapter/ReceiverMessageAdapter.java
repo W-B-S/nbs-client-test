@@ -3,15 +3,15 @@ package io.nbs.client.adapter;
 
 import com.nbs.biz.data.entity.PeerMessageEntity;
 import com.nbs.biz.service.PeerMessageService;
-import io.nbs.client.cnsts.AppGlobalCnst;
+
 import io.nbs.client.listener.IPFSSubscribeListener;
 import io.nbs.client.services.IpfsMessageSender;
 import io.nbs.client.ui.components.NbsListView;
 import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.panels.im.IMPeersPanel;
 import io.nbs.client.vo.ContactsItem;
-import io.nbs.commons.helper.ConfigurationHelper;
-import io.nbs.commons.utils.DbUtil;
+
+import io.nbs.commons.utils.DataBaseUtil;
 import io.nbs.commons.utils.UUIDGenerator;
 import io.nbs.sdk.beans.MessageItem;
 import io.nbs.sdk.beans.OnlineMessage;
@@ -39,7 +39,7 @@ public class ReceiverMessageAdapter implements IPFSSubscribeListener {
     public ReceiverMessageAdapter(List<MessageItem> items, NbsListView listView) {
         this.items = items;
         this.listView = listView;
-        SqlSession sqlSession = DbUtil.getSqlSession();
+        SqlSession sqlSession = DataBaseUtil.getSqlSession();
         peerMessageService = new PeerMessageService(sqlSession);
     }
 

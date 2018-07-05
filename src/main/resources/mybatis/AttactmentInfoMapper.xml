@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nbs.biz.data.dao.AttachmentInfoDao">
+
+    <resultMap id="BaseResultMap" type="com.nbs.biz.data.entity.AttachmentInfoEntity">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="peerid" property="peerid" jdbcType="VARCHAR"/>
+        <result column="phash" property="phash" jdbcType="VARCHAR"/>
+        <result column="hash58" property="hash58" jdbcType="VARCHAR"/>
+        <result column="fname" property="fname" jdbcType="VARCHAR"/>
+        <result column="fsize" property="fsize" jdbcType="VARCHAR"/>
+        <result column="fsuffix" property="fsuffix" jdbcType="VARCHAR"/>
+        <result column="fromid" property="fromid" jdbcType="VARCHAR"/>
+        <result column="seqno" property="seqno" jdbcType="VARCHAR"/>
+        <result column="cached" property="cached" jdbcType="INTEGER"/>
+        <result column="inlocal" property="inlocal" jdbcType="INTEGER"/>
+        <result column="ftype" property="ftype" jdbcType="VARCHAR"/>
+        <result column="sortno" property="sortno" jdbcType="INTEGER"/>
+        <result column="ctime" property="ctime" jdbcType="INTEGER"/>
+        <result column="lmtime" property="lmtime" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO attac_info (id, peerid,phash,hash58, fname,fsize,fsuffix,fromid,seqno,cached,cachedfile,inlocal,ftype,sortno)
+        VALUES (#{id},#{peerid},#{phash}, #{hash58}, #{fname}, #{fsize}, #{fsuffix}, #{fromid}, #{seqno}, #{cached}, #{cachedfile}, #{inlocal},#{ftype},#{sortno})
+    </insert>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT * FROM attac_info where id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT * FROM attac_info
+    </select>
+
+    <select id="find" resultMap="BaseResultMap" statementType="STATEMENT" parameterType="map">
+        SELECT * FROM attac_info where ${field} = ${val}
+    </select>
+
+    <delete id="delete" parameterType="java.lang.String">
+        DELETE * from attac_info WHERE id=#{id}
+    </delete>
+
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(1) FROM attac_info
+    </select>
+
+    <select id="exist" resultType="java.lang.Integer">
+        SELECT count(1) FROM attac_info where id = #{id}
+    </select>
+
+    <delete id="deleteAll">
+        delete from attac_info
+    </delete>
+
+
+    <update id="update">
+        UPDATE attac_info
+        <set>
+            fname=#{userId},
+            fsize=#{fsize},
+            fsuffix=#{fsuffix},
+            seqno=#{seqno},
+            cached=#{cached},
+            cachedfile=#{lmtime},
+            inlocal=#{lmtime},
+            ftype=#{lmtime},
+            lmtime=#{lmtime},
+        </set>
+        WHERE id=#{di}
+    </update>
+
+
+    <update id="updateIgnoreNull">
+        UPDATE attac_info
+        <set>
+            <if test="fname!= null">fname=#{fname},</if>
+            <if test="username!= null">username=#{username},</if>
+            <if test="cachedfile!= null">cachedfile=#{cachedfile},</if>
+            <if test="cached!= null">cached=#{cached},</if>
+            <if test="inlocal!= null">inlocal=#{inlocal},</if>
+            <if test="lmtime!= null">lmtime=#{lmtime},</if>
+        </set>
+        WHERE id=#{id}
+    </update>
+</mapper>

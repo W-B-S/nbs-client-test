@@ -15,5 +15,6 @@ import org.apache.ibatis.session.SqlSession;
 public class PeerContactsService extends BasicService<PeerContactsDao,PeerContactsEntity> {
     public PeerContactsService(SqlSession sqlSession) {
         dao = new PeerContactsDao(sqlSession);
+        setDao(dao);
     }
 }

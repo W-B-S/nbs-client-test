@@ -17,12 +17,10 @@ import io.nbs.client.adapter.ContactsItemAdapter;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.ui.components.GBC;
 import io.nbs.client.ui.components.NbsListView;
-import io.nbs.commons.utils.Base64CodecUtil;
-import io.nbs.commons.utils.DbUtil;
 import io.nbs.client.ui.panels.ParentAvailablePanel;
-import io.nbs.commons.helper.RadomCharactersHelper;
 import io.ipfs.api.IPFS;
 import io.ipfs.api.JSONParser;
+import io.nbs.commons.utils.DataBaseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,7 +76,7 @@ public class ContactsPanel extends ParentAvailablePanel {
     public ContactsPanel(JPanel parent) {
         super(parent);
         context = this;
-        service = new ContactsService(DbUtil.getSqlSession());
+        service = new ContactsService(DataBaseUtil.getSqlSession());
         initComponent();
         initView();
         initData();

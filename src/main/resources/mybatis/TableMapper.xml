@@ -76,7 +76,9 @@
 
     <update id="createAttachmentInfo">
         CREATE table attac_info (
-        id integer PRIMARY KEY autoincrement,
+        id varchar(64) PRIMARY KEY,
+        peerid varchar(64),
+        phash varchar(64),
         hash58 varchar(64),
         fname varchar (128),
         fsize varchar (20),
@@ -85,7 +87,11 @@
         seqno varchar (64),
         cached integer default 0,
         cachedfile varchar(256),
-        ctime TimeStamp NOT NULL DEFAULT (datetime('now','localtime'))
+        inlocal integer default 1,
+        ftype varchar(20),
+        sortno INTEGER ,
+        ctime TimeStamp NOT NULL DEFAULT (datetime('now','localtime')),
+        lmtime bigint
         );
     </update>
 

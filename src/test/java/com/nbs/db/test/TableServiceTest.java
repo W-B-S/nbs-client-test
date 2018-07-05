@@ -3,7 +3,7 @@ package com.nbs.db.test;
 import com.nbs.biz.model.ContactsEntity;
 import com.nbs.biz.service.ContactsService;
 import com.nbs.biz.service.TableService;
-import io.nbs.commons.utils.DbUtil;
+import io.nbs.commons.utils.DataBaseUtil;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.Date;
@@ -21,7 +21,7 @@ public class TableServiceTest {
     public TableServiceTest() {
 
     }
-    SqlSession sqlSession = DbUtil.getSqlSession();
+    SqlSession sqlSession = DataBaseUtil.getSqlSession();
     public static void main(String[] agrs){
 
         TableServiceTest tt = new TableServiceTest();
@@ -44,13 +44,13 @@ public class TableServiceTest {
     }
 
     public void crateTest(){
-        TableService service = new TableService(DbUtil.getSqlSession());
+        TableService service = new TableService(DataBaseUtil.getSqlSession());
         //service.initNBSMessage(true);
         service.initWorldMessages();
     }
 
     public void createNbsContacts(){
-        TableService service = new TableService(DbUtil.getSqlSession());
+        TableService service = new TableService(DataBaseUtil.getSqlSession());
         service.initPeerMessages();
        // List<NBSTest> lst = service.getAll();
 /*        if(lst!=null){
