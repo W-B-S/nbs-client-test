@@ -24,7 +24,7 @@ import java.net.URLEncoder;
  * All rights reserved.
  */
 public class IPMParser {
-    private static final String DEFAULT_ENCODING = "UTF-8";
+    public static final String DEFAULT_ENCODING = "UTF-8";
 
     /**
      * 默认NORMAL
@@ -53,6 +53,22 @@ public class IPMParser {
             e.printStackTrace();
             return content;
         }
+    }
+
+    /**
+     *
+     * @param url
+     * @return
+     */
+    public static String urlDecode(String url){
+        if(null==url)return "";
+
+        try {
+            url = URLDecoder.decode(url,DEFAULT_ENCODING);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return url;
     }
     /**
      *

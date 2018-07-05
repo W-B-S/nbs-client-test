@@ -1,13 +1,16 @@
 package io.nbs.client.ui.panels.im;
 
 import com.nbs.ui.components.NbsBorder;
+import io.nbs.client.Launcher;
 import io.nbs.client.adapter.ReceiverMessageAdapter;
 import io.nbs.client.cnsts.ColorCnst;
+import io.nbs.client.listener.IPFSFileUploader;
 import io.nbs.client.services.IpfsMessageSender;
 import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.panels.im.chatstmp.TMChatShowPanel;
 import io.nbs.commons.helper.DateHelper;
 import io.nbs.commons.helper.RadomCharactersHelper;
+import io.nbs.commons.utils.DataBaseUtil;
 import io.nbs.commons.utils.UUIDGenerator;
 import io.nbs.sdk.beans.MessageItem;
 import io.ipfs.nbs.helper.MessageViewHolderCacheHelper;
@@ -55,19 +58,22 @@ public class ChatPanel extends ParentAvailablePanel {
     // 每次加载的消息条数
     private static final int PAGE_LENGTH = 20;
 
-
     private static List<String> remoteHistoryLoadedRooms = new ArrayList<>();
 
     private java.util.List<MessageItem> messages = new ArrayList<>();
 
-
     private MessageViewHolderCacheHelper messageViewHolderCacheHelper;
     private MessageAdapter adapter;
 
-    private TMChatShowPanel chatShowPanel;
+
     private PeerInfo current;
 
     private ReceiverMessageAdapter receiverMessageAdapter;
+    /**
+     *
+     */
+    private IPFSFileUploader ipfsFileUploader;
+
 
     /**
      *
@@ -78,6 +84,7 @@ public class ChatPanel extends ParentAvailablePanel {
         context = this;
         current = MainFrame.getContext().getCurrentPeer();
         messageViewHolderCacheHelper = new MessageViewHolderCacheHelper();
+
 
         initComponents();
         /**
@@ -101,7 +108,8 @@ public class ChatPanel extends ParentAvailablePanel {
 //        chatShowPanel = new TMChatShowPanel(this);
 //        chatShowPanel.setBorder(null);
 
-        messageEditorPanel = new MessageEditorPanel(this);
+        ipfsFileUploader = new IPFSFileUploader(Launcher.getContext().getIpfs(),DataBaseUtil.getSqlSession(),messagePanel,messages);
+        messageEditorPanel = new MessageEditorPanel(this,ipfsFileUploader);
         //messageEditorPanel.setPreferredSize(new Dimension(MainFrame.DEFAULT_WIDTH*2/5,200));
 
     }
@@ -329,4 +337,7 @@ public class ChatPanel extends ParentAvailablePanel {
     }
 
 
+    public IPFSFileUploader getIpfsFileUploader() {
+        return ipfsFileUploader;
+    }
 }

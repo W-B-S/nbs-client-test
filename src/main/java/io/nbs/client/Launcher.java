@@ -206,4 +206,12 @@ public class Launcher {
     public static SqlSession getSqlSession() {
         return sqlSession;
     }
+
+    /**
+     *
+     * @return
+     */
+    public JFrame getCurrentFrame() {
+        return currentFrame;
+    }
 }

@@ -2,6 +2,7 @@ package io.nbs.client.ui.panels.im.messages;
 
 import UI.AppMainWindow;
 import UI.ConstantsUI;
+import io.nbs.client.listener.IPFSFileUploader;
 import io.nbs.client.ui.components.NBSIconButton;
 import io.nbs.client.ui.components.NBSButton;
 import io.nbs.client.cnsts.FontUtil;
@@ -13,9 +14,12 @@ import io.nbs.client.ui.components.ScrollUI;
 import com.nbs.ui.frames.ScreenShot;
 import io.nbs.client.ui.components.NBSIcon;
 import io.nbs.client.ui.panels.ParentAvailablePanel;
+import io.nbs.client.ui.panels.im.IMFileActionListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -51,14 +55,17 @@ public class MessageEditorPanel extends ParentAvailablePanel {
     private NBSIconButton cutIcon;
     private NBSIconButton fileIcon;
 
-
+    private JFileChooser jFileChooser;
+    private IMFileActionListener imFileActionListener;
 
     /**
      *
      * @param parent
      */
-    public MessageEditorPanel(JPanel parent) {
+    public MessageEditorPanel(JPanel parent, IPFSFileUploader uploader) {
         super(parent);
+        jFileChooser = new JFileChooser();
+        imFileActionListener = new IMFileActionListener(uploader,jFileChooser);
         initComponents();
         initView();
         setListeners();
@@ -162,6 +169,10 @@ public class MessageEditorPanel extends ParentAvailablePanel {
      *
      */
     private void setListeners(){
+        if(this.imFileActionListener!=null){
+            fileIcon.addActionListener(imFileActionListener);
+        }
+
         fileIcon.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -238,4 +249,6 @@ public class MessageEditorPanel extends ParentAvailablePanel {
     public NBSButton getSendButton() {
         return sendButton;
     }
+
+
 }
