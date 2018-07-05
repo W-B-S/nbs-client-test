@@ -9,6 +9,7 @@ import io.nbs.client.listener.OnlineNotifier;
 import io.nbs.client.ui.panels.im.ChatPanel;
 import io.nbs.commons.helper.ConfigurationHelper;
 
+import io.nbs.commons.utils.UUIDGenerator;
 import io.nbs.sdk.beans.*;
 import io.nbs.sdk.prot.IPMParser;
 import io.nbs.sdk.prot.IPMTypes;
@@ -121,13 +122,14 @@ public class IpfsMessageReceiver{
                     logger.warn("消息JSON ：{}解析失败，忽略.",json);
                     continue;
                 }
-                if(standardIPFSMessage.getMtype().equals(IPMTypes.nomarl.name())){
+                if(standardIPFSMessage.getMtype().equals(IPMTypes.nomarl.name())
+                        || standardIPFSMessage.getMtype().equals(IPMTypes.unkonw)){
                     if(subscribeListener==null)continue;
                     MessageItem item = IPMParser.convertMessageItem(standardIPFSMessage);
                     item.setMessageType(1);
                     PeerInfo info =Launcher.currentPeer;
                     logger.info("{}<=====>{}",info.getId(),item.getFrom());
-
+                    item.setId(UUIDGenerator.getUUID());
                     subscribeListener.notifyRecvMessage(item);
                 }
                 if(standardIPFSMessage.getMtype().equals(IPMTypes.online.name())){

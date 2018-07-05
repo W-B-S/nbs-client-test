@@ -3,6 +3,7 @@ package io.nbs.sdk.prot;
 import com.alibaba.fastjson.JSON;
 import io.ipfs.api.exceptions.IllegalIPFSMessageException;
 import io.nbs.commons.utils.Base64CodecUtil;
+import io.nbs.commons.utils.UUIDGenerator;
 import io.nbs.sdk.beans.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Base64Utils;
@@ -141,6 +142,7 @@ public class IPMParser {
     public static IMMessageBean convertIMMessageBean(StandardIPFSMessage message){
 
         IMMessageBean bean = new IMMessageBean();
+
         bean.setFrom(message.getFrom());
         bean.setSeqno(message.getSeqno());
         bean.setMtype(message.getMtype());
@@ -157,6 +159,7 @@ public class IPMParser {
      */
     public static MessageItem convertMessageItem(StandardIPFSMessage message){
         MessageItem bean = new MessageItem();
+        bean.setId(UUIDGenerator.getUUID());
         bean.setNeedToResend(false);
         bean.setTimestamp(System.currentTimeMillis());
         bean.setFrom(message.getFrom());
