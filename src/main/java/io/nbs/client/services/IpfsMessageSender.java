@@ -30,7 +30,8 @@ public class IpfsMessageSender {
     @Deprecated
     public static final String NBSWORLD_CTRL_TOPIC = Base64CodecUtil.encode("$NBS.CTRL.J$");
 
-    public static final String NBSWORLD_IMS_TOPIC = Base64CodecUtil.encode("nbsio.net");
+    public static final String NBSWORLD_IMS_TOPIC = "nbsio.net";
+            //Base64CodecUtil.encode("nbsio.net");
 
     private IPFS ipfs;
 
