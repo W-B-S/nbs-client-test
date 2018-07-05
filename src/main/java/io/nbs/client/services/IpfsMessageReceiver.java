@@ -47,6 +47,7 @@ public class IpfsMessageReceiver{
     boolean ctrlSign = true;
     private static boolean runing = false;
 
+
     public IpfsMessageReceiver() {
         worldTopic = IpfsMessageSender.NBSWORLD_IMS_TOPIC;
         ipfs = new IPFS(ConfigurationHelper.getInstance().getIPFSAddress());

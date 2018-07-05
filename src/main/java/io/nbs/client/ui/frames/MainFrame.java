@@ -8,6 +8,7 @@ import io.nbs.client.cnsts.FontUtil;
 import io.nbs.client.cnsts.OSUtil;
 import io.nbs.client.services.IpfsMessageSender;
 import io.nbs.client.services.MessageSendService;
+import io.nbs.commons.helper.ConfigurationHelper;
 import io.nbs.sdk.beans.OnlineMessage;
 import io.nbs.sdk.beans.PeerInfo;
 import io.nbs.client.ui.panels.MainContentPanel;
@@ -22,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Package : io.ipfs.nbs.ui.frames
@@ -47,6 +49,7 @@ public class MainFrame extends JFrame {
     public int currentWindowWidth = W_SIZE;
     public int currentWindowHeight = H_SIZE;
     public static  int RIGHT_EIDTH = 540;
+    private static boolean heartMonitor = true;
 
     public static final  int TOOLBAR_WIDTH = 52;
 
@@ -219,6 +222,34 @@ public class MainFrame extends JFrame {
     private void notifyWorldOnline(){
         PeerInfo info = Launcher.currentPeer;
         if(info==null)return;
+        OnlineMessage message = convertByPeerInfo(info);
+        //IP 解析
+        //nbs.client.heart.monitor.seconds
+        final int seconds = ConfigurationHelper.getInstance().getHeartMonitorSleep();
+        new Thread(()->{
+            while (heartMonitor){
+                try {
+                    if(message!=null)messageSender.sendOnline(message);
+                    logger.info("heart monitor {}",System.currentTimeMillis());
+                } catch (Exception e) {
+                    logger.warn(e.getMessage(),e.getCause());
+                }
+                try {
+                    TimeUnit.SECONDS.sleep(seconds);
+                } catch (InterruptedException e) {
+                }
+            }
+        }).start();
+
+        //刷新数据库登录
+        peerLoginService.refreshLoginInfo(info);
+    }
+
+    /**
+     *
+     * @return
+     */
+    private OnlineMessage convertByPeerInfo(PeerInfo info){
         OnlineMessage message = new OnlineMessage(info.getId(),info.getNick(),info.getFrom());
         if(StringUtils.isNotBlank(info.getAvatar())){
             message.setAvatar(info.getAvatar());
@@ -226,15 +257,7 @@ public class MainFrame extends JFrame {
             message.setAvatarSuffix(info.getAvatarSuffix());
             message.setLocations("中国*北京");
         }
-        //IP 解析
-        try {
-            messageSender.sendOnline(message);
-        } catch (Exception e) {
-            logger.warn(e.getMessage(),e.getCause());
-        }
-
-        //刷新数据库登录
-        peerLoginService.refreshLoginInfo(info);
+        return message;
     }
 
 

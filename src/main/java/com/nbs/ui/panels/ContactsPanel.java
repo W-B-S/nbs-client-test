@@ -5,6 +5,7 @@ import UI.panel.im.IMPanel;
 import com.alibaba.fastjson.JSON;
 import com.nbs.biz.model.ContactsEntity;
 import com.nbs.biz.service.ContactsService;
+import io.nbs.client.services.IpfsMessageSender;
 import io.nbs.client.vo.ContactsItem;
 import com.nbs.entity.PeerBoradcastInfo;
 import com.nbs.entity.PeerInfoBase;
@@ -142,8 +143,6 @@ public class ContactsPanel extends ParentAvailablePanel {
     private List<ContactsEntity> getContacts(){
         List<ContactsEntity> contacts = service.findAll();
         if(contacts==null)contacts = new ArrayList<>();
-        RadomCharactersHelper charactersHelper = RadomCharactersHelper.getInstance();
-        String hashPre = "hash.";
         if(AppMainWindow.currentPeerInfo()!=null){
             PeerInfoBase base = AppMainWindow.currentPeerInfo();
             ContactsEntity selfModel = new ContactsEntity(base.getPeerID(),base.getNick());
@@ -154,10 +153,15 @@ public class ContactsPanel extends ParentAvailablePanel {
 
         IPFS ipfs = IPFSHelper.getInstance().getIpfs();
 
+
         try {
             Object obj = null;
+            if(ConfigurationHelper.getInstance().subWorldPeers()){
+                obj = ipfs.pubsub.peers(IpfsMessageSender.NBSWORLD_IMS_TOPIC);
+            }else {
+                obj = ipfs.pubsub.peers();
+            }
 
-            obj = ipfs.pubsub.peers();
             if(obj==null)return contacts;
             List<String> peers = (List<String>)JSONParser.getValue(obj,"Strings");
             if(peers!=null&&peers.size()>0){
@@ -195,6 +199,7 @@ public class ContactsPanel extends ParentAvailablePanel {
     private void subWorld(long sleeps){
         List<Map<String, Object>> resList = Collections.synchronizedList(new ArrayList<>());
         AtomicInteger size = new AtomicInteger(0);
+
         new Thread(()->{
             logger.warn(DateHelper.currentTime()+">>>>>>>启动订阅 NBSWorld..."+IPFSHelper.NBSWORLD_IMS_TOPIC);
             IPFS ipfs = new IPFS(ConfigurationHelper.getInstance().getIPFSAddress());

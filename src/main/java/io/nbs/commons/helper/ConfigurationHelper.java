@@ -91,6 +91,15 @@ public class ConfigurationHelper {
         return instance;
     }
 
+    /**
+     *
+     * @return
+     */
+    public int getHeartMonitorSleep(){
+        String sec = cfgProps.getProperty("nbs.client.heart.monitor.seconds","300");
+        return Integer.parseInt(sec);
+    }
+
 
     /**
      * 获取IPFS服务地址
