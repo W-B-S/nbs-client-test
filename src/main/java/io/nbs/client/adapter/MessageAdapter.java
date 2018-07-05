@@ -135,9 +135,9 @@ public class MessageAdapter extends BaseAdapter<BaseMessageViewHolder> {
         holder.text.setTag(item.getId());
 
         holder.sender.setText(item.getSenderUsername());
-        ImageIcon selfIcon = new ImageIcon(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),currentPeer.getAvatarName()));
-        selfIcon.setImage(selfIcon.getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH));
-        holder.avatar.setIcon(selfIcon);
+       // ImageIcon selfIcon = new ImageIcon(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),currentPeer.getAvatarName()));
+        //selfIcon.setImage(selfIcon.getImage().getScaledInstance(40,40,Image.SCALE_SMOOTH));
+        //holder.avatar.setIcon(selfIcon);
 
         listView.setScrollHiddenOnMouseLeave(holder.messageBubble);
         listView.setScrollHiddenOnMouseLeave(holder.text);

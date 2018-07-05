@@ -81,8 +81,9 @@ public class ToolbarPanel extends JPanel {
          */
         bottomPanel = new JPanel();
         bottomPanel.setBackground(ColorCnst.DARKER);
-        bottomPanel.setLayout(new VerticalFlowLayout(VerticalFlowLayout.BOTTOM,0,10,false,false));
+        bottomPanel.setLayout(new BorderLayout());
 
+        //new VerticalFlowLayout(VerticalFlowLayout.BOTTOM,0,10,false,false)
 
     }
 
