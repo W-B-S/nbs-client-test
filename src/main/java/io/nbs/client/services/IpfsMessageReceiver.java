@@ -59,15 +59,15 @@ public class IpfsMessageReceiver{
             logger.info("启动消息订阅{}......",worldTopic);
             while (ctrlSign){
                 try {
-                    TimeUnit.MILLISECONDS.sleep(sleepTimes);
-                } catch (InterruptedException e) {
-                }
-                try {
                     ipfs.pubsub.sub(worldTopic,resList::add,t->t.printStackTrace());
                 } catch (IOException e) {
                     logger.error("订阅器异常停止，{}",e.getMessage());
                     runing = false;
                     ctrlSign =false;
+                }
+                try {
+                    TimeUnit.MILLISECONDS.sleep(sleepTimes);
+                } catch (InterruptedException e) {
                 }
             }
 
@@ -105,7 +105,7 @@ public class IpfsMessageReceiver{
      * @param jsonMessages
      */
     private void proccessMessage(List<String> jsonMessages){
-        new Thread(()->{
+       // new Thread(()->{
             for(String json: jsonMessages){
                 logger.info("处理消息....");
                 StandardIPFSMessage standardIPFSMessage = null;
@@ -124,7 +124,7 @@ public class IpfsMessageReceiver{
                     continue;
                 }
                 if(standardIPFSMessage.getMtype().equals(IPMTypes.nomarl.name())
-                        || standardIPFSMessage.getMtype().equals(IPMTypes.unkonw)){
+                        || standardIPFSMessage.getMtype().equals(IPMTypes.unkonw.name())){
                     if(subscribeListener==null)continue;
                     MessageItem item = IPMParser.convertMessageItem(standardIPFSMessage);
                     item.setMessageType(1);
@@ -146,7 +146,7 @@ public class IpfsMessageReceiver{
                     }
                 }
             }
-        }).start();
+       // }).start();
     }
 
     public void stopRecived(){
