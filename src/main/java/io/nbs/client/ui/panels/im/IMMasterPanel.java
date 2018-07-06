@@ -44,7 +44,6 @@ public class IMMasterPanel extends JPanel {
         initComponents();
         initView();
 
-
         //保持在最后
         messageReceiver.startReceiver();
     }

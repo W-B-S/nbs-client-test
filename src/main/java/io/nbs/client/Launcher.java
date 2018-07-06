@@ -11,6 +11,7 @@ import io.nbs.client.ui.frames.InitialFrame;
 import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.commons.utils.DataBaseUtil;
 import io.nbs.commons.utils.IconUtil;
+import io.nbs.sdk.prot.IPMParser;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
@@ -141,7 +142,8 @@ public class Launcher {
         String peerid = (String)ipfs.id().get("ID");
         if(cfg.containsKey(ConfigurationHelper.JSON_NICKNAME_KEY)
                 && cfg.containsKey(ConfigurationHelper.JSON_CFG_FROMID_KEY)){
-            String nick = (String)cfg.get(ConfigurationHelper.JSON_NICKNAME_KEY);
+            Object nickObj = cfg.get(ConfigurationHelper.JSON_NICKNAME_KEY);
+            String nick = IPMParser.urlDecode(nickObj.toString());
             String fromid =  (String)cfg.get(ConfigurationHelper.JSON_CFG_FROMID_KEY);
             if(StringUtils.isBlank(fromid)||StringUtils.isBlank(nick))return true;
 
@@ -158,7 +160,10 @@ public class Launcher {
                 currentPeer.setAvatarSuffix(avatarSuffix.toString());
             }
             Object avatarName = cfg.get(ConfigurationHelper.JSON_AVATAR_NAME_KEY);
-            if(avatarName!=null)currentPeer.setAvatarName((String)avatarName);
+            if(avatarName!=null){
+                String avatarFileName = IPMParser.urlDecode(avatarName.toString());
+                currentPeer.setAvatarName(avatarFileName);
+            }
             return false;
         }else {
             return true;

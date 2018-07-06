@@ -171,11 +171,13 @@ public class ChatPanel extends ParentAvailablePanel {
      *
      */
     private void initData(){
-        //autoLoadMessage();
-        //autoLoadMessage();
+
     }
 
 
+    /**
+     *
+     */
     private void autoLoadMessage(){
         String congtent = "";
         long ts = System.currentTimeMillis();
