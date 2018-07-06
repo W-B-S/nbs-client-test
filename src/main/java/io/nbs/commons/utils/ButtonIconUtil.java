@@ -59,8 +59,8 @@ public class ButtonIconUtil {
     public static NBSIconButton confBTN;
     public static NBSIconButton aboutBTN =
             new NBSIconButton(
-                    new ImageIcon(LamButtonIcon.class.getResource("/icons/tools/nbs40.png")),
-                    new ImageIcon(LamButtonIcon.class.getResource("/icons/tools/nbs40_normal.png")),
+                    new ImageIcon(LamButtonIcon.class.getResource("/icons/tools/NBS_ic_dis.png")),
+                    new ImageIcon(LamButtonIcon.class.getResource("/icons/tools/NBS_ic_pre.png")),
                     "关于NBS"
             );
 

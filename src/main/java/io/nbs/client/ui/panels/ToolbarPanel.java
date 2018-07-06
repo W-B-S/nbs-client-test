@@ -64,6 +64,18 @@ public class ToolbarPanel extends JPanel {
     }
 
 
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if(!isOpaque())return;
+        int width = getWidth();
+        int height = getHeight();
+        Graphics2D g2 = (Graphics2D)g;
+        GradientPaint gradientPaint = new GradientPaint(0,0,new Color(37,32,72),width,height,new Color(59,54,98));
+        g2.setPaint(gradientPaint);
+        g2.fillRect(0,0,width,height);
+    }
+
     private void initComponents(){
 
         upButtonPanel = new JPanel();
@@ -80,7 +92,8 @@ public class ToolbarPanel extends JPanel {
          *
          */
         bottomPanel = new JPanel();
-        bottomPanel.setBackground(ColorCnst.DARKER);
+        bottomPanel.setOpaque(false);
+        //bottomPanel.setBackground(ColorCnst.DARKER);
         bottomPanel.setLayout(new BorderLayout());
 
         //new VerticalFlowLayout(VerticalFlowLayout.BOTTOM,0,10,false,false)
@@ -114,7 +127,8 @@ public class ToolbarPanel extends JPanel {
     private void initView(){
         //setPreferredSize(new Dimension(MainFrame.TOOLBAR_WIDTH,MainFrame.HEIGHT));
         setLayout(new GridBagLayout());
-        upButtonPanel.setBackground(ColorCnst.DARKER);
+        upButtonPanel.setOpaque(false);
+        //upButtonPanel.setBackground(ColorCnst.DARKER);
         upButtonPanel.add(avatarLabel);
         avatarLabel.setBackground(ColorCnst.DARK);
 
@@ -192,5 +206,9 @@ public class ToolbarPanel extends JPanel {
         dataBTN =ButtonIconUtil.dataBTN;
         musicBTN = ButtonIconUtil.musicBTN;
         aboutBTN = ButtonIconUtil.aboutBTN;
+    }
+
+    public static ToolbarPanel getContext() {
+        return context;
     }
 }

@@ -58,7 +58,7 @@ public class ReceiverMessageAdapter implements IPFSSubscribeListener {
             listView.setAutoScrollToBottom();
             //
            saveWorldMessage(item);
-            //autoRepaly(item.getSenderUsername());
+            autoRepaly(item.getSenderUsername());
         }
     }
 

@@ -44,14 +44,14 @@ public class MainFrame extends JFrame {
 
     private static MainFrame context;
     private PeerInfo currentPeer;
-    public static final int W_SIZE = 900;
+    public static final int W_SIZE = 920;
     public static final int H_SIZE = 650;
     public int currentWindowWidth = W_SIZE;
     public int currentWindowHeight = H_SIZE;
     public static  int RIGHT_EIDTH = 540;
     private static boolean heartMonitor = true;
 
-    public static final  int TOOLBAR_WIDTH = 52;
+    public static final  int TOOLBAR_WIDTH = 80;
 
 
     private ToolbarPanel toolbarPanel;
@@ -130,9 +130,11 @@ public class MainFrame extends JFrame {
          * 功能按钮
          */
         leftMenuPanle = new JPanel();
-        leftMenuPanle.setBackground(ColorCnst.DARKER);
+
+        leftMenuPanle.setOpaque(false);
+       // leftMenuPanle.setBackground(ColorCnst.DARKER);
         toolbarPanel = new ToolbarPanel(context);
-        toolbarPanel.setBackground(ColorCnst.DARKER);
+        //toolbarPanel.setBackground(ColorCnst.DARKER);
         toolbarPanel.setPreferredSize(new Dimension(MainFrame.TOOLBAR_WIDTH,MainFrame.H_SIZE));
         leftMenuPanle.add(toolbarPanel);
 
@@ -161,7 +163,8 @@ public class MainFrame extends JFrame {
 
         //mainJPanel.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
         mainJPanel.setLayout(new BorderLayout());
-        mainJPanel.add(leftMenuPanle,BorderLayout.WEST);
+        mainJPanel.add(toolbarPanel,BorderLayout.WEST);
+       // mainJPanel.add(leftMenuPanle,BorderLayout.WEST);
         mainJPanel.add(mainCentetPanel,BorderLayout.CENTER);
 
         /**
