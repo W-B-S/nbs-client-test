@@ -47,6 +47,7 @@ public class InfoHeaderPanel extends ParentAvailablePanel {
     private LCJlabel locationLabel;
     private LCJlabel peerIDPanel;
     private LCJlabel peerIDLabel;
+    private JTextField peerIdField;
 
     private PeerInfo self;
     private static InfoHeaderPanel context;
@@ -80,6 +81,11 @@ public class InfoHeaderPanel extends ParentAvailablePanel {
         peerIDPanel = new LCJlabel();
         peerIDLabel = new LCJlabel();
         peerIDLabel.setFont(FontUtil.getDefaultFont(12));
+        peerIdField = new JTextField();
+        peerIdField.setHorizontalAlignment(JTextField.LEFT);
+        peerIdField.setFont(FontUtil.getDefaultFont(12));
+        peerIdField.setEditable(false);
+        peerIdField.setBorder(null);
     }
 
     /**
@@ -121,11 +127,14 @@ public class InfoHeaderPanel extends ParentAvailablePanel {
         peerIDTtile.setFont(FontUtil.getDefaultFont(12));
 
         //QmVJECTorWRbZAVnHeB2jpNnyUhfNAFJtWg8NSVRiAnrr5  测试用
-        if(self!=null)peerIDLabel.setText(self.getId());
+        if(self!=null){
+            peerIDLabel.setText(self.getId());
+            peerIdField.setText(self.getId());
+        }
 
         peerIDPanel.setLayout(new FlowLayout(FlowLayout.LEFT,2,2));
         peerIDPanel.add(peerIDTtile);
-        peerIDPanel.add(peerIDLabel);
+        peerIDPanel.add(peerIdField);
 
         rightPanel.add(nickLabel,
                 new GBC(0,0).setFill(GBC.HORIZONTAL).setWeight(1,10).setInsets(0,15,0,0)
