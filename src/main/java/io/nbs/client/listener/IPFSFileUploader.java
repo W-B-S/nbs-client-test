@@ -107,7 +107,9 @@ public class IPFSFileUploader {
         }
 
         // ipfs.pubsub.pub(IpfsMessageSender.NBSWORLD_IMS_TOPIC,)
+        //ipfs.object.
 
+        //ipfs.pin.add()
     }
 
     /**

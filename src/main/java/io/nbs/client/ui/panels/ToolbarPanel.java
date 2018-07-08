@@ -130,11 +130,11 @@ public class ToolbarPanel extends JPanel {
         upButtonPanel.setOpaque(false);
         //upButtonPanel.setBackground(ColorCnst.DARKER);
         upButtonPanel.add(avatarLabel);
-        avatarLabel.setBackground(ColorCnst.DARK);
+        //avatarLabel.setBackground(ColorCnst.DARK);
 
         upButtonPanel.add(infoBTN);
         upButtonPanel.add(imBTN);
-        imBTN.actived();
+        //imBTN.actived();
         upButtonPanel.add(dataBTN);
         upButtonPanel.add(musicBTN);
 
@@ -167,10 +167,28 @@ public class ToolbarPanel extends JPanel {
             }
         });
 
+        dataBTN.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedBTN(dataBTN);
+                mainCtx.mainWinShow(MainFrame.MainCardLayoutTypes.DATD);
+            }
+        });
+
         aboutBTN.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 selectedBTN(aboutBTN);
+                mainCtx.mainWinShow(MainFrame.MainCardLayoutTypes.ABOUT);
+            }
+        });
+
+
+
+        musicBTN.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedBTN(musicBTN);
                 mainCtx.mainWinShow(MainFrame.MainCardLayoutTypes.ABOUT);
             }
         });
