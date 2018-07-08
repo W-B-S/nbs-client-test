@@ -41,7 +41,7 @@ public class ColorCnst {
     public static final Color CONTACTS_ITEM_GRAY_MAIN = new Color(221, 221, 221);
     public static final Color CONTACTS_ITEM_LINE_GRAY = new Color(207, 207, 207);
     public static final Color CONTACTS_ITEM_GRAY = new Color(191, 191, 191);
-    public static final Color SEEARCH_ITEM_GRAY_LIGHT = new Color(211, 211, 211);
+    public static final Color SEEARCH_ITEM_GRAY_LIGHT = new Color(247, 247, 247);
     public static final Color SEEARCHTEXT_ITEM_GRAYBG = new Color(175, 175, 175);
     public static final Color SEEARCH_ITEM_GRAY_DARKER = new Color(138, 138, 138);
 }

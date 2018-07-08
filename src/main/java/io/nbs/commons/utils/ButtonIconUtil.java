@@ -20,6 +20,14 @@ public class ButtonIconUtil {
 
     public static final ImageIcon CHAT_NORMAL = new ImageIcon("");
 
+    public static final NBSIconButton searchBtn =
+            new NBSIconButton(
+                    new ImageIcon(LamButtonIcon.class.getResource("/icons/tools/search.png")),
+                    new ImageIcon(LamButtonIcon.class.getResource("/icons/tools/search_pre.png")),
+                    new ImageIcon(LamButtonIcon.class.getResource("/icons/tools/search.png")),
+                    "搜索"
+            );
+
     /**
      * 信息
      */

@@ -22,7 +22,7 @@ public class SearchTextField extends JTextField {
 
     public SearchTextField() {
         setBorder(null);
-        setBackground(ColorCnst.SEEARCHTEXT_ITEM_GRAYBG);
+       // setBackground(ColorCnst.SEEARCH_ITEM_GRAY_LIGHT);
         setForeground(ColorCnst.FONT_WHITE);
        // setCaretColor(ColorCnst.CONTACTS_ITEM_GRAY);
         setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
@@ -57,15 +57,15 @@ public class SearchTextField extends JTextField {
 
         Graphics2D g2 = (Graphics2D)g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(new Color(30, 30, 30, 100));
+        g2.setColor(new Color(117, 117, 117, 85));
         g2.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, 10, 10);
         g2.fillRoundRect(0, 0, getWidth()-1, getHeight()-1, 10, 10);
 
         if (getText().isEmpty()/* && !(FocusManager.getCurrentKeyboardFocusManager().getFocusOwner() == this)*/)
         {
-            g2.setBackground(Color.gray);
+            g2.setBackground(ColorCnst.SEEARCH_ITEM_GRAY_LIGHT);
             g2.setFont(FontUtil.getDefaultFont());
-            g2.setColor(Color.GRAY);
+            g2.setColor(ColorCnst.SEEARCH_ITEM_GRAY_LIGHT);
             g2.drawString("搜索 ", 10, 20);
             g2.dispose();
         }

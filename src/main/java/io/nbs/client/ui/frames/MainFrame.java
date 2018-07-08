@@ -8,6 +8,7 @@ import io.nbs.client.cnsts.FontUtil;
 import io.nbs.client.cnsts.OSUtil;
 import io.nbs.client.services.IpfsMessageSender;
 import io.nbs.client.services.MessageSendService;
+import io.nbs.client.ui.panels.manage.ManageMasterPanel;
 import io.nbs.commons.helper.ConfigurationHelper;
 import io.nbs.sdk.beans.OnlineMessage;
 import io.nbs.sdk.beans.PeerInfo;
@@ -53,9 +54,12 @@ public class MainFrame extends JFrame {
 
     public static final  int TOOLBAR_WIDTH = 80;
 
-
+    /**
+     * 右侧窗口
+     */
     private ToolbarPanel toolbarPanel;
     private JPanel leftMenuPanle;
+
 
     private MainContentPanel mainCentetPanel;
     private CardLayout cardLayout;
@@ -77,6 +81,11 @@ public class MainFrame extends JFrame {
      * 聊天
      */
     private IMMasterPanel imMasterPanel;
+
+    /**
+     *
+     */
+    private ManageMasterPanel manageMasterPanel;
 
 
     private AboutMasterPanel aboutMasterPanel;
@@ -149,22 +158,22 @@ public class MainFrame extends JFrame {
         infoMasterPanel = new InfoMasterPanel();
         imMasterPanel = new IMMasterPanel();
         aboutMasterPanel = new AboutMasterPanel();
+        manageMasterPanel = new ManageMasterPanel();
 
         mainCentetPanel.add(infoMasterPanel,MainFrame.MainCardLayoutTypes.INFO.name());
         mainCentetPanel.add(imMasterPanel,MainCardLayoutTypes.IM.name());
         mainCentetPanel.add(aboutMasterPanel,MainCardLayoutTypes.ABOUT.name());
+        mainCentetPanel.add(manageMasterPanel,MainCardLayoutTypes.DATD.name());
     }
 
     private void initView(){
         Dimension winDimension = new Dimension(W_SIZE,H_SIZE);
         setSize(winDimension);
         setMinimumSize(winDimension);
-        //mainJPanel.setLayout(new BorderLayout());
 
-        //mainJPanel.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
         mainJPanel.setLayout(new BorderLayout());
         mainJPanel.add(toolbarPanel,BorderLayout.WEST);
-       // mainJPanel.add(leftMenuPanle,BorderLayout.WEST);
+
         mainJPanel.add(mainCentetPanel,BorderLayout.CENTER);
 
         /**

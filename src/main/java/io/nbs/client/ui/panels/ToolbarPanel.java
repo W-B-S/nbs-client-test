@@ -215,8 +215,8 @@ public class ToolbarPanel extends JPanel {
     }
 
     public void setDefaultSelected(){
-        selectedBTN(imBTN);
-        mainCtx.mainWinShow(MainFrame.MainCardLayoutTypes.IM);
+        selectedBTN(dataBTN);
+        mainCtx.mainWinShow(MainFrame.MainCardLayoutTypes.DATD);
     }
     private void initialButton(){
         infoBTN = ButtonIconUtil.infoBTN;
