@@ -105,11 +105,6 @@ public class IPFSFileUploader {
             int pos = messageItems.size();
             messagePanel.getListView().notifyItemInserted(pos-1,true);
         }
-
-        // ipfs.pubsub.pub(IpfsMessageSender.NBSWORLD_IMS_TOPIC,)
-        //ipfs.object.
-
-        //ipfs.pin.add()
     }
 
     /**

@@ -213,7 +213,7 @@ public class MainFrame extends JFrame {
     }
 
     public static enum MainCardLayoutTypes{
-        INFO,IM,DATD,MUSIC,ABOUT;
+        INFO,IM,DATD,MUSIC,ABOUT,MEDIA;
     }
 
     public PeerInfo getCurrentPeer() {

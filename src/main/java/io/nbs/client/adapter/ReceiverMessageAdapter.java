@@ -11,6 +11,7 @@ import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.panels.im.IMPeersPanel;
 import io.nbs.client.vo.ContactsItem;
 
+import io.nbs.commons.helper.ConfigurationHelper;
 import io.nbs.commons.utils.DataBaseUtil;
 import io.nbs.commons.utils.UUIDGenerator;
 import io.nbs.sdk.beans.MessageItem;
@@ -58,7 +59,13 @@ public class ReceiverMessageAdapter implements IPFSSubscribeListener {
             listView.setAutoScrollToBottom();
             //
            saveWorldMessage(item);
-            autoRepaly(item.getSenderUsername());
+            /**
+             * AutoReplay enabled
+             */
+           if(ConfigurationHelper.getInstance().getCfgProps().getProperty("nbs.client.im.replay-open","false").equals("true")){
+               autoRepaly(item.getSenderUsername());
+           }
+           //
         }
     }
 
@@ -103,16 +110,13 @@ public class ReceiverMessageAdapter implements IPFSSubscribeListener {
     }
 
     private void autoRepaly(final String name){
-        new Thread(()->{
-            IpfsMessageSender sender = MainFrame.getContext().getMessageSender();
-            String text = "你好"+name+"收到！";
-            try {
-                sender.ipfsSendMessage(text);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
-
+        IpfsMessageSender sender = MainFrame.getContext().getMessageSender();
+        String text = "你好"+name+"收到！";
+        try {
+            sender.ipfsSendMessage(text);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

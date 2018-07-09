@@ -3,7 +3,6 @@ package io.nbs.service.ipfs;
 import com.alibaba.fastjson.JSON;
 import com.nbs.biz.model.ContactsEntity;
 import io.ipfs.api.IPFS;
-import io.ipfs.api.JSONParser;
 
 import java.net.URLEncoder;
 

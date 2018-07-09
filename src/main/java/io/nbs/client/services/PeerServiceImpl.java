@@ -7,6 +7,7 @@ import io.nbs.client.vo.ContactsItem;
 import io.ipfs.api.IPFS;
 import io.ipfs.api.JSONParser;
 import io.nbs.client.Launcher;
+import io.nbs.commons.helper.ConfigurationHelper;
 import io.nbs.commons.helper.RadomCharactersHelper;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
@@ -124,12 +125,14 @@ public class PeerServiceImpl {
     public List<String> getOnlinePeers(){
         List<String> result = null;
         try {
-            Object o = ipfs.pubsub.peers();
-                    //ipfs.pubsub.peers(IPFSHelper.NBSWORLD_IMS_TOPIC);
+            Object o = null;
+            if(ConfigurationHelper.getInstance().subWorldPeers()){
+                o = ipfs.pubsub.peers(IpfsMessageSender.NBSWORLD_IMS_TOPIC);
+            }else {
+                o = ipfs.pubsub.peers();
+            }
             result = (List<String>)JSONParser.getValue(o,"Strings");
-           /* for(String p : result){
-                logger.info(">>>>>>>GET {} peers",p);
-            }*/
+
         } catch (IOException e) {
             e.printStackTrace();
         }

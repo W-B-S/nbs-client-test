@@ -44,4 +44,9 @@ public class ColorCnst {
     public static final Color SEEARCH_ITEM_GRAY_LIGHT = new Color(247, 247, 247);
     public static final Color SEEARCHTEXT_ITEM_GRAYBG = new Color(175, 175, 175);
     public static final Color SEEARCH_ITEM_GRAY_DARKER = new Color(138, 138, 138);
+
+    /**
+     * About
+     */
+    public static final Color FONT_ABOUT_TITLE_BLUE = new Color(59, 54, 98);
 }

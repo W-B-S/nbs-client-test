@@ -7,7 +7,6 @@ import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.listener.IPFSFileUploader;
 import io.nbs.client.services.IpfsMessageSender;
 import io.nbs.client.ui.frames.MainFrame;
-import io.nbs.client.ui.panels.im.chatstmp.TMChatShowPanel;
 import io.nbs.commons.helper.DateHelper;
 import io.nbs.commons.helper.RadomCharactersHelper;
 import io.nbs.commons.utils.DataBaseUtil;
@@ -105,24 +104,18 @@ public class ChatPanel extends ParentAvailablePanel {
         adapter = new MessageAdapter(messages,messagePanel.getListView(),messageViewHolderCacheHelper);
         messagePanel.getListView().setAdapter(adapter);
 
-//        chatShowPanel = new TMChatShowPanel(this);
-//        chatShowPanel.setBorder(null);
 
         ipfsFileUploader = new IPFSFileUploader(Launcher.getContext().getIpfs(),DataBaseUtil.getSqlSession(),messagePanel,messages);
         messageEditorPanel = new MessageEditorPanel(this,ipfsFileUploader);
-        //messageEditorPanel.setPreferredSize(new Dimension(MainFrame.DEFAULT_WIDTH*2/5,200));
 
     }
     private void initView(){
 
         this.setLayout(new GridBagLayout());
         add(messagePanel,new GBC(0,0).setFill(GBC.BOTH).setWeight(1,7));
-        //add(chatShowPanel,new GBC(0,0).setFill(GBC.BOTH).setWeight(1,6).setInsets(0,0,0,0));
         add(messageEditorPanel,new GBC(0,1).setFill(GBC.BOTH).setWeight(1,2).setInsets(0,0,0,0));
 
-        //this.setLayout(new BorderLayout());
-//        add(chatShowPanel,BorderLayout.CENTER);
-//        add(messageEditorPanel,BorderLayout.SOUTH);
+
 
     }
 

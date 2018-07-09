@@ -99,9 +99,6 @@ public class IMPeersPanel extends ParentAvailablePanel {
 
     }
 
-    private void initTestPeers(){
-        String avatarHash = ".nbs/cache/avatars/thumbs/QmcGgwkoZpVZa8nytvPCCLuMQUMFF2QrzXDG77D9Qz1N5T.JPG";
-    }
 
     /**
      * [getContext description]
