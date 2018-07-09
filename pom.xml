@@ -87,10 +87,21 @@
             <artifactId>miglayout-swing</artifactId>
             <version>5.1</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.11.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>3.10.0</version>
+        </dependency>
     </dependencies>
 
     <build>
-        <finalName>nbs-client4j1.0</finalName>
+        <finalName>nbs-client4j-2.0</finalName>
         <resources>
             <resource>
                 <directory>conf/**</directory>

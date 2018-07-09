@@ -1,6 +1,7 @@
 package io.nbs.client;
 
 import io.ipfs.api.IPFS;
+import io.ipfs.nbs.helper.IPAddressHelper;
 import io.nbs.client.cnsts.AppGlobalCnst;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.cnsts.OSUtil;
@@ -146,7 +147,6 @@ public class Launcher {
             String nick = IPMParser.urlDecode(nickObj.toString());
             String fromid =  (String)cfg.get(ConfigurationHelper.JSON_CFG_FROMID_KEY);
             if(StringUtils.isBlank(fromid)||StringUtils.isBlank(nick))return true;
-
             currentPeer = new PeerInfo();
             currentPeer.setId(peerid);
             currentPeer.setNick(nick);
@@ -163,6 +163,13 @@ public class Launcher {
             if(avatarName!=null){
                 String avatarFileName = IPMParser.urlDecode(avatarName.toString());
                 currentPeer.setAvatarName(avatarFileName);
+            }
+            //setIP
+            String ip = IPAddressHelper.getInstance().getRealIP();
+            if(ip!=null&&!"".equals(ip)){
+                currentPeer.setIp(ip);
+                String locations = IPAddressHelper.getInstance().getLocations(ip);
+                if(StringUtils.isNotBlank(locations))currentPeer.setLocations(locations);
             }
             return false;
         }else {

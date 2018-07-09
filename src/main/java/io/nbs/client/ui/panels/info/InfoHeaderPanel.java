@@ -118,7 +118,7 @@ public class InfoHeaderPanel extends ParentAvailablePanel {
 
         nickLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        locationLabel.setText("中国 北京 海淀区");
+        locationLabel.setText(self.getLocations()!=null?self.getLocations():"");
         locationLabel.setHorizontalAlignment(JLabel.LEFT);
 
         JLabel peerIDTtile = new LCJlabel("Peer ID :");

@@ -1,6 +1,7 @@
 package io.nbs.service.ipfs;
 
 import io.ipfs.api.exceptions.IllegalIPFSMessageException;
+
 import io.nbs.sdk.beans.OnlineMessage;
 import io.nbs.sdk.prot.IPMParser;
 import io.nbs.sdk.prot.IPMTypes;
@@ -19,8 +20,11 @@ public class IMParseTest {
 
     public static void main(String[] args){
         IMParseTest it = new IMParseTest();
-        it.generateOnmessage();
+        //it.generateOnmessage();
+
     }
+
+
 
     private void generateOnmessage(){
         OnlineMessage message = get68Message();

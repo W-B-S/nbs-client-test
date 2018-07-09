@@ -267,7 +267,7 @@ public class MainFrame extends JFrame {
             message.setAvatar(info.getAvatar());
             message.setAvatarFile(info.getAvatarName());
             message.setAvatarSuffix(info.getAvatarSuffix());
-            message.setLocations("中国*北京");
+            message.setLocations("");
         }
         return message;
     }
