@@ -56,6 +56,7 @@ public class TitlePanel extends ParentAvailablePanel {
     }
 
     private void initComponents(){
+        setBackground(ColorCnst.LIGHT_GRAY);
         Cursor handCursor = new Cursor(Cursor.HAND_CURSOR);
         Dimension ctrlItemSize = new Dimension(30,30);
 
@@ -67,7 +68,6 @@ public class TitlePanel extends ParentAvailablePanel {
 
         titleLabel = new JLabel();
         titleLabel.setFont(FontUtil.getDefaultFont(15));
-        //titleLabel.setText("NBS Chain 世界频道");
 
 
         CtrlLabelMouseListener listener = new CtrlLabelMouseListener();
@@ -108,7 +108,6 @@ public class TitlePanel extends ParentAvailablePanel {
      *
      */
     private void initView(){
-        //setLayout(new VerticalFlowLayout(VerticalFlowLayout.TOP,0,0,true,true));
         setLayout(new GridBagLayout());
         setLayout(new GridBagLayout());
         JPanel left = new JPanel();
@@ -116,12 +115,7 @@ public class TitlePanel extends ParentAvailablePanel {
         JPanel right = new JPanel();
         right.setLayout(new FlowLayout(FlowLayout.RIGHT,0,0));
 
-        //add(left,BorderLayout.CENTER);
-        //add(right,BorderLayout.EAST);
-
-        //setLayout(new GridBagLayout());
         setBorder(null);
-        //this.setBorder(new LamBorder(LamBorder.BOTTOM,ColorCnst.LIGHT_GRAY));
 
         ctrlPanel.add(minLabel);
         ctrlPanel.add(maxLabel);

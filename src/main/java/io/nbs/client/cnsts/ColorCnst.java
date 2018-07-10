@@ -17,8 +17,8 @@ public class ColorCnst {
     public static final Color GROUP_AVATAR_BACKGROUND = new Color(221, 221, 221);
     public static Color DARK = new Color(46, 50, 56);
     //public static Color WINDOW_BACKGROUND = new Color(245, 245, 245);
-    public static Color WINDOW_BACKGROUND = new Color(238, 238, 238);
-    public static final Color WINDOW_BACKGROUND_LIGHT = new Color(250, 250, 250);
+    public static Color WINDOW_BACKGROUND = new Color(245, 245, 245);
+    public static final Color WINDOW_BACKGROUND_LIGHT = new Color(253, 252, 255);
 
 
     public static Color FONT_WHITE = new Color(255, 255, 255);

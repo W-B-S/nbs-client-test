@@ -8,6 +8,7 @@ import io.nbs.client.cnsts.FontUtil;
 import io.nbs.client.cnsts.OSUtil;
 import io.nbs.client.services.IpfsMessageSender;
 import io.nbs.client.services.MessageSendService;
+import io.nbs.client.ui.panels.info.InfoFooterPanel;
 import io.nbs.client.ui.panels.manage.ManageMasterPanel;
 import io.nbs.commons.helper.ConfigurationHelper;
 import io.nbs.sdk.beans.OnlineMessage;
@@ -21,6 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.print.DocFlavor;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -65,6 +67,7 @@ public class MainFrame extends JFrame {
     private CardLayout cardLayout;
 
     private static JPanel mainJPanel;
+    public static boolean INFO_REFREHING = false;
 
     /**
      *
@@ -280,4 +283,9 @@ public class MainFrame extends JFrame {
     public MessageSendService getMessageSendService() {
         return messageSendService;
     }
+
+    public void stopInfoRefresh(){
+        INFO_REFREHING = false;
+    }
+
 }

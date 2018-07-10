@@ -2,9 +2,7 @@ package io.nbs.client.helper;
 
 import io.nbs.client.Launcher;
 import io.nbs.client.cnsts.AppGlobalCnst;
-import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.commons.utils.IconUtil;
-import io.nbs.sdk.beans.PeerInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +14,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -32,9 +29,10 @@ import java.net.URL;
 public class AvatarImageHandler {
     private static Logger logger = LoggerFactory.getLogger(AvatarImageHandler.class);
     private static final int DEFAULT_THUMB_SIZE = 128;
-    private static final int DEFAULT_PROFILE_AVATAR_SIZE = 128;
+    private static final int DEFAULT_PROFILE_AVATAR_SIZE = 200;
     private static final int DEFAULT_PROFILE_THUMB_SIZE = 48;
     private static final int DEFAULT_CONTACTS_THUMB_SIZE = 64;
+    public static final String AVATAR_SUFFIX = ".png";
     private static AvatarImageHandler ourInstance = new AvatarImageHandler();
 
     public static AvatarImageHandler getInstance() {
@@ -104,6 +102,53 @@ public class AvatarImageHandler {
     }
 
 
+    /**
+     *
+     * @param filePath
+     * @param size
+     * @return
+     */
+    public ImageIcon getImageIconFromOrigin(String filePath,int size){
+        File originFile = new File(filePath);
+        return getImageIconFromOrigin(originFile,size);
+    }
+
+    /**
+     * 获取头像，
+     * @param originFile
+     * @param size
+     * @return
+     */
+    public ImageIcon getImageIconFromOrigin(File originFile,int size){
+        if(originFile==null||originFile.isDirectory()||!originFile.exists())
+            return IconUtil.getIcon(this,"/icons/nbs128.png",size,size);
+        ImageIcon icon = null;
+        try{
+            icon = new ImageIcon(getAvatarScaleImage(originFile,size));
+            return icon;
+        }catch (IOException e){
+            return IconUtil.getIcon(this,"/icons/nbs128.png",size,size);
+        }
+    }
+
+    private Image getAvatarScaleImage(File file,int size) throws IOException {
+        BufferedImage srcImage = ImageIO.read(file);
+        if(size<=10)size=10;
+        int oW =  srcImage.getWidth();
+        int oH = srcImage.getHeight();
+        float oScale = oW*10F/oH;
+        int nW=10,nH = 10;float scale = 1.0F;
+        if(oScale>=1.0F){
+            nW = size;
+            scale = size*1.0F/oW;
+            nH = (int)(oH*scale);
+        }else {
+            nH = size;
+            scale = size*1.0F/oH;
+            nW = (int)(oW*scale);
+        }
+        return srcImage.getScaledInstance(nW,nH,BufferedImage.SCALE_SMOOTH);
+    }
 
 
     /**
@@ -133,21 +178,22 @@ public class AvatarImageHandler {
 
     /**
      * 上传时
-     * 创建用户头像
+     * 创建用户头像 所有 转换为png
      * 128,64
      * @param hashFileName
      * @throws Exception
      */
-    public void createdAvatar4Profile(File srcFile,String hashFileName) throws Exception {
+    public String createdAvatar4Profile(File srcFile,String hashFileName) throws Exception {
         if(!srcFile.exists())throw new Exception("图片源不存在.");
         String originName = StringUtils.isBlank(hashFileName) ? srcFile.getName() : hashFileName;
         /**
          * 128*128
          */
+        originName = originName.substring(0,originName.lastIndexOf("."))+AVATAR_SUFFIX;
         String target128 = AppGlobalCnst.consturactPath(AVATAR_PROFILE_HOME,originName);
         File targetFile128 = new File(target128);
         generateThumbScale(srcFile,targetFile128,DEFAULT_PROFILE_AVATAR_SIZE);
-
+        return originName;
     }
 
     /**
@@ -205,30 +251,43 @@ public class AvatarImageHandler {
 
     /**
      *
-     * @param img
+     * @param srcImg
      * @param destFile
      * @param w
      * @param h
      * @throws IOException
      */
-    private void compressImage(Image img,File destFile,int w,int h) throws IOException {
-        if(!destFile.getParentFile().exists())destFile.getParentFile().mkdirs();
-        BufferedImage image = new BufferedImage(w,h,BufferedImage.SCALE_SMOOTH);
-        image.getGraphics().drawImage(img,0,0,w,h,null);
-        FileOutputStream out = new FileOutputStream(destFile);
+    private void compressImage(Image srcImg,File destFile,int w,int h) throws IOException {
+        if(!destFile.getParentFile().exists()){
+            destFile.getParentFile().mkdirs();
+        }
+        if(!destFile.exists()){
+            destFile.createNewFile();
+        }
+
+        //BufferedImage outBi = ImageIO.read(destFile);
+        /**
+         *
+         */
+        BufferedImage targetImg = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
+
+        Graphics2D g2d = targetImg.createGraphics();
+        // 抗锯齿
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        targetImg = g2d.getDeviceConfiguration().createCompatibleImage(w,h,Transparency.TRANSLUCENT);
+        g2d.dispose();
+        g2d = targetImg.createGraphics();
+        Image formatSrcImg = srcImg.getScaledInstance(w,h,Image.SCALE_AREA_AVERAGING);
+
+        g2d.drawImage(formatSrcImg,0,0,null);
+        g2d.dispose();
         String destName = destFile.getName();
+        //destName = destName.substring(0,destName.lastIndexOf("."));
         String suffix = destName.substring(destName.lastIndexOf(".")+1);
-        ImageIO.write(image,suffix,destFile);
-        out.close();
+        ImageIO.write(targetImg,suffix,destFile);
     }
 
-    /**
-     * 联系人头像 32 *32
-     * 40*40
-     * .nbs/cache/avatars/custom
-    public static String getAvatarCustomHome() {
-        return AVATAR_CUSTOM_HOME;
-    }
+
 
     /**
      * 用户配置头标

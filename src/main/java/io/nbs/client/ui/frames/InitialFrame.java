@@ -555,11 +555,14 @@ public class InitialFrame extends JFrame {
         File file = fileChooser.getSelectedFile();
         if(file!=null)
         {
-            String name = file.getName();//源文件名
-            String avatarPeerName = tempInfo.getId() + name.substring(name.lastIndexOf("."));
             new Thread(()->{
                 List<MerkleNode> nodes;
+                String name = file.getName();//源文件名
+                logger.info(name);
+                name = name.substring(0,name.lastIndexOf("."));
 
+                name = name+".png";
+                String avatarPeerName = tempInfo.getId() + name.substring(name.lastIndexOf("."));
                 FileOutputStream fos = null;
                 try {
                     //上传前先压缩
@@ -576,9 +579,10 @@ public class InitialFrame extends JFrame {
                     String avatarFileName = fileHash+".png";
                     try {
                         imageHandler.createContactsAvatar(file,avatarFileName);
-                        ImageIcon icon = new ImageIcon(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),name));
+                        ImageIcon icon = AvatarImageHandler.getInstance().getImageIconFromOrigin(file128,100);
                         if(icon!=null){
                             logger.info(fileHash);
+
                             avatarLabel.setIcon(icon);
                             avatarLabel.updateUI();
                             upFileName = file.getName();

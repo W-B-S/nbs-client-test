@@ -1,5 +1,6 @@
 package io.nbs.client.ui.panels.info;
 
+import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.commons.helper.ConfigurationHelper;
 import io.nbs.client.ui.panels.TitlePanel;
 
@@ -20,6 +21,7 @@ public class InfoMasterPanel extends JPanel {
     private JPanel centerPanel;
     private InfoHeaderPanel headerPanel;
     private InfoBodyPanel bodyPanel;
+    private InfoFooterPanel footerPanel;
 
     public InfoMasterPanel() {
         initComponents();
@@ -35,13 +37,15 @@ public class InfoMasterPanel extends JPanel {
     private void initComponents(){
         this.winTitlePanel = new TitlePanel(this);
         winTitlePanel.setTitle(ConfigurationHelper.getInstance().getI18nProperty("nbs.ui.panel.info.label","PEER INFO"));
-
+        winTitlePanel.setBackground(ColorCnst.LIGHT_GRAY);
         /**
          *
          */
         centerPanel = new JPanel();
-        headerPanel = new InfoHeaderPanel(this);
+        //headerPanel = new InfoHeaderPanel(this);
         bodyPanel = new InfoBodyPanel(this);
+
+        footerPanel = new InfoFooterPanel(this);
 
     }
 
@@ -55,13 +59,14 @@ public class InfoMasterPanel extends JPanel {
        // headerPanel.setBorder(MainFrame.redBorder);
         //bodyPanel.setBorder(MainFrame.buleBorder);
 
-        centerPanel.add(headerPanel,BorderLayout.NORTH);
+        //centerPanel.add(headerPanel,BorderLayout.NORTH);
         centerPanel.add(bodyPanel,BorderLayout.CENTER);
-
+        centerPanel.add(footerPanel,BorderLayout.SOUTH);
 
         /* ======================= 构造内部End =====================*/
         add(winTitlePanel,BorderLayout.NORTH);
         add(centerPanel,BorderLayout.CENTER);
+
     }
 
     private void setListeners(){

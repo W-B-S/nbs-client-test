@@ -97,17 +97,16 @@ public class InfoHeaderPanel extends ParentAvailablePanel {
         JPanel rightPanel = new JPanel();
 
 
+
+
         /**
          * avatar
          */
         String avatar128Path = AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),self.getAvatarName());
-        ImageIcon avatar = new ImageIcon(avatar128Path);
-        if(avatar.getImage().getWidth(null)<=0||avatar.getImage().getHeight(null)<=0){
-            avatar = IconUtil.getIcon(this,"/icons/nbs128.png");
-        }
+        ImageIcon avatar = AvatarImageHandler.getInstance().getImageIconFromOrigin(avatar128Path,200);
         avatarLabel.setIcon(avatar);
 
-        leftPanel.setPreferredSize(new Dimension(150,150));
+        //leftPanel.setPreferredSize(new Dimension(150,150));
         avatarLabel.setHorizontalAlignment(JLabel.CENTER);
         leftPanel.add(avatarLabel);
 
@@ -152,120 +151,12 @@ public class InfoHeaderPanel extends ParentAvailablePanel {
     }
 
     private void setListeners(){
-        avatarLabel.addMouseListener(new AbstractMouseListener(){
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                uploadAvatar();
 
-            }
 
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                avatarLabel.setCursor(MainFrame.handCursor);
-                avatarLabel.setToolTipText("点击修改头像");
-                super.mouseEntered(e);
-            }
 
-            @Override
-            public void mouseExited(MouseEvent e) {
-                super.mouseExited(e);
-            }
-        });
-
-        nickLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                String oriNick = nickLabel.getText();
-                String upText = JOptionPane.showInputDialog(context,"请输入新的昵称","修改昵称",JOptionPane.INFORMATION_MESSAGE);
-                if(StringUtils.isBlank(upText)||upText.trim().equals(oriNick))return;
-
-                upText = upText.trim();
-                IPFS ipfs = Launcher.getContext().getIpfs();
-                if(ipfs==null)return;
-                try {
-                    String enUpText = IPMParser.urlEncode(upText);
-                    ipfs.config.set(ConfigurationHelper.JSON_NICKNAME_KEY,enUpText);
-                    MainFrame.getContext().getCurrentPeer().setNick(upText);
-                    nickLabel.setText(upText);
-
-                    //TODO 存库
-                } catch (IOException ioe) {
-                    logger.error("更新 IPFS config error :{}",ioe.getMessage());
-                }
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                nickLabel.setToolTipText("点击修改昵称");
-                nickLabel.setCursor(MainFrame.handCursor);
-                super.mouseEntered(e);
-            }
-        });
     }
 
-    /**
-     *
-     */
-    private void uploadAvatar(){
-        fileChooser = new JFileChooser();
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        fileChooser.showDialog(this,"选择图片");
-        File file = fileChooser.getSelectedFile();
-        if(file!=null) {
-            String name = file.getName();//源文件名
-            String avatarPeerName = self.getId() + name.substring(name.lastIndexOf("."));
-                List<MerkleNode> nodes;
 
-                FileOutputStream fos = null;
-                try {
-                    //上传前先压缩
-                    imageHandler.createdAvatar4Profile(file,name);
-                    File file128 = new File(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),name));
-
-                    NamedStreamable.FileWrapper fileWrapper = new NamedStreamable.FileWrapper(file128);
-                    //上传ipfs
-                    nodes = ipfs.add(fileWrapper);
-                    String fileHash = nodes.get(0).hash.toBase58();
-
-                    self.setAvatar(fileHash);
-                    self.setAvatarName(name);
-                    self.setAvatarSuffix(name.substring(name.lastIndexOf(".")));
-
-                    ipfs.config.set(ConfigurationHelper.JSON_AVATAR_KEY,fileHash);
-                    ipfs.config.set(ConfigurationHelper.JSON_AVATAR_SUFFIX_KEY,self.getAvatarSuffix());
-                    ipfs.config.set(ConfigurationHelper.JSON_AVATAR_NAME_KEY,name);
-
-                    //TODO 存数据库upload
-                    /**
-                     * 创建Hash 头像 :cache/avatar/custom
-                     */
-                    String hashFileName = fileHash+".png";
-                    try {
-                        imageHandler.createContactsAvatar(file,hashFileName);
-                        BufferedImage image = ImageIO.read(file128);
-                        ImageIcon avatarIcon = AvatarImageHandler.getInstance().getAvatarScaleIcon(file128,128);
-
-                        logger.info( file128.getAbsolutePath());
-                        if(avatarIcon!=null){
-                            logger.info(fileHash);
-                            avatarLabel.setIcon(avatarIcon);
-                            avatarLabel.validate();
-                            avatarLabel.updateUI();
-                            MainFrame.getContext().refreshAvatar();
-                        }
-                    } catch (Exception e) {
-                        logger.info(e.getMessage());
-                        return;
-                    }
-                } catch (Exception e) {
-                    logger.error("上传失败：{}",e.getMessage());
-                    JOptionPane.showMessageDialog(context,"上传失败");
-                    return;
-                }
-           // new Thread(()->{ }).start();
-        }
-    }
 
     /**
      * 更新数据库

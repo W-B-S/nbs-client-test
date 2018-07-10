@@ -239,7 +239,7 @@ public class AvatarUtil {
     private static Image createAvatar(String sign, String name)
     {
         String drawString;
-        if (sign.length() > 1)
+        if (sign!=null&&sign.length() > 1)
         {
             drawString = sign.substring(0, 1).toUpperCase() + sign.substring(1, 2).toLowerCase();
         }

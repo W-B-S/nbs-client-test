@@ -55,6 +55,7 @@ public class Launcher {
     public static String userHome;
     public static String CURRENT_DIR;
     public static final String FILE_SEPARATOR;
+    public static String DOWNLOAD_FILE_PATH;
     private ConfigurationHelper cfgHelper;
 
     private IPFS ipfs;
@@ -165,12 +166,14 @@ public class Launcher {
                 currentPeer.setAvatarName(avatarFileName);
             }
             //setIP
-            String ip = IPAddressHelper.getInstance().getRealIP();
-            if(ip!=null&&!"".equals(ip)){
-                currentPeer.setIp(ip);
-                String locations = IPAddressHelper.getInstance().getLocations(ip);
-                if(StringUtils.isNotBlank(locations))currentPeer.setLocations(locations);
-            }
+            new Thread(()->{
+                String ip = IPAddressHelper.getInstance().getRealIP();
+                if(ip!=null&&!"".equals(ip)){
+                    currentPeer.setIp(ip);
+                    String locations = IPAddressHelper.getInstance().getLocations(ip);
+                    if(StringUtils.isNotBlank(locations))currentPeer.setLocations(locations);
+                }
+            }).start();
             return false;
         }else {
             return true;
@@ -186,7 +189,9 @@ public class Launcher {
         /**
          * 初始化目录
          */
-        File userFile = new File(userHome+FILE_SEPARATOR+AppGlobalCnst.NBS_ROOT);
+
+        DOWNLOAD_FILE_PATH = AppGlobalCnst.consturactPath(userHome,AppGlobalCnst.NBS_ROOT);
+        File userFile = new File(DOWNLOAD_FILE_PATH);
         if(!userFile.exists()){
             userFile.mkdirs();
         }
