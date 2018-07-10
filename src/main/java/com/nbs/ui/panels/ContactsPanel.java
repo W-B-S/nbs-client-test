@@ -5,23 +5,22 @@ import UI.panel.im.IMPanel;
 import com.alibaba.fastjson.JSON;
 import com.nbs.biz.model.ContactsEntity;
 import com.nbs.biz.service.ContactsService;
-import com.nbs.entity.ContactsItem;
+import io.nbs.client.services.IpfsMessageSender;
+import io.nbs.client.vo.ContactsItem;
 import com.nbs.entity.PeerBoradcastInfo;
 import com.nbs.entity.PeerInfoBase;
 import com.nbs.ipfs.IPFSHelper;
 import com.nbs.ipfs.entity.IpfsMessage;
-import com.nbs.tools.ConfigHelper;
-import com.nbs.tools.DateHelper;
-import com.nbs.ui.adapter.ContactsItemAdapter;
-import com.nbs.ui.components.ColorCnst;
-import com.nbs.ui.components.GBC;
-import com.nbs.ui.components.NbsListView;
-import com.nbs.utils.Base64CodecUtil;
-import com.nbs.utils.DbUtil;
-import com.nbs.utils.RadomCharactersHelper;
+import io.nbs.commons.helper.ConfigurationHelper;
+import io.nbs.commons.helper.DateHelper;
+import io.nbs.client.adapter.ContactsItemAdapter;
+import io.nbs.client.cnsts.ColorCnst;
+import io.nbs.client.ui.components.GBC;
+import io.nbs.client.ui.components.NbsListView;
+import io.nbs.client.ui.panels.ParentAvailablePanel;
 import io.ipfs.api.IPFS;
 import io.ipfs.api.JSONParser;
-import org.apache.ibatis.session.SqlSession;
+import io.nbs.commons.utils.DataBaseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,7 +76,7 @@ public class ContactsPanel extends ParentAvailablePanel {
     public ContactsPanel(JPanel parent) {
         super(parent);
         context = this;
-        service = new ContactsService(DbUtil.getSqlSession());
+        service = new ContactsService(DataBaseUtil.getSqlSession());
         initComponent();
         initView();
         initData();
@@ -136,14 +135,12 @@ public class ContactsPanel extends ParentAvailablePanel {
 
 
     /**
-     * 初始化Demo TODO
+     * 初始化 TODO 数据库匹配补全信息
      * @return
      */
     private List<ContactsEntity> getContacts(){
         List<ContactsEntity> contacts = service.findAll();
         if(contacts==null)contacts = new ArrayList<>();
-        RadomCharactersHelper charactersHelper = RadomCharactersHelper.getInstance();
-        String hashPre = "hash.";
         if(AppMainWindow.currentPeerInfo()!=null){
             PeerInfoBase base = AppMainWindow.currentPeerInfo();
             ContactsEntity selfModel = new ContactsEntity(base.getPeerID(),base.getNick());
@@ -154,13 +151,15 @@ public class ContactsPanel extends ParentAvailablePanel {
 
         IPFS ipfs = IPFSHelper.getInstance().getIpfs();
 
+
         try {
             Object obj = null;
-            if(ConfigHelper.getInstance().subWorldPeers()){
-                obj = ipfs.pubsub.peers(IPFSHelper.NBSWORLD_IMS_TOPIC);
+            if(ConfigurationHelper.getInstance().subWorldPeers()){
+                obj = ipfs.pubsub.peers(IpfsMessageSender.NBSWORLD_IMS_TOPIC);
             }else {
                 obj = ipfs.pubsub.peers();
             }
+
             if(obj==null)return contacts;
             List<String> peers = (List<String>)JSONParser.getValue(obj,"Strings");
             if(peers!=null&&peers.size()>0){
@@ -198,9 +197,10 @@ public class ContactsPanel extends ParentAvailablePanel {
     private void subWorld(long sleeps){
         List<Map<String, Object>> resList = Collections.synchronizedList(new ArrayList<>());
         AtomicInteger size = new AtomicInteger(0);
+
         new Thread(()->{
             logger.warn(DateHelper.currentTime()+">>>>>>>启动订阅 NBSWorld..."+IPFSHelper.NBSWORLD_IMS_TOPIC);
-            IPFS ipfs = new IPFS(ConfigHelper.getInstance().getIpfsAddress());
+            IPFS ipfs = new IPFS(ConfigurationHelper.getInstance().getIPFSAddress());
 
             while (true){
                 try {
@@ -272,17 +272,17 @@ public class ContactsPanel extends ParentAvailablePanel {
      */
     private void proccessIpfsMessage(IpfsMessage im){
 
-        if(im==null)return;
+  /*      if(im==null)return;
         Base64CodecUtil.CtrlTypes types =im.getTypes();
         if(types==null)types = Base64CodecUtil.CtrlTypes.unkonw;
         im = Base64CodecUtil.parseIpmsMessageCtrlType(im);
         switch (types){
             case online:
 
-                /**
+                *//**
                  * $ON.B64.J$eyJpZCI6IlFtU29BaURTR1g0dnFaZWcyS29ESHNKcEZTR1AyU21hRXQxM05CUFJGZ3BRZnkiLCJuaWNrIjoiTkJTQ2hhaW5fbGFuYmVyeSJ9$
                  * 解析更新列表
-                 */
+                 *//*
                 PeerBoradcastInfo peerInfo = JSON.parseObject(im.getContents(),PeerBoradcastInfo.class);
                 if(peerInfo.getId().equals(AppMainWindow.currentPeerInfo().getPeerID())){
                     logger.info("忽略自己上线");
@@ -298,7 +298,7 @@ public class ContactsPanel extends ParentAvailablePanel {
                 im.setContents(Base64CodecUtil.decode(im.getContents()));
                 IMPanel.appendMsgShow(peerItems,im);
                 return;
-        }
+        }*/
     }
 
     /**

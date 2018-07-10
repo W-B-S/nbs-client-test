@@ -1,5 +1,7 @@
 package com.nbs.ui.components;
 
+import io.nbs.client.cnsts.ColorCnst;
+
 import javax.swing.border.Border;
 import java.awt.*;
 
@@ -22,7 +24,7 @@ public class NbsBorder implements Border {
     private float heightScale = 1.0F;
 
     public NbsBorder(int orientation) {
-        this(orientation,ColorCnst.DARK);
+        this(orientation,ColorCnst.FONT_GRAY_DARKER);
     }
 
     public NbsBorder(int orientation, Color color) {

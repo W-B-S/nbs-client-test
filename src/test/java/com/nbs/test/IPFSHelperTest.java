@@ -1,17 +1,14 @@
 package com.nbs.test;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
 import com.nbs.ipfs.IPFSHelper;
 import com.nbs.ipfs.entity.IpfsMessage;
 import io.ipfs.api.JSONParser;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -34,7 +31,7 @@ public class IPFSHelperTest {
     public static void main(String[] args){
         IPFSHelperTest t = new IPFSHelperTest();
 
-        new Thread(() -> {
+       /* new Thread(() -> {
             while (true){
                 try {
                     System.out.println("--------------begin-------------");
@@ -47,7 +44,7 @@ public class IPFSHelperTest {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        }).start();*/
     }
 
 
@@ -81,5 +78,7 @@ public class IPFSHelperTest {
             }
         }).start();
     }
+
+
 
 }

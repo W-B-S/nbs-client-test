@@ -1,15 +1,12 @@
 package com.nbs.db.test;
 
-import com.alibaba.fastjson.JSON;
 import com.nbs.biz.model.ContactsEntity;
-import com.nbs.biz.model.NBSTest;
 import com.nbs.biz.service.ContactsService;
 import com.nbs.biz.service.TableService;
-import com.nbs.utils.DbUtil;
+import io.nbs.commons.utils.DataBaseUtil;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * @Package : com.nbs.db.test
@@ -24,14 +21,14 @@ public class TableServiceTest {
     public TableServiceTest() {
 
     }
-    SqlSession sqlSession = DbUtil.getSqlSession();
+    SqlSession sqlSession = DataBaseUtil.getSqlSession();
     public static void main(String[] agrs){
 
         TableServiceTest tt = new TableServiceTest();
 
         //tt.createNbsContacts();
-       // tt.crateTest();
-        tt.save();
+        tt.crateTest();
+        //tt.save();
 
     }
 
@@ -47,14 +44,14 @@ public class TableServiceTest {
     }
 
     public void crateTest(){
-        TableService service = new TableService(DbUtil.getSqlSession());
+        TableService service = new TableService(DataBaseUtil.getSqlSession());
         //service.initNBSMessage(true);
-        service.initNbsContacts();
+        service.initWorldMessages();
     }
 
     public void createNbsContacts(){
-        TableService service = new TableService(DbUtil.getSqlSession());
-        service.initNbsContacts();
+        TableService service = new TableService(DataBaseUtil.getSqlSession());
+        service.initPeerMessages();
        // List<NBSTest> lst = service.getAll();
 /*        if(lst!=null){
             String json = JSON.toJSONStringWithDateFormat(lst,"yyyy-MM-dd HH:mm:ss");

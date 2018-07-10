@@ -12,6 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <main-class>io.nbs.client.App</main-class>
         <!-- dependency version -->
         <ipfs.api.version>v1.2.0</ipfs.api.version>
         <logback.version>1.2.3</logback.version>
@@ -75,12 +76,32 @@
             <artifactId>emoji-java</artifactId>
             <version>4.0.0</version>
         </dependency>
-
-
+        <dependency>
+            <groupId>nine-patch</groupId>
+            <artifactId>android.nine.patch</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.miglayout/miglayout-swing -->
+        <dependency>
+            <groupId>com.miglayout</groupId>
+            <artifactId>miglayout-swing</artifactId>
+            <version>5.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.11.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>3.10.0</version>
+        </dependency>
     </dependencies>
 
     <build>
-        <finalName>nbs-client4j1.0</finalName>
+        <finalName>nbs-client4j-2.0</finalName>
         <resources>
             <resource>
                 <directory>conf/**</directory>
@@ -90,15 +111,17 @@
                 <directory>src/main/resources</directory>
             </resource>
         </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.1</version>
+                <version>3.7.0</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
                     <encoding>UTF-8</encoding>
+                    <compilerArgument>-XDignore.symbol.file</compilerArgument>
                 </configuration>
             </plugin>
             <plugin>
@@ -134,7 +157,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>UI.AppMainWindow</mainClass>
+                            <mainClass>io.nbs.client.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -156,6 +179,21 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- maven-assembly-plugin -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>${main-class}</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+            </plugin>
+
             <!-- 打jar包 https://blog.csdn.net/mn960mn/article/details/51554152  -->
             <!-- lib目录中jar的存放规则，默认是${groupId}/${artifactId}的目录格式，flat表示直接把jar放到lib目录 -->
 
@@ -177,7 +215,7 @@
                     <repositoryLayout>flat</repositoryLayout>
                     <repositoryName>lib</repositoryName>
                     <binFolder>bin</binFolder>
-                    <copyConfigurationDirectory>true</copyConfigurationDirectory>
+                    <copyConfigurationDirectory>false</copyConfigurationDirectory>
                     <configurationDirectory>resources</configurationDirectory>
                     <configurationSourceDirectory>src/main/resources</configurationSourceDirectory>
                     <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
@@ -193,7 +231,7 @@
                     <repositoryName>lib</repositoryName>
                     <programs>
                         <program>
-                            <mainClass>UI.AppMainWindow</mainClass>
+                            <mainClass>${main-class}</mainClass>
                             <name>nbs-client4j</name>
                             <jvmSettings>
                                 <extraArguments>

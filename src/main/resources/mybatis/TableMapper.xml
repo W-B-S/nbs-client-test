@@ -1,38 +1,111 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.nbs.biz.dao.NBSTableDao">
+<mapper namespace="com.nbs.biz.data.dao.NBSTableDao">
 
     <select id="tableExist" resultType="java.lang.Integer">
 		select count(1) AS c from sqlite_master where type = 'table' and name = #{name}
 	</select>
 
-    <update id="createNbsContacts">
-        create table nbs_contacts (
+    <update id="createPeerdLogin">
+        create table p_login (
+          id varchar(64) PRIMARY KEY,
+          fromid varchar(64),
+          nick varchar(100),
+          avatar varchar(100),
+          avatar_suffix varchar(64),
+          ip varchar (32),
+          locations varchar (200),
+          remark varchar(200),
+          ext_json text,
+          seckey varchar (256),
+          sysuser varchar (100),
+          ctime TimeStamp NOT NULL DEFAULT (datetime('now','localtime')),
+          lmtime bigint
+        );
+    </update>
+
+    <update id="createPeerContacts">
+        create table p_contacts (
         id varchar(64) PRIMARY KEY,
         fromid varchar (64),
         nick varchar(100),
         avatar varchar(100),
         avatar_suffix varchar(64),
+        ip varchar (32),
+        locations varchar (200),
         remark varchar(200),
-        ext_json text,
-        seckey varchar (256),
+        online integer default 0,
         ctime TimeStamp NOT NULL DEFAULT (datetime('now','localtime')),
-        lmtime integer
+        lmtime bigint
         );
     </update>
 
-    <update id="createNbsMessage">
-        CREATE table nbs_message (
-        id varchar(20) PRIMARY KEY,
-        formid varchar (100),
-        formhash varchar (100),
+    <update id="createPeerMessages">
+        CREATE table p_messages (
+        id varchar (64) not null,
+        seqno varchar(20) ,
+        fromid varchar (100),
+        fromhash varchar (100),
         self integer default 0,
         topic varchar (100),
         roomid varchar(36),
         msg text,
-        creator varchar (100),
-        recvtime INTEGER ,
-        deleted boolean
+        mtype integer default 1,
+        ip varchar (32),
+        recvtime bigint,
+        ctime TimeStamp NOT NULL DEFAULT (datetime('now','localtime'))
+        );
+    </update>
+
+    <update id="createWorldMessages">
+       CREATE table w_messages (
+          id varchar(36) PRIMARY KEY,
+          formid varchar (100),
+          formhash varchar (100),
+          self integer default 0,
+          topic varchar (100),
+          roomid varchar(36),
+          msg text,
+          creator varchar (100),
+          mtype integer default 1,
+          ip varchar (32),
+          recvtime bigint ,
+          ctime TimeStamp NOT NULL DEFAULT (datetime('now','localtime'))
+        );
+    </update>
+
+    <update id="createAttachmentInfo">
+        CREATE table attac_info (
+        id varchar(64) PRIMARY KEY,
+        peerid varchar(64),
+        phash varchar(64),
+        hash58 varchar(64),
+        fname varchar (128),
+        fsize varchar (20),
+        fsuffix varchar (32),
+        fromid varchar(64),
+        seqno varchar (64),
+        cached integer default 0,
+        cachedfile varchar(256),
+        inlocal integer default 1,
+        ftype varchar(20),
+        sortno INTEGER ,
+        ctime TimeStamp NOT NULL DEFAULT (datetime('now','localtime')),
+        lmtime bigint
+        );
+    </update>
+
+    <update id="createUploadInfo">
+        CREATE table upload_info (
+        id integer PRIMARY KEY autoincrement,
+        hash58 varchar(64),
+        fname varchar (128),
+        fsize varchar (20),
+        fsuffix varchar (32),
+        fromid varchar(36),
+        cached integer default 0,
+        cachedfile varchar(256),
+        ctime TimeStamp NOT NULL DEFAULT (datetime('now','localtime'))
         );
     </update>
 

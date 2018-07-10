@@ -2,19 +2,19 @@ package UI.panel.im;
 
 import UI.AppMainWindow;
 import UI.ConstantsUI;
-import UI.button.NBSIconButton;
+import io.nbs.client.ui.components.NBSIconButton;
 import UI.common.NBSAbstractPanel;
 import UI.common.ToolbarStatsPanel;
 import UI.templete.WihteBackJPanel;
 import com.alibaba.fastjson.JSON;
-import com.nbs.entity.ContactsItem;
+import io.nbs.client.vo.ContactsItem;
 import com.nbs.entity.PeerInfoBase;
 import com.nbs.ipfs.IPFSHelper;
 import com.nbs.ipfs.entity.IpfsMessage;
-import com.nbs.tools.DateHelper;
-import com.nbs.ui.components.ColorCnst;
-import com.nbs.ui.panels.ChatPanel;
-import com.nbs.utils.Base64CodecUtil;
+import io.nbs.commons.helper.DateHelper;
+import io.nbs.client.cnsts.ColorCnst;
+import io.nbs.client.ui.panels.im.ChatPanel;
+import io.nbs.commons.utils.Base64CodecUtil;
 import io.ipfs.api.IPFS;
 
 import org.apache.commons.lang3.StringUtils;
@@ -126,9 +126,9 @@ public class IMPanel extends NBSAbstractPanel {
         /**
          * 聊天主窗口
          */
-        //centerPanel.add(buildMessMainPanel(),BorderLayout.CENTER);
-        chatPanel = new ChatPanel(this);
-        centerPanel.add(chatPanel,BorderLayout.CENTER);
+        centerPanel.add(buildMessMainPanel(),BorderLayout.CENTER);
+        //chatPanel = new ChatPanel(this);
+        //centerPanel.add(chatPanel,BorderLayout.CENTER);
         return centerPanel;
     }
 
@@ -290,7 +290,7 @@ public class IMPanel extends NBSAbstractPanel {
             sb.append(ConstantsUI.WSPACE_CHARACTER4).append(sendContent);
 
             //send pub
-            AppMainWindow.ipfs.pubsub.pub(topic,Base64CodecUtil.encodeByCtrlType(sendContent,Base64CodecUtil.CtrlTypes.normal));
+           // AppMainWindow.ipfs.pubsub.pub(topic,Base64CodecUtil.encodeByCtrlType(sendContent,Base64CodecUtil.CtrlTypes.normal));
             inputArea.setText("");
             sb.append(ConstantsUI.ENTER_CHARACTER);
             if(msgMax.intValue()>18){
@@ -319,11 +319,11 @@ public class IMPanel extends NBSAbstractPanel {
         IpfsMessage message = JSON.parseObject(json,IpfsMessage.class);
         ContactsItem item = AppMainWindow.findContactsItemByFrom(message.getFrom());
         String nick = (item==null||item.getName()==null) ? message.getFrom() : item.getName();
-        message = Base64CodecUtil.parseIpmsMessageCtrlType(message);
-        if(message==null||message.getTypes()!=Base64CodecUtil.CtrlTypes.normal){
+       // message = Base64CodecUtil.parseIpmsMessageCtrlType(message);
+       /* if(message==null||message.getTypes()!=Base64CodecUtil.CtrlTypes.normal){
             logger.info("message is null");
             return;
-        }
+        }*/
         String msg = message.getContents();
         StringBuffer sb = new StringBuffer();
         sb.append(nick).append("  ").append(DateHelper.currentTime()).append(ConstantsUI.ENTER_CHARACTER);

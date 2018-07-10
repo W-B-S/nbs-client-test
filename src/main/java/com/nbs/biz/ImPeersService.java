@@ -1,7 +1,5 @@
 package com.nbs.biz;
 
-import com.alibaba.fastjson.JSON;
-import com.nbs.entity.ContactsItem;
 import com.nbs.ipfs.IPFSHelper;
 import io.ipfs.api.IPFS;
 import io.ipfs.api.JSONParser;
@@ -9,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nbs.biz.data.dao.PeerLoginDao">
+    <resultMap id="BaseResultMap" type="com.nbs.biz.data.entity.PeerLoginEntity">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="fromid" property="fromid" jdbcType="VARCHAR"/>
+        <result column="nick" property="nick" jdbcType="VARCHAR"/>
+        <result column="avatar" property="avatar" jdbcType="VARCHAR"/>
+        <result column="avatar_suffix" property="avatarSuffix" jdbcType="VARCHAR"/>
+        <result column="ip" property="ip" jdbcType="VARCHAR"/>
+        <result column="locations" property="locations" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="ext_json" property="extJson" jdbcType="VARCHAR"/>
+        <result column="seckey" property="seckey" jdbcType="VARCHAR"/>
+        <result column="sysuser" property="sysuser" jdbcType="VARCHAR"/>
+        <result column="ctime" property="ctime" jdbcType="INTEGER"/>
+        <result column="lmtime" property="lmtime" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="BaseSqlColumns">
+      id,fromid,nick,avatar,avatar_suffix,ip,locations,remark,ext_json,seckey,sysuser,ctime,lmtime
+    </sql>
+
+    <insert id="insert">
+        INSERT INTO p_login (id, fromid, nick,avatar,avatar_suffix,ip,locations,remark,ext_json,seckey,sysuser)
+        VALUES (#{id}, #{fromid}, #{nick},#{avatar},#{avatarSuffix},#{ip},#{locations},#{remark},#{extJson},#{seckey},#{sysuser})
+    </insert>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT * FROM p_login where id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT * FROM p_login
+    </select>
+
+    <select id="find" resultMap="BaseResultMap" statementType="STATEMENT" parameterType="map">
+        SELECT * FROM p_login where ${field} = ${val}
+    </select>
+
+    <delete id="delete" parameterType="java.lang.String">
+        DELETE * from p_login WHERE id=#{id}
+    </delete>
+
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(1) FROM p_login
+    </select>
+
+    <select id="exist" resultType="java.lang.Integer">
+        SELECT count(1) FROM p_login where id = #{id}
+    </select>
+
+    <delete id="deleteAll">
+        delete from p_login
+    </delete>
+
+
+    <update id="update">
+        UPDATE p_login
+        <set>
+            nick=#{nick},
+            avatar=#{avatar},
+            avatar_suffix=#{avatarSuffix},
+            ip=#{ip},
+            locations=#{locations},
+            remark=#{remark},
+            ext_json=#{extJson},
+            seckey=#{seckey},
+            sysuser=#{sysuser},
+            lmtime=#{lmtime}
+        </set>
+        WHERE id=#{id}
+    </update>
+
+
+    <update id="updateIgnoreNull">
+        UPDATE p_login
+        <set>
+            <if test="nick!= null">nick=#{nick},</if>
+            <if test="avatar!= null">avatar=#{avatar},</if>
+            <if test="avatarSuffix!= null">avatar_suffix=#{avatarSuffix},</if>
+            <if test="ip!= null">ip=#{ip},</if>
+            <if test="locations!= null">locations=#{locations},</if>
+            <if test="remark!= null">remark=#{remark},</if>
+            <if test="sysuser!= null">sysuser=#{sysuser},</if>
+            <if test="lmtime!= null">lmtime=#{lmtime},</if>
+        </set>
+        WHERE id=#{id}
+    </update>
+</mapper>

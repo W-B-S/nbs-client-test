@@ -1,5 +1,7 @@
 package com.nbs.ui.panels;
 
+import io.nbs.client.ui.panels.ParentAvailablePanel;
+
 import javax.swing.*;
 
 /**

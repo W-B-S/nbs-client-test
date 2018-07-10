@@ -1,7 +1,6 @@
 package UI.common;
 
 import UI.ConstantsUI;
-import com.nbs.entity.ContactsItem;
 import com.nbs.tools.PropertyUtil;
 import org.apache.commons.lang3.StringUtils;
 

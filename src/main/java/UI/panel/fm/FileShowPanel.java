@@ -5,7 +5,7 @@ import UI.panel.ContentJLabel;
 import com.nbs.entity.NbsChainData;
 import com.nbs.tools.PropertyUtil;
 import com.nbs.tools.StringHelper;
-import com.nbs.utils.MerkleHashHelper;
+import io.nbs.commons.helper.MerkleHashHelper;
 
 import javax.swing.*;
 import javax.swing.table.TableModel;

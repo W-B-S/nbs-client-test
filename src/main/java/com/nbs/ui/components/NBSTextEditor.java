@@ -1,6 +1,6 @@
 package com.nbs.ui.components;
 
-import com.nbs.utils.ClipboardUtil;
+import io.nbs.commons.utils.ClipboardUtil;
 
 import javax.swing.*;
 import java.awt.*;

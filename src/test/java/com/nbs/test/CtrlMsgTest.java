@@ -2,8 +2,9 @@ package com.nbs.test;
 
 import com.alibaba.fastjson.JSON;
 import com.nbs.entity.PeerBoradcastInfo;
-import com.nbs.utils.Base64CodecUtil;
-import com.nbs.utils.RadomCharactersHelper;
+import io.nbs.commons.utils.Base64CodecUtil;
+import io.nbs.commons.helper.RadomCharactersHelper;
+import io.nbs.sdk.prot.IPMTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,9 +22,17 @@ public class CtrlMsgTest {
 
    public static void main(String[] agrs){
        CtrlMsgTest cmt = new CtrlMsgTest();
-       long l = System.currentTimeMillis()/1000;
-       System.out.println(">>>"+l);
+       /*long l = System.currentTimeMillis()/1000;
+       System.out.println(">>>"+l);*/
        //cmt.GetCtrlOnline();
+       String str = "$IMN.UE.S$njsf76283-sdisdfs$";
+       IPMTypes types = IPMTypes.parserProtocol(str);
+       System.out.println(types.name());
+       str = types.protocolSplit(str);
+       System.out.println(str);
+
+       String name = "kasdfsadf.txt";
+       System.out.println(name.substring(name.lastIndexOf(".")));
    }
 
    private void GetCtrlOnline(){
@@ -35,7 +44,7 @@ public class CtrlMsgTest {
 
        String json = JSON.toJSONString(peerInfo);
        log.info(json);
-       String encode = Base64CodecUtil.encodeCtrlMsg(peerInfo,Base64CodecUtil.CtrlTypes.online);
+       String encode = Base64CodecUtil.encode(json);
        log.info(encode);
    }
 }

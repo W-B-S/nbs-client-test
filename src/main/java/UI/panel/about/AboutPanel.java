@@ -1,11 +1,9 @@
 package UI.panel.about;
 
-import UI.AppMainWindow;
 import UI.ConstantsUI;
-import UI.button.NBSIconButton;
-import UI.panel.ContentJLabel;
-import com.nbs.tools.ConfigHelper;
+import io.nbs.client.ui.components.NBSIconButton;
 import com.nbs.tools.PropertyUtil;
+import io.nbs.commons.helper.ConfigurationHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -205,7 +203,7 @@ public class AboutPanel extends JPanel {
                 try {
                     java.net.URI uri = java.net.URI.create(site);
                     java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
-                    String v =ConfigHelper.getInstance().getIpfsAddress();
+                    String v =ConfigurationHelper.getInstance().getIPFSAddress();
                     logger.info(v);
                     if(desktop.isSupported(Desktop.Action.BROWSE)){
                             desktop.browse(uri);
@@ -226,12 +224,12 @@ public class AboutPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 logger.info(">>>>NBS TEST BUTTON.");
-                try {
+  /*              try {
                     ConfigHelper.getInstance().storeClientAddFileRootHash("skjfhsafkdasfd","TEST");
                     logger.info(ConfigHelper.getInstance().getClientAddFileRootHash());
                 } catch (IOException e1) {
                     e1.printStackTrace();
-                }
+                }*/
             }
         });
     }

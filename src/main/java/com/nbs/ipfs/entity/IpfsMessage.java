@@ -1,6 +1,7 @@
 package com.nbs.ipfs.entity;
 
-import com.nbs.utils.Base64CodecUtil;
+import io.nbs.commons.utils.Base64CodecUtil;
+import io.nbs.sdk.prot.IPMTypes;
 
 /**
  * @Package : com.nbs.ipfs.entity
@@ -23,7 +24,9 @@ public class IpfsMessage {
 
     private String time;
 
-    private Base64CodecUtil.CtrlTypes types;
+    private IPMTypes types;
+
+
 
     public String getFrom() {
         return from;
@@ -73,11 +76,11 @@ public class IpfsMessage {
         this.peerId = peerId;
     }
 
-    public Base64CodecUtil.CtrlTypes getTypes() {
+    public IPMTypes getTypes() {
         return types;
     }
 
-    public void setTypes(Base64CodecUtil.CtrlTypes types) {
+    public void setTypes(IPMTypes types) {
         this.types = types;
     }
 
