@@ -109,6 +109,10 @@ public class ReceiverMessageAdapter implements IPFSSubscribeListener {
         peerMessageService.insert(entity);
     }
 
+    /**
+     *
+     * @param name
+     */
     private void autoRepaly(final String name){
         IpfsMessageSender sender = MainFrame.getContext().getMessageSender();
         String text = "你好"+name+"收到！";

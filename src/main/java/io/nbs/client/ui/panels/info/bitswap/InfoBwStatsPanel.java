@@ -83,19 +83,19 @@ public class InfoBwStatsPanel extends ParentAvailablePanel {
         centPanel.add(shareTotalLabel
                 ,new GBC(0,0).setWeight(5,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
         centPanel.add(shareTotalVol
-                ,new GBC(1,0).setWeight(2,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
+                ,new GBC(1,0).setWeight(4,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
         centPanel.add(getTotalLabel
                 ,new GBC(0,1).setWeight(5,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
         centPanel.add(getTotalVol
-                ,new GBC(1,1).setWeight(2,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
+                ,new GBC(1,1).setWeight(4,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
         centPanel.add(rateInLabel
                 ,new GBC(0,2).setWeight(5,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
         centPanel.add(rateInVol
-                ,new GBC(1,2).setWeight(2,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
+                ,new GBC(1,2).setWeight(4,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
         centPanel.add(rateOutLabel
                 ,new GBC(0,3).setWeight(5,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
         centPanel.add(rateOutVol
-                ,new GBC(1,3).setWeight(2,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
+                ,new GBC(1,3).setWeight(4,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
 
         add(centPanel,BorderLayout.CENTER);
     }

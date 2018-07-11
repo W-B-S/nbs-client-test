@@ -148,7 +148,7 @@ public class ContactsItemAdapter extends BaseAdapter<ContactsItemViewHolder> {
             {
                 if (selectedViewHolder != viewHolder)
                 {
-                    setBackground(viewHolder, ColorCnst.ITEM_SELECTED_LIGHT);
+                    setBackground(viewHolder, ColorCnst.CONTACTS_ITEM_LINE_GRAY);
                 }
             }
 

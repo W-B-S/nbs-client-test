@@ -4,6 +4,7 @@ import io.nbs.client.cnsts.FontUtil;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.ui.components.GBC;
 import com.nbs.ui.components.NbsBorder;
+import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.holders.ViewHolder;
 
 import javax.swing.*;
@@ -20,6 +21,7 @@ import java.awt.*;
 public class ContactsItemViewHolder extends ViewHolder {
     public JLabel avatar = new JLabel();
     public JLabel roomName = new JLabel();
+    public JLabel shortMsg = new JLabel();
 
     public ContactsItemViewHolder() {
         initComponents();
@@ -30,14 +32,19 @@ public class ContactsItemViewHolder extends ViewHolder {
      * 列表项内容设置
      */
     private void initComponents(){
+
         setPreferredSize(new Dimension(100,50));
         setBackground(ColorCnst.CONTACTS_ITEM_GRAY_MAIN);
         setBorder(new NbsBorder(NbsBorder.BOTTOM,ColorCnst.LIGHT_GRAY));
-        setOpaque(true);
+        //setOpaque(false);
         setForeground(ColorCnst.FONT_WHITE);
 
-        roomName.setFont(FontUtil.getDefaultFont(13));
-        roomName.setForeground(ColorCnst.FONT_BLACK);//ITEM_SELECTED
+        roomName.setFont(FontUtil.getDefaultFont(16));
+        roomName.setForeground(ColorCnst.FONT_MAIN);//ITEM_SELECTED
+
+        shortMsg.setFont(FontUtil.getDefaultFont(12));
+        shortMsg.setForeground(ColorCnst.DARK);//ITEM_SELECTED
+        shortMsg.setText("beijing ");
     }
 
     /**
@@ -48,5 +55,6 @@ public class ContactsItemViewHolder extends ViewHolder {
         setLayout(new GridBagLayout());
         add(avatar, new GBC(0, 0).setWeight(1, 1).setFill(GBC.BOTH).setInsets(0,5,0,0));
         add(roomName, new GBC(1, 0).setWeight(10, 1).setFill(GBC.BOTH));
+        //add(shortMsg, new GBC(2, 0).setWeight(4, 1).setFill(GBC.BOTH));
     }
 }

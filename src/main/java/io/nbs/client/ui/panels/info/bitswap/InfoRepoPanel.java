@@ -83,19 +83,19 @@ public class InfoRepoPanel extends ParentAvailablePanel {
         centPanel.add(objectsLabel
                 ,new GBC(0,0).setWeight(5,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
         centPanel.add(objectsVol
-                ,new GBC(1,0).setWeight(2,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
+                ,new GBC(1,0).setWeight(5,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
         centPanel.add(objectDataLabel
                 ,new GBC(0,1).setWeight(5,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
         centPanel.add(objectDataVol
-                ,new GBC(1,1).setWeight(2,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
+                ,new GBC(1,1).setWeight(5,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
         centPanel.add(repoPathLabel
                 ,new GBC(0,2).setWeight(5,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
         centPanel.add(repoPathVol
-                ,new GBC(1,2).setWeight(2,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
+                ,new GBC(1,2).setWeight(5,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
         centPanel.add(tempPathLabel
                 ,new GBC(0,3).setWeight(5,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
         centPanel.add(tempPathVol
-                ,new GBC(1,3).setWeight(2,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
+                ,new GBC(1,3).setWeight(5,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
 
         add(centPanel,BorderLayout.CENTER);
     }

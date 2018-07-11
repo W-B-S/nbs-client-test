@@ -237,15 +237,16 @@ public class MainFrame extends JFrame {
     private void notifyWorldOnline(){
         PeerInfo info = Launcher.currentPeer;
         if(info==null)return;
-        OnlineMessage message = convertByPeerInfo(info);
+
         //IP 解析
         //nbs.client.heart.monitor.seconds
         final int seconds = ConfigurationHelper.getInstance().getHeartMonitorSleep();
         new Thread(()->{
             while (heartMonitor){
+                OnlineMessage message = convertByPeerInfo(info);
                 try {
                     if(message!=null)messageSender.sendOnline(message);
-                    logger.info("heart monitor {}",System.currentTimeMillis());
+                    logger.info("{} heart monitor {}",System.currentTimeMillis());
                 } catch (Exception e) {
                     logger.warn(e.getMessage(),e.getCause());
                 }
@@ -254,10 +255,9 @@ public class MainFrame extends JFrame {
                 } catch (InterruptedException e) {
                 }
             }
+            //刷新数据库登录
+            peerLoginService.refreshLoginInfo(info);
         }).start();
-
-        //刷新数据库登录
-        peerLoginService.refreshLoginInfo(info);
     }
 
     /**
@@ -270,7 +270,8 @@ public class MainFrame extends JFrame {
             message.setAvatar(info.getAvatar());
             message.setAvatarFile(info.getAvatarName());
             message.setAvatarSuffix(info.getAvatarSuffix());
-            message.setLocations("");
+            message.setLocations(info.getLocations());
+            message.setIp(info.getIp());
         }
         return message;
     }

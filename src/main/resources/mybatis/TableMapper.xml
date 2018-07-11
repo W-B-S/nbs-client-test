@@ -75,18 +75,23 @@
     </update>
 
     <update id="createAttachmentInfo">
+        <!--
+            id file Hash
+            peerhash
+            prehash prevous
+        -->
         CREATE table attac_info (
         id varchar(64) PRIMARY KEY,
-        peerid varchar(64),
-        phash varchar(64),
-        hash58 varchar(64),
+        peername varchar(128),
+        peerhash varchar(64),
+        prehash varchar(64),
         fname varchar (128),
         fsize varchar (20),
         fsuffix varchar (32),
         fromid varchar(64),
         seqno varchar (64),
         cached integer default 0,
-        cachedfile varchar(256),
+        cachedfile varchar(1000),
         inlocal integer default 1,
         ftype varchar(20),
         sortno INTEGER ,

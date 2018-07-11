@@ -12,6 +12,7 @@ import java.awt.*;
  */
 public class ColorCnst {
     public static final Color RED = new Color(228, 74, 47);
+    public static final Color FONT_MAIN = new Color(51,51,51);
     public static final Color FONT_BLACK = new Color(0,0,0);
     public static final Color SHADOW = new Color(221, 221, 221);
     public static final Color GROUP_AVATAR_BACKGROUND = new Color(221, 221, 221);
@@ -27,7 +28,7 @@ public class ColorCnst {
     public static Color DARKER = new Color(38, 41, 46);
     public static Color ITEM_SELECTED_DARK = new Color(57, 63, 68);
     public static Color ITEM_SELECTED = new Color(65, 71, 78);
-    public static Color ITEM_SELECTED_LIGHT = new Color(168, 168, 168);
+    public static Color ITEM_SELECTED_LIGHT = new Color(204, 204, 204);
     public static Color LIGHT_GRAY = new Color(228, 228, 228);
     public static Color DIALOG_BORDER = new Color(204, 204, 204);
     public static Color PROGRESS_BAR_START = new Color(178, 226, 129);
@@ -38,8 +39,8 @@ public class ColorCnst {
     public static final Color SCROLL_BAR_TTRACK = new Color(175, 175, 175);
     public static Color SCROLL_BAR_TRACK_LIGHT = new Color(214, 214, 214);
 
-    public static final Color CONTACTS_ITEM_GRAY_MAIN = new Color(221, 221, 221);
-    public static final Color CONTACTS_ITEM_LINE_GRAY = new Color(207, 207, 207);
+    public static final Color CONTACTS_ITEM_GRAY_MAIN = new Color(243, 242, 250);
+    public static final Color CONTACTS_ITEM_LINE_GRAY = new Color(245, 250, 250);
     public static final Color CONTACTS_ITEM_GRAY = new Color(191, 191, 191);
     public static final Color SEEARCH_ITEM_GRAY_LIGHT = new Color(247, 247, 247);
     public static final Color SEEARCHTEXT_ITEM_GRAYBG = new Color(175, 175, 175);

@@ -104,28 +104,28 @@ public class InFoBitswapPanel extends ParentAvailablePanel {
         centPanel.add(recBlockLabel
              ,new GBC(0,0).setWeight(5,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
         centPanel.add(recBlockVol
-                ,new GBC(1,0).setWeight(2,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
+                ,new GBC(1,0).setWeight(4,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
         centPanel.add(recDataLabel
                 ,new GBC(0,1).setWeight(5,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
         centPanel.add(recDataVol
-                ,new GBC(1,1).setWeight(2,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
+                ,new GBC(1,1).setWeight(4,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
         centPanel.add(sendBlockLabel
                 ,new GBC(0,2).setWeight(5,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
         centPanel.add(sendBlockVol
-                ,new GBC(1,2).setWeight(2,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
+                ,new GBC(1,2).setWeight(4,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
         centPanel.add(sendDataLabel
                 ,new GBC(0,3).setWeight(5,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
         centPanel.add(sendDataVol
-                ,new GBC(1,3).setWeight(2,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
+                ,new GBC(1,3).setWeight(4,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
 
         centPanel.add(wantSizeLabel
                 ,new GBC(0,4).setWeight(5,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
         centPanel.add(wantSizeVolume
-                ,new GBC(1,4).setWeight(2,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
+                ,new GBC(1,4).setWeight(4,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
         centPanel.add(partnersLabel
                 ,new GBC(0,5).setWeight(5,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
         centPanel.add(partnersVolume
-                ,new GBC(1,5).setWeight(2,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
+                ,new GBC(1,5).setWeight(4,1).setFill(GBC.BOTH).setInsets(5,0,0,10));
 
         /*        add(dupBlockLabel
                 ,new GBC(0,4).setWeight(5,1).setFill(GBC.BOTH).setInsets(5,0,0,10));

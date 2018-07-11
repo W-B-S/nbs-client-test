@@ -4,15 +4,16 @@
 
     <resultMap id="BaseResultMap" type="com.nbs.biz.data.entity.AttachmentInfoEntity">
         <id column="id" property="id" jdbcType="VARCHAR"/>
-        <result column="peerid" property="peerid" jdbcType="VARCHAR"/>
-        <result column="phash" property="phash" jdbcType="VARCHAR"/>
-        <result column="hash58" property="hash58" jdbcType="VARCHAR"/>
+        <result column="peername" property="peername" jdbcType="VARCHAR"/>
+        <result column="peerhash" property="peerhash" jdbcType="VARCHAR"/>
+        <result column="prehash" property="prehash" jdbcType="VARCHAR"/>
         <result column="fname" property="fname" jdbcType="VARCHAR"/>
         <result column="fsize" property="fsize" jdbcType="VARCHAR"/>
         <result column="fsuffix" property="fsuffix" jdbcType="VARCHAR"/>
         <result column="fromid" property="fromid" jdbcType="VARCHAR"/>
         <result column="seqno" property="seqno" jdbcType="VARCHAR"/>
         <result column="cached" property="cached" jdbcType="INTEGER"/>
+        <result column="cachedfile" property="cachedfile" jdbcType="INTEGER"/>
         <result column="inlocal" property="inlocal" jdbcType="INTEGER"/>
         <result column="ftype" property="ftype" jdbcType="VARCHAR"/>
         <result column="sortno" property="sortno" jdbcType="INTEGER"/>
@@ -21,8 +22,8 @@
     </resultMap>
 
     <insert id="insert">
-        INSERT INTO attac_info (id, peerid,phash,hash58, fname,fsize,fsuffix,fromid,seqno,cached,cachedfile,inlocal,ftype,sortno)
-        VALUES (#{id},#{peerid},#{phash}, #{hash58}, #{fname}, #{fsize}, #{fsuffix}, #{fromid}, #{seqno}, #{cached}, #{cachedfile}, #{inlocal},#{ftype},#{sortno})
+        INSERT INTO attac_info (id, peername,peerhash,prehash, fname,fsize,fsuffix,fromid,seqno,cached,cachedfile,inlocal,ftype,sortno)
+        VALUES (#{id},#{peername},#{peerhash}, #{prehash}, #{fname}, #{fsize}, #{fsuffix}, #{fromid}, #{seqno}, #{cached}, #{cachedfile}, #{inlocal},#{ftype},#{sortno})
     </insert>
 
     <select id="findById" resultMap="BaseResultMap">
@@ -57,14 +58,14 @@
     <update id="update">
         UPDATE attac_info
         <set>
-            fname=#{userId},
+            fname=#{fname},
             fsize=#{fsize},
             fsuffix=#{fsuffix},
             seqno=#{seqno},
             cached=#{cached},
-            cachedfile=#{lmtime},
-            inlocal=#{lmtime},
-            ftype=#{lmtime},
+            cachedfile=#{cachedfile},
+            inlocal=#{inlocal},
+            ftype=#{ftype},
             lmtime=#{lmtime},
         </set>
         WHERE id=#{di}
@@ -75,10 +76,11 @@
         UPDATE attac_info
         <set>
             <if test="fname!= null">fname=#{fname},</if>
-            <if test="username!= null">username=#{username},</if>
+            <if test="peername!= null">peername=#{peername},</if>
             <if test="cachedfile!= null">cachedfile=#{cachedfile},</if>
             <if test="cached!= null">cached=#{cached},</if>
             <if test="inlocal!= null">inlocal=#{inlocal},</if>
+            <if test="fsize!= null">fsize=#{fsize},</if>
             <if test="lmtime!= null">lmtime=#{lmtime},</if>
         </set>
         WHERE id=#{id}

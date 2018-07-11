@@ -13,9 +13,9 @@ import java.util.Date;
 public class AttachmentInfoEntity extends BasicEntity {
 
     private String id;
-    private String peerid;
-    private String phash;
-    private String hash58;
+    private String peername;
+    private String peerhash;
+    private String prehash;
     private String fname;
     private String fsize;
     private String fsuffix;
@@ -37,12 +37,28 @@ public class AttachmentInfoEntity extends BasicEntity {
         this.id = id;
     }
 
-    public String getHash58() {
-        return hash58;
+    public String getPeername() {
+        return peername;
     }
 
-    public void setHash58(String hash58) {
-        this.hash58 = hash58;
+    public void setPeername(String peername) {
+        this.peername = peername;
+    }
+
+    public String getPeerhash() {
+        return peerhash;
+    }
+
+    public void setPeerhash(String peerhash) {
+        this.peerhash = peerhash;
+    }
+
+    public String getPrehash() {
+        return prehash;
+    }
+
+    public void setPrehash(String prehash) {
+        this.prehash = prehash;
     }
 
     public String getFname() {
@@ -131,22 +147,6 @@ public class AttachmentInfoEntity extends BasicEntity {
 
     public void setLmtime(Long lmtime) {
         this.lmtime = lmtime;
-    }
-
-    public String getPeerid() {
-        return peerid;
-    }
-
-    public void setPeerid(String peerid) {
-        this.peerid = peerid;
-    }
-
-    public String getPhash() {
-        return phash;
-    }
-
-    public void setPhash(String phash) {
-        this.phash = phash;
     }
 
     public Integer getSortno() {
