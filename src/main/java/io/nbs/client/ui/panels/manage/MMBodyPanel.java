@@ -1,8 +1,13 @@
 package io.nbs.client.ui.panels.manage;
 
 import io.nbs.client.ui.panels.ParentAvailablePanel;
+import io.nbs.client.ui.panels.manage.body.MMBodyLeftCardPanel;
+import io.nbs.client.ui.panels.manage.body.MMDataListPanel;
+import io.nbs.client.ui.panels.manage.body.MMRightPanel;
+import io.nbs.client.ui.panels.manage.body.MMSearchResultPanel;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * @Package : io.nbs.client.ui.panels.manage
@@ -14,7 +19,12 @@ import javax.swing.*;
  */
 public class MMBodyPanel extends ParentAvailablePanel {
     private static MMBodyPanel context;
+    private MMRightPanel rightPanel;
+    private MMBodyLeftCardPanel cardPanel;
 
+    private CardLayout cardLayout;
+    private MMDataListPanel dataListPanel;
+    private MMSearchResultPanel searchResultPanel;
 
 
     /**
@@ -33,9 +43,15 @@ public class MMBodyPanel extends ParentAvailablePanel {
      * @return {[type]} [description]
      */
     private void initComponents() {
-        JPanel panel = new JPanel();
-        JLabel label = new JLabel("HHHHHHHH");
-        add(label);
+        cardPanel = new MMBodyLeftCardPanel(this);
+        cardLayout = new CardLayout();
+        cardPanel.setLayout(cardLayout);
+        //文件列表
+        dataListPanel = new MMDataListPanel();
+        searchResultPanel = new MMSearchResultPanel(this);
+
+
+        rightPanel = new MMRightPanel(this);
     }
 
     /**
@@ -44,7 +60,15 @@ public class MMBodyPanel extends ParentAvailablePanel {
      * @return {[type]} [description]
      */
     private void initView() {
+        setLayout(new BorderLayout());
+        /* ===================================================================== */
 
+        cardPanel.add(dataListPanel,MMNames.LISTF.name());
+        cardPanel.add(searchResultPanel,MMNames.SEARCHE.name());
+
+        /* ===================================================================== */
+        add(cardPanel,BorderLayout.CENTER);
+        add(rightPanel,BorderLayout.EAST);
     }
 
     private void setListeners() {
@@ -58,5 +82,9 @@ public class MMBodyPanel extends ParentAvailablePanel {
      */
     public static MMBodyPanel getContext() {
         return context;
+    }
+
+    public static enum MMNames{
+        LISTF,SEARCHE;
     }
 }

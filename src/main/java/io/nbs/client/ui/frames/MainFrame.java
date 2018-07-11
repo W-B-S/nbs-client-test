@@ -26,6 +26,8 @@ import javax.print.DocFlavor;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -193,6 +195,16 @@ public class MainFrame extends JFrame {
      */
     private void  setListeners(){
 
+        /**
+         *
+         */
+        this.addComponentListener(new ComponentAdapter (){
+            @Override
+            public void componentResized(ComponentEvent e) {
+                currentWindowWidth = (int)e.getComponent().getBounds().getWidth();
+                currentWindowWidth = (int)e.getComponent().getBounds().getHeight();
+            }
+        });
     }
 
     /**

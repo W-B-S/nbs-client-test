@@ -1,25 +1,31 @@
-package io.nbs.client.ui.panels.manage;
+package io.nbs.client.ui.panels.manage.body;
 
+import io.nbs.client.cache.AttachmentsViewHolderCacheHelper;
 import io.nbs.client.ui.panels.ParentAvailablePanel;
 
 import javax.swing.*;
 
 /**
- * @Package : io.nbs.client.ui.panels.manage
+ * @Package : io.nbs.client.ui.panels.manage.body
  * @Description : <p></p>
  * @Author : lambor.c
- * @Date : 2018/7/8-20:52
+ * @Date : 2018/7/11-16:31
  * Copyright (c) 2018, NBS , lambor.c<lanbery@gmail.com>.
  * All rights reserved.
  */
-public class MMSearchResultPanel extends ParentAvailablePanel {
-    private static MMSearchResultPanel context;
+public class MMBodyLeftCardPanel extends ParentAvailablePanel {
+    private static MMBodyLeftCardPanel context;
+
+    private AttachmentsViewHolderCacheHelper viewHolderCacheHelper;
+
+
 
     /**
      * construction
      */
-    public MMSearchResultPanel(JPanel parent) {
+    public MMBodyLeftCardPanel(JPanel parent) {
         super(parent);
+        viewHolderCacheHelper = new AttachmentsViewHolderCacheHelper();
         initComponents();
         initView();
         setListeners();
@@ -52,7 +58,15 @@ public class MMSearchResultPanel extends ParentAvailablePanel {
      *
      * @return {[type]} [description]
      */
-    public static MMSearchResultPanel getContext() {
+    public static MMBodyLeftCardPanel getContext() {
         return context;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public AttachmentsViewHolderCacheHelper getViewHolderCacheHelper() {
+        return viewHolderCacheHelper;
     }
 }

@@ -27,6 +27,7 @@ public class ManageMasterPanel extends JPanel {
     private MMHeaderPanel headerPanel;
     private MMBodyPanel bodyPanel;
 
+
     private MMSearcherPanel searcherPanel;
 
     public ManageMasterPanel() {
@@ -40,9 +41,6 @@ public class ManageMasterPanel extends JPanel {
         winTitlePanel.setTitle(ConfigurationHelper.getInstance().getI18nProperty("nbs.ui.panel.data.label","Data Manager"));
         centerPanel = new JPanel();
         headerPanel = new MMHeaderPanel(this);
-
-
-
         searcherPanel = new MMSearcherPanel(this);
 
         bodyPanel = new MMBodyPanel(this);
@@ -56,21 +54,10 @@ public class ManageMasterPanel extends JPanel {
         /* ======================= 构造内部Start =====================*/
 
 
-
-        JPanel prevousPanel = new JPanel();
-        JPanel suffixPanel = new JPanel();
         headerPanel.setLayout(new BorderLayout());
-
-      /*  headerPanel.add(prevousPanel,
-                new GBC(0,0).setWeight(1,1).setFill(GBC.BOTH).setInsets(20,0,20,0));*/
         headerPanel.add(searcherPanel);
-                //new GBC(1,0).setWeight(7,1).setFill(GBC.BOTH).setInsets(20,0,20,0));
-      /*  headerPanel. add(suffixPanel,
-                new GBC(1,0).setWeight(1,1).setFill(GBC.BOTH).setInsets(20,0,20,0));*/
-        headerPanel.setBackground(null);
+        //headerPanel.setBackground(null);
 
-       // headerPanel.setPreferredSize(new Dimension(MainFrame.W_SIZE-MainFrame.TOOLBAR_WIDTH-10,80));
-       // headerPanel.setBorder(MainFrame.buleBorder);
         centerPanel.add(headerPanel,BorderLayout.NORTH);
         centerPanel.add(bodyPanel,BorderLayout.CENTER);
 

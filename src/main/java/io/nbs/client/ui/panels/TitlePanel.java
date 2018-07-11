@@ -56,7 +56,7 @@ public class TitlePanel extends ParentAvailablePanel {
     }
 
     private void initComponents(){
-        setBackground(ColorCnst.LIGHT_GRAY);
+        setBackground(ColorCnst.WINDOW_BACKGROUND);
         Cursor handCursor = new Cursor(Cursor.HAND_CURSOR);
         Dimension ctrlItemSize = new Dimension(30,30);
 
@@ -65,6 +65,7 @@ public class TitlePanel extends ParentAvailablePanel {
         restoreIcon =  new ImageIcon(getClass().getResource("/icons/window_restore.png"));
         titlePanel = new JPanel();
         titlePanel.setLayout(new GridBagLayout());
+        //titlePanel.setBackground(ColorCnst.WINDOW_BACKGROUND);
 
         titleLabel = new JLabel();
         titleLabel.setFont(FontUtil.getDefaultFont(15));

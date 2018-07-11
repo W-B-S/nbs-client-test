@@ -86,7 +86,7 @@
         peerhash varchar(64),
         prehash varchar(64),
         fname varchar (128),
-        fsize varchar (20),
+        fsize bigint,
         fsuffix varchar (32),
         fromid varchar(64),
         seqno varchar (64),
@@ -111,6 +111,26 @@
         cached integer default 0,
         cachedfile varchar(256),
         ctime TimeStamp NOT NULL DEFAULT (datetime('now','localtime'))
+        );
+    </update>
+    <!--
+        hash_links
+        id file hash
+        phash
+        size
+     -->
+    <update id="createHashLinks">
+        CREATE table hash_links (
+          id varchar(64) PRIMARY KEY,
+          phash varchar(64),
+          rhash varchar(64),
+          size bigint,
+          cached integer default 0,
+          srcid varchar(64),
+          cachedblk integer default 0,
+          subs integer ,
+          ctime TimeStamp NOT NULL DEFAULT (datetime('now','localtime')),
+          lmtime bigint
         );
     </update>
 

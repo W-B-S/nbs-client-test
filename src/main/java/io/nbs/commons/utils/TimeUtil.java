@@ -19,6 +19,7 @@ public class TimeUtil
 {
     private static final SimpleDateFormat daySimpleDateFormat = new SimpleDateFormat("HH:mm");
     private static final SimpleDateFormat monthSimpleDateFormat = new SimpleDateFormat("MM/dd");
+    private static final SimpleDateFormat monthToDateFormat = new SimpleDateFormat("MM-dd");
     private static final SimpleDateFormat yearSimpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
     private static final Calendar calendar = Calendar.getInstance();
@@ -32,6 +33,23 @@ public class TimeUtil
         int min2 = calendar.get(Calendar.MINUTE);
 
         return min1 == min2;
+    }
+
+    /**
+     * 同一天
+     * @param d1
+     * @param d2
+     * @return
+     */
+    public static boolean inTheSameDate(Date d1,Date d2){
+        if(d1==null)d1 = new Date(System.currentTimeMillis());
+        if(d2==null)d2 = new Date(System.currentTimeMillis());
+        return monthSimpleDateFormat.format(d1).equals(monthSimpleDateFormat.format(d2));
+    }
+
+    public static String formatMonthDay(Date date){
+        if(date==null)date = new Date(System.currentTimeMillis());
+        return monthToDateFormat.format(date);
     }
 
     public static String diff(long timestamp)

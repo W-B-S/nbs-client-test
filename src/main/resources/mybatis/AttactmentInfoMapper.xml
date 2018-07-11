@@ -8,7 +8,7 @@
         <result column="peerhash" property="peerhash" jdbcType="VARCHAR"/>
         <result column="prehash" property="prehash" jdbcType="VARCHAR"/>
         <result column="fname" property="fname" jdbcType="VARCHAR"/>
-        <result column="fsize" property="fsize" jdbcType="VARCHAR"/>
+        <result column="fsize" property="fsize" jdbcType="BIGINT"/>
         <result column="fsuffix" property="fsuffix" jdbcType="VARCHAR"/>
         <result column="fromid" property="fromid" jdbcType="VARCHAR"/>
         <result column="seqno" property="seqno" jdbcType="VARCHAR"/>

@@ -56,16 +56,19 @@ public class IPFSFileUploader {
      *
      * @param file
      */
-    public void addFileToIPFS(File file){
-        if(!file.exists()||file.isDirectory())return;
+    public MerkleNode addFileToIPFS(File file){
+        if(!file.exists()||file.isDirectory())return null;
+        String name = file.getName();
         try {
             NamedStreamable.FileWrapper fileWrapper = new NamedStreamable.FileWrapper(file);
-            List<MerkleNode> list = ipfs.add(fileWrapper);
+            List<MerkleNode> list = ipfs.add(fileWrapper,false,false);
             logger.info(JSON.toJSONString(list.get(0)));
             uploadSuccessNotify(list.get(0));
-            uploadSuccessSaveDB(list);
+            return list.get(0);
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            logger.error("文件{}上传失败,{}",name,e.getMessage());
+            return null;
         }
     }
 
