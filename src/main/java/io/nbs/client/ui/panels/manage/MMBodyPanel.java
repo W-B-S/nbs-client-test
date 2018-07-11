@@ -1,5 +1,6 @@
 package io.nbs.client.ui.panels.manage;
 
+import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.panels.ParentAvailablePanel;
 import io.nbs.client.ui.panels.manage.body.MMBodyLeftCardPanel;
 import io.nbs.client.ui.panels.manage.body.MMDataListPanel;
@@ -65,6 +66,8 @@ public class MMBodyPanel extends ParentAvailablePanel {
 
         cardPanel.add(dataListPanel,MMNames.LISTF.name());
         cardPanel.add(searchResultPanel,MMNames.SEARCHE.name());
+
+        rightPanel.setPreferredSize(new Dimension(310,MainFrame.getContext().currentWindowHeight));
 
         /* ===================================================================== */
         add(cardPanel,BorderLayout.CENTER);

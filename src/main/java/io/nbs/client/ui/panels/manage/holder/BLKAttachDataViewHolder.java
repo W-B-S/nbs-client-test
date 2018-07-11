@@ -1,10 +1,15 @@
 package io.nbs.client.ui.panels.manage.holder;
 
-import io.nbs.client.ui.components.AttachmentPanel;
-import io.nbs.client.ui.components.LCFromLabel;
-import io.nbs.client.ui.components.LCProgressBar;
-import io.nbs.client.ui.components.SizeAutoAdjustTextArea;
+
+import io.nbs.client.cnsts.ColorCnst;
+import io.nbs.client.cnsts.FontUtil;
+import io.nbs.client.ui.components.GBC;
+import io.nbs.client.ui.components.LCAttachMessageBubble;
+import io.nbs.client.ui.components.VerticalFlowLayout;
 import io.nbs.client.ui.frames.MainFrame;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * @Package : io.nbs.client.ui.panels.manage.holder
@@ -15,13 +20,9 @@ import io.nbs.client.ui.frames.MainFrame;
  * All rights reserved.
  */
 public class BLKAttachDataViewHolder extends AttachDataViewHolder {
-    public SizeAutoAdjustTextArea attaHashTitle;
-    //进度条
-    public LCProgressBar progressBar = new LCProgressBar();
 
-    public LCFromLabel sizeLabel = new LCFromLabel();
-    private String cacheLocalFile;
-    private AttachmentPanel attaPanel = new AttachmentPanel();//附件信息
+    public JLabel srcPanel = new JLabel();
+
 
     public BLKAttachDataViewHolder() {
         initComponents();
@@ -30,24 +31,46 @@ public class BLKAttachDataViewHolder extends AttachDataViewHolder {
     }
 
     private void initComponents(){
-        int maxWidth = (int)(MainFrame.getContext().currentWindowWidth * 0.427);
-        attaHashTitle = new SizeAutoAdjustTextArea(maxWidth);
+        messageBubble = new LCAttachMessageBubble();
+        srcPanel.setFont(FontUtil.getDefaultFont(12));
+        srcPanel.setForeground(ColorCnst.FONT_GRAY_DARKER);
 
+        messageBubble.setCursor(MainFrame.handCursor);
     }
 
+    /**
+     *
+     */
     private void initView(){
+        this.setLayout(new BorderLayout());
+        timePanel.add(time);
 
+        attachmentPanel.setLayout(new GridBagLayout());
+        attachmentPanel.add(attachIcon
+                ,new GBC(0,0).setWeight(1,1).setInsets(5,5,5,0));
+
+        attachmentPanel.add(attachmentTitle
+        ,new GBC(1,0).setWeight(100,1).setAnchor(GBC.NORTH).setInsets(5,8,5,5));
+        attachmentPanel.add(progressBar
+                ,new GBC(1,1).setWeight(1,1).setFill(GBC.HORIZONTAL).setAnchor(GBC.SOUTH).setInsets(0,8,5,5));
+        attachmentPanel.add(sizeLabel
+        ,new GBC(1,1).setWeight(1,1).setFill(GBC.HORIZONTAL).setAnchor(GBC.SOUTH).setInsets(-20,8,3,0));
+
+        messageBubble.add(attachmentPanel);
+
+        JPanel contentPanel = new JPanel();
+        contentPanel.setBackground(ColorCnst.WINDOW_BACKGROUND_LIGHT);
+        contentPanel.setLayout(new VerticalFlowLayout(VerticalFlowLayout.TOP,0,0,true,false));
+        contentPanel.add(srcPanel);
+
+        contentPanel.add(messageBubble);
+
+        this.add(timePanel,BorderLayout.NORTH);
+        this.add(contentPanel,BorderLayout.CENTER);
     }
 
     private void setListeners(){
 
     }
 
-    public String getCacheLocalFile() {
-        return cacheLocalFile;
-    }
-
-    public void setCacheLocalFile(String cacheLocalFile) {
-        this.cacheLocalFile = cacheLocalFile;
-    }
 }

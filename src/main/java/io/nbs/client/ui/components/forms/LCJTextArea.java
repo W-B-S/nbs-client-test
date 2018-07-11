@@ -20,9 +20,37 @@ public class LCJTextArea extends JTextArea {
         initComponents();
     }
 
+    public LCJTextArea(String ...agrs) {
+        if(agrs.length>0){
+            StringBuffer sb = new StringBuffer();
+            for(String s : agrs){
+                sb.append(s);
+            }
+            setText(sb.toString());
+        }
+        initComponents();
+    }
+
     private void initComponents(){
         setLineWrap(true);
-        setFont(FontUtil.getDefaultFont(13));
+        setEditable(false);
+        setFont(FontUtil.getDefaultFont(12));
         setForeground(ColorCnst.ITEM_SELECTED);
+    }
+
+    /**
+     *
+     * @param agrs
+     */
+    public LCJTextArea appendText(String ...agrs){
+        if(agrs.length>0){
+            StringBuffer sb = new StringBuffer();
+            sb.append(getText());
+            for(String s: agrs){
+                sb.append(s);
+            }
+            setText(sb.toString());
+        }
+        return this;
     }
 }
