@@ -98,6 +98,14 @@
             <artifactId>okhttp</artifactId>
             <version>3.10.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-beans -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>5.0.7.RELEASE</version>
+        </dependency>
+
     </dependencies>
 
     <build>

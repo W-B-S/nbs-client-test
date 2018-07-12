@@ -18,7 +18,7 @@ import java.util.Map;
  * Copyright (c) 2018, NBS , lambor.c<lanbery@gmail.com>.
  * All rights reserved.
  */
-public class BasicDao {
+public class BasicDao<E> {
     private Logger logger = LoggerFactory.getLogger(BasicDao.class);
     protected SqlSession session;
     private String className;
@@ -35,13 +35,13 @@ public class BasicDao {
         return session.insert(className + ".insert", model);
     }
 
-    public List findAll()
+    public List<E> findAll()
     {
         //return session.selectList(className + ".findAll");
         return _findAll(0);
     }
 
-    private List _findAll(int time)
+    private List<E> _findAll(int time)
     {
         if (time > 10)
         {
@@ -83,7 +83,7 @@ public class BasicDao {
         }
     }
 
-    public List find(String field, Object val)
+    public List<E> find(String field, Object val)
     {
         Map map = new HashMap();
         map.put("field", field);

@@ -8,5 +8,5 @@ package io.nbs.client.ui.panels.manage.holder;
  * Copyright (c) 2018, NBS , lambor.c<lanbery@gmail.com>.
  * All rights reserved.
  */
-public class FileAttachDataViewHolder extends AttachDataViewHolder {
+public abstract class FileAttachDataViewHolder extends AttachDataViewHolder {
 }

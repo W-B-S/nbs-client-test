@@ -16,7 +16,7 @@ import javax.swing.*;
 public class MMBodyLeftCardPanel extends ParentAvailablePanel {
     private static MMBodyLeftCardPanel context;
 
-    private AttachmentsViewHolderCacheHelper viewHolderCacheHelper;
+
 
 
 
@@ -25,7 +25,7 @@ public class MMBodyLeftCardPanel extends ParentAvailablePanel {
      */
     public MMBodyLeftCardPanel(JPanel parent) {
         super(parent);
-        viewHolderCacheHelper = new AttachmentsViewHolderCacheHelper();
+
         initComponents();
         initView();
         setListeners();
@@ -62,11 +62,4 @@ public class MMBodyLeftCardPanel extends ParentAvailablePanel {
         return context;
     }
 
-    /**
-     *
-     * @return
-     */
-    public AttachmentsViewHolderCacheHelper getViewHolderCacheHelper() {
-        return viewHolderCacheHelper;
-    }
 }

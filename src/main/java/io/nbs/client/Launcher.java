@@ -1,6 +1,7 @@
 package io.nbs.client;
 
 import io.ipfs.api.IPFS;
+import io.ipfs.api.exceptions.IllegalIPFSMessageException;
 import io.ipfs.nbs.helper.IPAddressHelper;
 import io.nbs.client.cnsts.AppGlobalCnst;
 import io.nbs.client.cnsts.ColorCnst;
@@ -309,7 +310,11 @@ public class Launcher {
         return currentFrame;
     }
 
-    public boolean startIPFS(){
+    /**
+     *
+     * @return
+     */
+    public boolean startIPFS() throws IllegalIPFSMessageException {
         if(ipfsBuilder==null){
             //ipfs daemon --routing=dhtclient --enable-pubsub-experiment
 
@@ -318,7 +323,7 @@ public class Launcher {
             File exeFile = new File(ipfsPath,"ipfs.exe");
             if(!exeFile.exists()){
                 logger.error("IPFS SEVER NOT FOUND IN PATH :{}",ipfsExe);
-                return false;
+                throw new IllegalIPFSMessageException("没有在["+ipfsExe+"]下找到服务文件.");
             }
             ipfsBuilder = new ProcessBuilder("ipfs.exe","daemon" ,"--routing=dhtclient","--enable-pubsub-experiment");
             ipfsBuilder.directory(ipfsPath);
@@ -333,6 +338,29 @@ public class Launcher {
 
         }
         return false;
+    }
+
+    public boolean initNBSSvr() throws IllegalIPFSMessageException {
+        String ipfsExe = AppGlobalCnst.consturactPath(CURRENT_DIR,AppGlobalCnst.IPFS_BASE);
+        File ipfsPath = new File(ipfsExe);
+        File exeFile = new File(ipfsPath,"ipfs.exe");
+        if(!exeFile.exists()){
+            logger.error("IPFS SEVER NOT FOUND IN PATH :{}",ipfsExe);
+            throw new IllegalIPFSMessageException("没有在["+ipfsExe+"]下找到服务文件.");
+        }
+        ProcessBuilder initNBSBuilder =  new ProcessBuilder("ipfs.exe","init" ,"-p local-discovery");
+        initNBSBuilder.directory(ipfsPath);
+        try {
+            Process initNBSProcess = initNBSBuilder.start();
+            initNBSProcess.waitFor(2,TimeUnit.SECONDS);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new IllegalIPFSMessageException("初始化失败.");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new IllegalIPFSMessageException("初始化失败.");
+        }
+        return true;
     }
 
     /**

@@ -3,10 +3,10 @@ package io.nbs.client.ui.panels.manage.holder;
 
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.cnsts.FontUtil;
-import io.nbs.client.ui.components.GBC;
 import io.nbs.client.ui.components.LCAttachMessageBubble;
 import io.nbs.client.ui.components.VerticalFlowLayout;
-import io.nbs.client.ui.frames.MainFrame;
+import io.nbs.client.ui.panels.manage.listener.FillDetailInfoListener;
+import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,19 +23,31 @@ public class BLKAttachDataViewHolder extends AttachDataViewHolder {
 
     public JLabel srcPanel = new JLabel();
 
-
     public BLKAttachDataViewHolder() {
         initComponents();
         initView();
         setListeners();
     }
 
+    public BLKAttachDataViewHolder(FillDetailInfoListener listener) {
+        super.listener = listener;
+        initComponents();
+        initView();
+        setListeners();
+    }
+
+    @Override
+    public void setFillDetailListener( FillDetailInfoListener listener) {
+        super.listener = listener;
+    }
+
     private void initComponents(){
         messageBubble = new LCAttachMessageBubble();
-        srcPanel.setFont(FontUtil.getDefaultFont(12));
+        messageBubble.setLayout(new BorderLayout());
+        srcPanel.setFont(FontUtil.getDefaultFont(14));
         srcPanel.setForeground(ColorCnst.FONT_GRAY_DARKER);
-
-        messageBubble.setCursor(MainFrame.handCursor);
+        sizeLabel.setHorizontalAlignment(JLabel.LEFT);
+       // messageBubble.setCursor(MainFrame.handCursor);
     }
 
     /**
@@ -44,20 +56,33 @@ public class BLKAttachDataViewHolder extends AttachDataViewHolder {
     private void initView(){
         this.setLayout(new BorderLayout());
         timePanel.add(time);
+        /**
+         * 消息布局
+         */
+        attachmentPanel.setLayout(new MigLayout("","[left]"));
+        attachmentPanel.add(hashTitle,"growx ,gap 4,wrap");
+        attachmentPanel.add(attachmentTitle,"growx,gap 4,wrap");
+        attachmentPanel.add(progressBar,"growx,gaptop 0,wrap");
+        attachmentPanel.add(sizeLabel,"split,span,growx,gaptop 0");
+        attachmentPanel.add(blkNumLabel,"span,growx,gaptop 4,wrap");
 
-        attachmentPanel.setLayout(new GridBagLayout());
-        attachmentPanel.add(attachIcon
-                ,new GBC(0,0).setWeight(1,1).setInsets(5,5,5,0));
+        /**
+         * 图标布局
+         */
+        iconInfoPanel.setLayout(new MigLayout("","[right]"));
+        iconInfoPanel.add(attachIcon,"growx,span ,gaptop 10,wrap");
+        //iconInfoPanel.add(new JLabel(),"split,span 2,growx,gaptop 20");
+        iconInfoPanel.add(openBtn,"split,span,growx,gaptop 20");
+        iconInfoPanel.add(downloadBtn,"span,growx,gapright 20,wrap");
 
-        attachmentPanel.add(attachmentTitle
-        ,new GBC(1,0).setWeight(100,1).setAnchor(GBC.NORTH).setInsets(5,8,5,5));
-        attachmentPanel.add(progressBar
-                ,new GBC(1,1).setWeight(1,1).setFill(GBC.HORIZONTAL).setAnchor(GBC.SOUTH).setInsets(0,8,5,5));
-        attachmentPanel.add(sizeLabel
-        ,new GBC(1,1).setWeight(1,1).setFill(GBC.HORIZONTAL).setAnchor(GBC.SOUTH).setInsets(-20,8,3,0));
 
-        messageBubble.add(attachmentPanel);
+        messageBubble.add(attachmentPanel,BorderLayout.CENTER);
+        messageBubble.add(iconInfoPanel,BorderLayout.EAST);
 
+
+        /**
+         * 整体垂直布局
+         */
         JPanel contentPanel = new JPanel();
         contentPanel.setBackground(ColorCnst.WINDOW_BACKGROUND_LIGHT);
         contentPanel.setLayout(new VerticalFlowLayout(VerticalFlowLayout.TOP,0,0,true,false));

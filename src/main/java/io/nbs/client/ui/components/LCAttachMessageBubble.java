@@ -1,7 +1,10 @@
 package io.nbs.client.ui.components;
 
 import com.nbs.ui.components.NBS9PathImageIcon;
+import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.ui.components.message.IMMessageBubble;
+import io.nbs.client.ui.frames.MainFrame;
+import io.nbs.commons.utils.IconUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,10 +25,24 @@ public class LCAttachMessageBubble extends JPanel implements IMMessageBubble {
      * 背景
      */
     private Icon currentBGIcon;
+    private NinePatchImageIcon bgNormalIcon;
+    private NinePatchImageIcon bgActiveIcon;
 
     public LCAttachMessageBubble() {
         setOpaque(false);
+       // init();
         setListener();
+    }
+
+    private void init(){
+        bgNormalIcon = new NinePatchImageIcon(this.getClass().getResource("/icons/left.9.png"));
+        bgActiveIcon = new NinePatchImageIcon(this.getClass().getResource("/icons/left_active.9.png"));
+        this.setCurrentBGIcon(bgNormalIcon);
+    }
+
+    @Override
+    public Insets getInsets() {
+        return new Insets(2,9,3,2);
     }
 
     private void setListener(){
@@ -80,5 +97,21 @@ public class LCAttachMessageBubble extends JPanel implements IMMessageBubble {
 
     public void setCurrentBGIcon(Icon currentBGIcon) {
         this.currentBGIcon = currentBGIcon;
+    }
+
+    public NinePatchImageIcon getBgNormalIcon() {
+        return bgNormalIcon;
+    }
+
+    public void setBgNormalIcon(NinePatchImageIcon bgNormalIcon) {
+        this.bgNormalIcon = bgNormalIcon;
+    }
+
+    public NinePatchImageIcon getBgActiveIcon() {
+        return bgActiveIcon;
+    }
+
+    public void setBgActiveIcon(NinePatchImageIcon bgActiveIcon) {
+        this.bgActiveIcon = bgActiveIcon;
     }
 }

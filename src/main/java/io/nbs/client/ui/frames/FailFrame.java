@@ -1,5 +1,6 @@
 package io.nbs.client.ui.frames;
 
+import io.ipfs.api.exceptions.IllegalIPFSMessageException;
 import io.nbs.client.Launcher;
 import io.nbs.client.listener.AbstractMouseListener;
 import io.nbs.client.cnsts.ColorCnst;
@@ -166,13 +167,36 @@ public class FailFrame extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     failFrame.dispose();
-                    boolean b = Launcher.getContext().startIPFS();
+                    boolean b = false;
+                    try {
+                        b = Launcher.getContext().startIPFS();
+                    } catch (IllegalIPFSMessageException e1) {
+                        JOptionPane.showMessageDialog(failFrame,e1.getMessage());
+                        System.exit(1);
+                    }
 
                     if(!b){
-
                         Launcher.getContext().reStartMain();
                     }else {
-                        JOptionPane.showMessageDialog(failFrame,"NBS 服务启动失败.");
+                        String message = "NBS 服务启动失败.可能你还没有初始化服务";
+                        int r = JOptionPane.showConfirmDialog(failFrame,message);
+                        switch (r){
+                            case JOptionPane.YES_OPTION:
+                                try {
+                                    boolean bInit  = Launcher.getContext().initNBSSvr();
+                                    if(bInit)Launcher.getContext().startIPFS();
+                                } catch (IllegalIPFSMessageException e1) {
+                                    e1.printStackTrace();
+                                    System.exit(1);
+                                }
+                                break;
+                            case JOptionPane.NO_OPTION:
+                            case JOptionPane.CANCEL_OPTION:
+                            case JOptionPane.CLOSED_OPTION:
+                            default:
+                                System.exit(1);
+                                break;
+                        }
                     }
                 }
             });

@@ -67,8 +67,10 @@ public class SizeAutoAdjustTextArea extends JIMSendTextPane {
 
     @Override
     public void setText(String t) {
+
+
         // 对emoji的Unicode编码转别名
-        t = EmojiParser.parseToAliases(t);
+       // t = EmojiParser.parseToAliases(t);
         if (t == null)
         {
             return;

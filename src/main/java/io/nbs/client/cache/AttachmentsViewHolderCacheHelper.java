@@ -2,6 +2,7 @@ package io.nbs.client.cache;
 
 import io.nbs.client.ui.components.adapters.MessageMouseListener;
 import io.nbs.client.ui.panels.manage.holder.BLKAttachDataViewHolder;
+import io.nbs.client.ui.panels.manage.listener.FillDetailInfoListener;
 
 import javax.swing.*;
 import java.awt.event.MouseListener;
@@ -24,15 +25,17 @@ public class AttachmentsViewHolderCacheHelper {
     private List<BLKAttachDataViewHolder> attaHolders = new ArrayList<>();
 
     private int attPosition = 0;
+    private FillDetailInfoListener fillDetailInfoListener;
 
-    public AttachmentsViewHolderCacheHelper(){
+    public AttachmentsViewHolderCacheHelper(FillDetailInfoListener detailInfoListener){
+        this.fillDetailInfoListener = detailInfoListener;
         initialized();
     }
 
     private void initialized(){
         new Thread(()->{
             for(int i=0;i<CACHE_CAPACITY;i++){
-                attaHolders.add(new BLKAttachDataViewHolder());
+                attaHolders.add(new BLKAttachDataViewHolder(fillDetailInfoListener));
             }
         }).start();
     }
@@ -43,7 +46,7 @@ public class AttachmentsViewHolderCacheHelper {
      */
     public synchronized BLKAttachDataViewHolder tryGetAttachmentBlockDataViewHolder(){
         BLKAttachDataViewHolder holder = null;
-        if(attPosition<CACHE_CAPACITY&& attaHolders.size()>0){
+        if(attPosition < CACHE_CAPACITY && attaHolders.size()>0){
             holder = attaHolders.get(attPosition);
             attPosition++;
         }

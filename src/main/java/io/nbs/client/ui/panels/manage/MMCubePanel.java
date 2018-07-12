@@ -2,10 +2,13 @@ package io.nbs.client.ui.panels.manage;
 
 import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.panels.ParentAvailablePanel;
+import io.nbs.commons.utils.DataSizeFormatUtil;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * @Package : io.nbs.client.ui.panels.manage
@@ -16,7 +19,7 @@ import java.awt.*;
  * All rights reserved.
  */
 public class MMCubePanel extends JPanel {
-    private static MMCubePanel context;
+    private MMCubePanel context;
     private static int whSize = 15;
     private String hash;
     private long dataSize = 0;
@@ -26,6 +29,7 @@ public class MMCubePanel extends JPanel {
      * construction
      */
     public MMCubePanel(String hash,Long size) {
+        context =this;
         init(hash,size,true);
     }
 
@@ -65,7 +69,18 @@ public class MMCubePanel extends JPanel {
     }
 
     private void setListeners() {
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
 
+                super.mouseEntered(e);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+            }
+        });
     }
 
     /**
@@ -73,7 +88,7 @@ public class MMCubePanel extends JPanel {
      *
      * @return {[type]} [description]
      */
-    public static MMCubePanel getContext() {
+    public MMCubePanel getContext() {
         return context;
     }
 

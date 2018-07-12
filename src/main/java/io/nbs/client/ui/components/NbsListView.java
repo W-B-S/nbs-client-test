@@ -101,7 +101,7 @@ public class NbsListView extends JScrollPane {
     }
 
     /**
-     * 设置滚动条的颜色 TODO
+     * 设置滚动条的颜色
      * @param thumbColor
      * @param trackColor
      */

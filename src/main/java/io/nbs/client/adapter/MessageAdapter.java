@@ -146,6 +146,7 @@ public class MessageAdapter extends BaseAdapter<BaseMessageViewHolder> {
 
     private void processRightTextMessage(ViewHolder viewHolder,final MessageItem item){
         MessageRightTextViewHolder holder = (MessageRightTextViewHolder)viewHolder;
+
         holder.text.setText(item.getMessageContent());
         holder.text.setTag(item.getId());
 

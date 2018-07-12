@@ -1,4 +1,4 @@
-package io.nbs.client.ui.components.message;
+package io.nbs.client.ui.components;
 
 import com.android.ninepatch.NinePatch;
 
@@ -18,11 +18,11 @@ import java.net.URL;
  * Copyright (c) 2018, NBS , lambor.c<lanbery@gmail.com>.
  * All rights reserved.
  */
-public class IM9PatchImageIcon extends ImageIcon {
+public class NinePatchImageIcon extends ImageIcon {
     private static final long serialVersionUID = 1L;
     private NinePatch mNinePatch;
 
-    public IM9PatchImageIcon(URL location) {
+    public NinePatchImageIcon(URL location) {
         try{
             this.mNinePatch = NinePatch.load(location,true);
         }catch (IOException e){

@@ -2,6 +2,7 @@ package io.nbs.client.ui.panels.manage;
 
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.cnsts.FontUtil;
+import io.nbs.client.listener.AbstractMouseListener;
 import io.nbs.client.ui.components.GBC;
 import io.nbs.client.ui.components.NBSIconButton;
 import io.nbs.client.ui.components.SearchButtonPanel;
@@ -10,9 +11,14 @@ import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.panels.ParentAvailablePanel;
 import io.nbs.commons.utils.ButtonIconUtil;
 import io.nbs.commons.utils.IconUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * @Package : io.nbs.client.ui.panels.manage
@@ -56,7 +62,7 @@ public class MMSearcherPanel extends ParentAvailablePanel {
 
         searchTextField.setFont(FontUtil.getDefaultFont(14));
         //searchTextField.setBorder(MainFrame.redBorder);
-        searchTextField.setForeground(ColorCnst.FONT_WHITE);
+        searchTextField.setForeground(ColorCnst.DARK);
     }
 
     /**
@@ -83,6 +89,42 @@ public class MMSearcherPanel extends ParentAvailablePanel {
     }
 
     private void setListeners() {
+        buttonPanel.addMouseListener(new AbstractMouseListener(){
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                searchHash(searchTextField.getText());
+                //super.mouseClicked(e);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                buttonPanel.setCursor(MainFrame.handCursor);
+                super.mouseEntered(e);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+            }
+        });
+
+        searchTextField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode()==KeyEvent.VK_ENTER){
+                    searchHash(searchTextField.getText());
+                }
+            }
+        });
+    }
+
+    /**
+     *
+     * @param text
+     */
+    private void searchHash(String text){
+        if(StringUtils.isBlank(text))return;
+        String searchStr = text.trim();
 
     }
 

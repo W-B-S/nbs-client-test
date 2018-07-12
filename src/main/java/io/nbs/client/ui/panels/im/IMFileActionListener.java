@@ -8,6 +8,7 @@ import io.nbs.client.Launcher;
 import io.nbs.client.listener.IPFSFileUploader;
 import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.sdk.beans.PeerInfo;
+import io.nbs.sdk.prot.IPMParser;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,7 +78,7 @@ public class IMFileActionListener implements ActionListener {
             entity.setPeername(info.getNick());
             entity.setPeerhash(info.getId());
             String fname = node.name.get();
-            entity.setFname(fname);
+            entity.setFname(IPMParser.urlDecode(fname));
             entity.setFsize(Long.parseLong(node.largeSize.get()));
             String suffix = fname.lastIndexOf(".") > 0 ?"":fname.substring(fname.lastIndexOf("."));
             entity.setFsuffix(suffix);
