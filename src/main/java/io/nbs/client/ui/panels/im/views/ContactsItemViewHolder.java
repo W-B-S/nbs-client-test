@@ -44,7 +44,7 @@ public class ContactsItemViewHolder extends ViewHolder {
 
         shortMsg.setFont(FontUtil.getDefaultFont(12));
         shortMsg.setForeground(ColorCnst.DARK);//ITEM_SELECTED
-        shortMsg.setText("beijing ");
+        shortMsg.setText("");
     }
 
     /**

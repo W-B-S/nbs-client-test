@@ -1,5 +1,6 @@
 package com.nbs.biz.data.entity;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -26,7 +27,7 @@ public class AttachmentInfoEntity extends BasicEntity {
     private Integer inlocal;
     private String ftype;
     private Integer sortno;
-    private Date ctime;
+    private String ctime;
     private Long lmtime;
 
     public String getId() {
@@ -133,11 +134,11 @@ public class AttachmentInfoEntity extends BasicEntity {
         this.ftype = ftype;
     }
 
-    public Date getCtime() {
+    public String getCtime() {
         return ctime;
     }
 
-    public void setCtime(Date ctime) {
+    public void setCtime(String ctime) {
         this.ctime = ctime;
     }
 

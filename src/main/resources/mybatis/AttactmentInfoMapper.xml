@@ -17,7 +17,7 @@
         <result column="inlocal" property="inlocal" jdbcType="INTEGER"/>
         <result column="ftype" property="ftype" jdbcType="VARCHAR"/>
         <result column="sortno" property="sortno" jdbcType="INTEGER"/>
-        <result column="ctime" property="ctime" jdbcType="INTEGER"/>
+        <result column="ctime" property="ctime" jdbcType="VARCHAR"/>
         <result column="lmtime" property="lmtime" jdbcType="BIGINT"/>
     </resultMap>
 

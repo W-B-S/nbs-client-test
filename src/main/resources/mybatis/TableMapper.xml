@@ -95,7 +95,7 @@
         inlocal integer default 1,
         ftype varchar(20),
         sortno INTEGER ,
-        ctime TimeStamp NOT NULL DEFAULT (datetime('now','localtime')),
+        ctime varchar NOT NULL DEFAULT (datetime('now','localtime')),
         lmtime bigint
         );
     </update>

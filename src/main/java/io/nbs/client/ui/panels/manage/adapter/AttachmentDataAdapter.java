@@ -12,6 +12,7 @@ import io.nbs.commons.utils.TimeUtil;
 import io.nbs.sdk.beans.PeerInfo;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -87,11 +88,11 @@ public class AttachmentDataAdapter extends BaseAdapter<AttachDataViewHolder> {
                 holder.time.setVisible(false);
             }else {
                 holder.time.setVisible(true);
-                holder.time.setText(TimeUtil.formatMonthDay(entity.getCtime()));
+                holder.time.setText(entity.getCtime());
             }
         }else {
             holder.time.setVisible(true);
-            holder.time.setText(TimeUtil.formatMonthDay(entity.getCtime()));
+            holder.time.setText(entity.getCtime());
         }
         //处理图标
     }

@@ -17,7 +17,7 @@ import java.awt.*;
  */
 public class MMCubePanel extends JPanel {
     private static MMCubePanel context;
-    private static int whSize = 30;
+    private static int whSize = 15;
     private String hash;
     private long dataSize = 0;
     private boolean pined = false;

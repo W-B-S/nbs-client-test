@@ -226,6 +226,7 @@ public class NbsListView extends JScrollPane {
         lastItemCount = adapter.getCount();
         for(int i = 0 ;i<adapter.getCount();i++){
             int viewType = adapter.getItemViewType(i);
+           // System.out.println("Peers Load error :"+i);
             AvatarViewHolder avatarViewHolder = adapter.onCreateHeaderViewHolder(viewType,i);
             if(avatarViewHolder != null){
                 adapter.onBindHeaderViewHolder(avatarViewHolder,i);
@@ -237,6 +238,7 @@ public class NbsListView extends JScrollPane {
             adapter.onBindViewHolder(holder,i);
             contentPanel.add(holder);
         }
+       // System.out.println("Peers Load complete");
     }
 
     public BaseAdapter getAdapter() {

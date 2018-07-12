@@ -48,7 +48,7 @@ public class MessageRightTextViewHolder extends BaseMessageViewHolder {
         timePanel.setBackground(ColorCnst.WINDOW_BACKGROUND);
         messageAvatarPanel.setBackground(ColorCnst.WINDOW_BACKGROUND);
 
-        int maxWidth = (int)(MainFrame.getContext().currentWindowHeight*0.5);
+        int maxWidth = (int)(MainFrame.getContext().currentWindowWidth*0.5);
         text = new SizeAutoAdjustTextArea(maxWidth);
         text.setParseUrl(true);
 
@@ -74,6 +74,7 @@ public class MessageRightTextViewHolder extends BaseMessageViewHolder {
 
         //JPanel res
         JPanel resendTextPanel = new JPanel();
+
         resendTextPanel.setBackground(ColorCnst.WINDOW_BACKGROUND);
         resendTextPanel.add(resend, BorderLayout.WEST);
         resendTextPanel.add(sendingProgress, BorderLayout.WEST);
@@ -84,7 +85,8 @@ public class MessageRightTextViewHolder extends BaseMessageViewHolder {
         //messageAvatarPanel.setBorder(MainFrame.redBorder);
         messageAvatarPanel.add(resendTextPanel,
                 new GBC(1,0).setWeight(1000,1).setAnchor(GBC.EAST).setInsets(0,0,5,0));
-        messageAvatarPanel.add(avatar,new GBC(2,0).setWeight(1,1).setAnchor(GBC.NORTH).setInsets(5,0,0,10));
+        messageAvatarPanel.add(avatar,
+                new GBC(2,0).setWeight(1,1).setAnchor(GBC.NORTH).setInsets(5,0,0,10));
         add(timePanel,BorderLayout.NORTH);//
         add(messageAvatarPanel,BorderLayout.CENTER);
     }

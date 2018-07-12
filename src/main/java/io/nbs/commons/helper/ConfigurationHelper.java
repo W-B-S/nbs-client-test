@@ -223,4 +223,9 @@ public class ConfigurationHelper {
                 || stats.equalsIgnoreCase("1")
         )  ? true : false;
     }
+
+    public boolean exitStopIPFS(){
+        String v = cfgProps.getProperty("nbs.server.exit.stop","true");
+        return v.equalsIgnoreCase("true")||v.equals("1")||v.equalsIgnoreCase("y");
+    }
 }

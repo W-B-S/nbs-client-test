@@ -6,6 +6,7 @@ import io.nbs.client.cnsts.AppGlobalCnst;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.cnsts.OSUtil;
 import io.nbs.commons.helper.ConfigurationHelper;
+import io.nbs.commons.utils.TimeUtil;
 import io.nbs.sdk.beans.PeerInfo;
 import io.nbs.client.ui.frames.FailFrame;
 import io.nbs.client.ui.frames.InitialFrame;
@@ -22,6 +23,7 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Package : io.ipfs.app
@@ -39,6 +41,8 @@ public class Launcher {
     private static final String APP_VERSION = "2.0";
 
     public static ImageIcon logo ;
+    private static ProcessBuilder ipfsBuilder;
+    private static Process ipfsProcess;
     /**
      * 文件基础路径
      * ${basedir}/.nbs/
@@ -56,7 +60,9 @@ public class Launcher {
     public static String CURRENT_DIR;
     public static final String FILE_SEPARATOR;
     public static String DOWNLOAD_FILE_PATH;
-    private ConfigurationHelper cfgHelper;
+    private static ConfigurationHelper cfgHelper;
+    private static boolean ipfsRuning = false;
+    private static boolean cliStartFirst = true;
 
     private IPFS ipfs;
     /**
@@ -76,6 +82,7 @@ public class Launcher {
         context = this;
         logo = IconUtil.getIcon(this,"/icons/nbs.png");
         cfgHelper = ConfigurationHelper.getInstance();
+
     }
     public Launcher(String[] args){
         context = this;
@@ -99,7 +106,87 @@ public class Launcher {
         try{
             String apiURL = ConfigurationHelper.getInstance().getIPFSAddress();
             ipfs =  new IPFS(apiURL);
-            boolean first = needInitConfig(ipfs);
+            checkedIPFSRunning();
+            if(ipfsRuning){
+                boolean first = needInitConfig(ipfs);
+                //first = true;
+                if(first){
+                    currentFrame = new InitialFrame(ipfs);
+                }else {
+                    currentFrame = new MainFrame(currentPeer);
+                    currentFrame.setVisible(true);
+                }
+            }else {
+                goFailFrame("您的 NBS 服务未启动,请检查.");
+            }
+        }catch (RuntimeException re){
+            cliStartFirst =false;
+            re.printStackTrace();
+            System.out.println(re.getMessage());
+            goFailFrame("您的 NBS 服务未启动,请检查.");
+        } catch (IOException e) {
+            cliStartFirst =false;
+            logger.error(e.getMessage());
+            goFailFrame("未能获取服务配置信息,请检查IPFS 服务是否已启动.");
+        }
+        currentFrame.setBackground(ColorCnst.WINDOW_BACKGROUND);
+        currentFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        if(OSUtil.getOsType()!=OSUtil.Mac_OS){
+            currentFrame.setIconImage(logo.getImage());
+        }
+        currentFrame.setVisible(true);
+    }
+
+    private void goFailFrame(String msg){
+        StringBuilder sb = new StringBuilder();
+        sb.append("<html>");
+        sb.append(msg);
+        sb.append("</html");
+        currentFrame = new FailFrame(sb.toString());
+    }
+
+    /**
+     *
+     */
+    private void checkedIPFSRunning(){
+        int checkTimes = 0;
+        while (!ipfsRuning&& checkTimes<20){
+            if(ipfs==null){
+                String apiURL = cfgHelper.getIPFSAddress();
+                try {
+                    ipfs =  new IPFS(apiURL);
+                }catch (RuntimeException e){
+                    try {
+                        TimeUnit.SECONDS.sleep(1);
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+                    checkTimes++;
+                    continue;
+                }
+            }
+            try {
+                ipfs.id();
+                ipfsRuning = true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            System.out.println("NBS 服务启动检查...{"+checkTimes+"}.");
+            checkTimes++;
+        }
+    }
+
+    public void reStartMain(){
+        //init IPFS and check
+        checkedIPFSRunning();
+        boolean first = false;
+        try {
+            first = needInitConfig(ipfs);
             //first = true;
             if(first){
                 currentFrame = new InitialFrame(ipfs);
@@ -108,30 +195,20 @@ public class Launcher {
                 currentFrame.setVisible(true);
             }
             currentFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        }catch (RuntimeException re){
-            re.printStackTrace();
-            System.out.println(re.getMessage());
-            StringBuilder sb = new StringBuilder();
-            sb.append("<html>");
-            sb.append("您的 NBS 服务未启动,请检查.");
-            sb.append("</html");
-            currentFrame = new FailFrame(sb.toString());
-            currentFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            currentFrame.setBackground(ColorCnst.WINDOW_BACKGROUND);
+            if(OSUtil.getOsType()!=OSUtil.Mac_OS){
+                currentFrame.setIconImage(logo.getImage());
+            }
+            currentFrame.setVisible(true);
         } catch (IOException e) {
+            e.printStackTrace();
             logger.error(e.getMessage());
-            StringBuilder sb = new StringBuilder();
-            sb.append("<html>");
-            sb.append("未能获取服务配置信息,请检查IPFS 服务是否已启动.");
-            sb.append("</html");
-            currentFrame = new FailFrame(sb.toString());
-            currentFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            destoryIPFS();
+            System.exit(1);
         }
-        currentFrame.setBackground(ColorCnst.WINDOW_BACKGROUND);
-        if(OSUtil.getOsType()!=OSUtil.Mac_OS){
-            currentFrame.setIconImage(logo.getImage());
-        }
-        currentFrame.setVisible(true);
     }
+
+
 
     /**
      *
@@ -230,5 +307,44 @@ public class Launcher {
      */
     public JFrame getCurrentFrame() {
         return currentFrame;
+    }
+
+    public boolean startIPFS(){
+        if(ipfsBuilder==null){
+            //ipfs daemon --routing=dhtclient --enable-pubsub-experiment
+
+            String ipfsExe = AppGlobalCnst.consturactPath(CURRENT_DIR,AppGlobalCnst.IPFS_BASE);
+            File ipfsPath = new File(ipfsExe);
+            File exeFile = new File(ipfsPath,"ipfs.exe");
+            if(!exeFile.exists()){
+                logger.error("IPFS SEVER NOT FOUND IN PATH :{}",ipfsExe);
+                return false;
+            }
+            ipfsBuilder = new ProcessBuilder("ipfs.exe","daemon" ,"--routing=dhtclient","--enable-pubsub-experiment");
+            ipfsBuilder.directory(ipfsPath);
+            try {
+                ipfsProcess = ipfsBuilder.start();
+                return ipfsProcess.waitFor(2,TimeUnit.SECONDS);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return false;
+    }
+
+    /**
+     * 退出时同时结束IPFS服务
+     */
+    public static void destoryIPFS(){
+        if(ipfsProcess!=null && cfgHelper.exitStopIPFS()){
+            ipfsProcess.destroy();
+        }
+    }
+
+    public static boolean isIpfsRuning() {
+        return ipfsRuning;
     }
 }

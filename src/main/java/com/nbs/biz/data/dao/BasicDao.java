@@ -69,7 +69,7 @@ public class BasicDao {
     {
         if (time > 10)
         {
-            System.out.println("查询到 BasicModel 对象失败次数>10，放弃查询");
+            System.out.println("查询到 BasicModel 对象失败次数>10，放弃查询 id："+id);
             return null;
         }
 
@@ -78,7 +78,7 @@ public class BasicDao {
             return (BasicEntity) session.selectOne(className + ".findById", id);
         } catch (PersistenceException exception)
         {
-            System.out.println("没有查询到 BasicModel 对象，继续查询");
+            System.out.println("没有查询到 BasicModel 对象，继续查询:"+className+".findById");
             return _findById(id, ++time);
         }
     }

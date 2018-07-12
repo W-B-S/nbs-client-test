@@ -1,5 +1,6 @@
 package io.nbs.client.ui.frames;
 
+import io.nbs.client.Launcher;
 import io.nbs.client.listener.AbstractMouseListener;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.cnsts.FontUtil;
@@ -30,9 +31,12 @@ public class FailFrame extends JFrame {
     private JLabel messageLabel;
     private JLabel titleLabel;
     private NBSButton exitButton;
+    private NBSButton startIPFSBtn;
     private static Point origin = new Point();
+    private FailFrame failFrame;
 
     public FailFrame(String errorMsg){
+        failFrame = this;
         initComponents();
         centerScreen();
         initView(errorMsg);
@@ -56,7 +60,10 @@ public class FailFrame extends JFrame {
         titleLabel.setFont(FontUtil.getDefaultFont(18));
 
         exitButton = new NBSButton("退出",ColorCnst.MAIN_COLOR,ColorCnst.MAIN_COLOR_DARKER);
-        exitButton.setPreferredSize(new Dimension(200,40));
+        exitButton.setPreferredSize(new Dimension(100,40));
+
+        startIPFSBtn = new NBSButton("启动服务",ColorCnst.MAIN_COLOR,ColorCnst.MAIN_COLOR_DARKER);
+        startIPFSBtn.setPreferredSize(new Dimension(100,40));
 
         messageLabel = new JLabel();
         messageLabel.setFont(FontUtil.getDefaultFont(16));
@@ -69,6 +76,10 @@ public class FailFrame extends JFrame {
        // contentPanel.setBackground(ColorCnst.WINDOW_BACKGROUND);
 
         controlPanel.add(closeLabel);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridBagLayout());
+        buttonPanel.add(exitButton,new GBC(0,0)
+                .setFill(GBC.BOTH).setWeight(1,1).setInsets(10,0,0,0));
 
         if(OSUtil.getOsType() != OSUtil.Mac_OS){
             setUndecorated(true);
@@ -77,14 +88,13 @@ public class FailFrame extends JFrame {
                             .setFill(GBC.BOTH)
                             .setWeight(1,1)
                             .setInsets(10,0,0,0));
+
+            buttonPanel.add(startIPFSBtn,new GBC(1,0)
+                    .setFill(GBC.BOTH).setWeight(1,1).setInsets(10,10,0,0));
         }
         JPanel titlePanel = new JPanel();
         titlePanel.add(titleLabel);
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridBagLayout());
-        buttonPanel.add(exitButton,new GBC(0,0)
-        .setFill(GBC.BOTH).setWeight(1,1).setInsets(10,0,0,0));
 
         JPanel messagePanel = new JPanel();
         messageLabel.setText(message);
@@ -151,11 +161,27 @@ public class FailFrame extends JFrame {
                 }
             });
 
+
+            startIPFSBtn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    failFrame.dispose();
+                    boolean b = Launcher.getContext().startIPFS();
+
+                    if(!b){
+
+                        Launcher.getContext().reStartMain();
+                    }else {
+                        JOptionPane.showMessageDialog(failFrame,"NBS 服务启动失败.");
+                    }
+                }
+            });
         }
 
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Launcher.destoryIPFS();
                 System.exit(1);
             }
         });

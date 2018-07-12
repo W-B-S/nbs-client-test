@@ -1,5 +1,6 @@
 package io.nbs.client.ui.panels;
 
+import io.nbs.client.Launcher;
 import io.nbs.client.listener.AbstractMouseListener;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.cnsts.FontUtil;
@@ -240,6 +241,7 @@ public class TitlePanel extends ParentAvailablePanel {
         public void mouseClicked(MouseEvent e) {
             if(e.getComponent()==closeLabel){
                 //MainFrame.getContext().setVisible(false);
+                Launcher.destoryIPFS();
                 System.exit(1);
             }else if(e.getComponent() == maxLabel){
                 maxOrRestoreWindow();

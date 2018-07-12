@@ -19,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -142,6 +143,8 @@ public class AvatarUtil {
         return avatar;
     }
 
+    
+
     /**
      * 获取联系人头像,如果是hash则先从IPFS获取
      * @param identify
@@ -163,13 +166,23 @@ public class AvatarUtil {
                     avatar = ImageIO.read(temFile);
                     avatarCache.put(identify,avatar);
                     return avatar;
-                }else {//不存在下载
-                    File temCacheFile = new File(AppGlobalCnst.consturactPath(AVATAR_CACHE_ROOT,identify+suffix));
-                    URL url = new URL(ConfigurationHelper.getInstance().getGateWayURL()+identify);
-                    AvatarImageHandler.getInstance().getFileFromIPFS(url,temCacheFile);
-                    avatar = ImageIO.read(url);
-                    avatarCache.put(identify,avatar);
-                    return avatar;
+                }else {
+                    //不存在下载线程区下载
+                    new Thread(()->{
+                        URL url = null;
+                        try {
+                            File temCacheFile = new File(AppGlobalCnst.consturactPath(AVATAR_CACHE_ROOT,identify+suffix));
+                            logger.info("avatar download:{}",identify);
+                            url = new URL(ConfigurationHelper.getInstance().getGateWayURL()+identify);
+                            AvatarImageHandler.getInstance().getFileFromIPFS(url,temCacheFile);
+                            Image nAvatar = ImageIO.read(url);
+                            avatarCache.put(identify,nAvatar);
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }).start();
                 }
             } catch (Exception e) {
                 logger.warn(e.getMessage(),e.getCause());
