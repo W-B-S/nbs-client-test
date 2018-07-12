@@ -1,6 +1,11 @@
 package io.nbs.client.ui.panels.manage.body;
 
+import com.alibaba.fastjson.JSON;
 import com.nbs.ui.components.NbsBorder;
+import io.ipfs.api.IPFS;
+import io.ipfs.api.MerkleNode;
+import io.ipfs.multihash.Multihash;
+import io.nbs.client.Launcher;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.ui.components.*;
 import io.nbs.client.ui.components.forms.LCFormLabel;
@@ -17,6 +22,8 @@ import org.apache.commons.lang3.StringUtils;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.io.IOException;
+import java.util.Map;
 
 /**
  * @Package : io.nbs.client.ui.panels.manage
@@ -183,8 +190,29 @@ public class MMRightPanel extends ParentAvailablePanel {
         if(StringUtils.isNotBlank(detailInfo.getCachedfile())){
             localFileArea.setText(detailInfo.getCachedfile());
         }
+        getBlockInfo(detailInfo);
         context.updateUI();
     }
 
+    private void getBlockInfo(AttachmentDataDTO detailInfo){
+
+        try {
+            IPFS ipfs = Launcher.getContext().getIpfs();
+            Multihash multihash = Multihash.fromBase58(detailInfo.getId());
+            Map map = ipfs.object.stat(multihash);
+            if(map!=null){
+                logger.info("stat:{}", JSON.toJSONString(map));
+                if(map.containsKey("NumLinks")){
+
+                }
+            }
+            MerkleNode node = ipfs.object.links(multihash);
+            logger.info("Node:{}", JSON.toJSONString(node));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 }
