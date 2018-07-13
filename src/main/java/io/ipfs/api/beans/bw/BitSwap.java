@@ -1,4 +1,4 @@
-package io.ipfs.api.bitswap;
+package io.ipfs.api.beans.bw;
 
 import java.util.List;
 

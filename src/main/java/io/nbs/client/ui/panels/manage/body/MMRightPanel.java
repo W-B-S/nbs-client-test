@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.nbs.ui.components.NbsBorder;
 import io.ipfs.api.IPFS;
 import io.ipfs.api.MerkleNode;
+import io.ipfs.api.beans.blk.BlockStat;
 import io.ipfs.multihash.Multihash;
 import io.nbs.client.Launcher;
 import io.nbs.client.cnsts.ColorCnst;
@@ -45,10 +46,19 @@ public class MMRightPanel extends ParentAvailablePanel {
     private LCJlabel hashLabel;
     private LCJlabel sizeLabel;
     private LCJlabel sizeVol;
-    private LCJlabel precentLabel;
-    private LCJlabel precentVol;
+
+    private LCJlabel numLinksLable;
+    private LCJlabel numLinksVol;
+
     private LCJlabel blockLabel;
     private LCJlabel blockVol;
+
+    private LCJlabel linksSizeLabel;
+    private LCJlabel linksSizeVol;
+
+    private LCJlabel dataSizeLabel;
+    private LCJlabel dataSizeVol;
+
     private JPanel operPanel;//lock,unlock ,view ,download button
     private boolean inLocal = false;
     private JPanel topPanel;
@@ -77,17 +87,23 @@ public class MMRightPanel extends ParentAvailablePanel {
 
         nameArea = new LCAutoJTextPanel();
         nameArea.setForeground(ColorCnst.FONT_ABOUT_TITLE_BLUE);
-        hashLabel = new LCJlabel("HASH:");
+        hashLabel = new LCJlabel("HASH:",14);
         hashArea = new LCAutoJTextPanel();
         localFileArea = new LCAutoJTextPanel();
 
-        sizeLabel = new LCJlabel("Total Size：");
-        blockLabel = new LCJlabel("Block");
-        precentLabel = new LCJlabel("");
+        sizeLabel = new LCJlabel("Total Size：",11);
+        numLinksLable = new LCJlabel("NumLinks:",11);
 
-        sizeVol = new LCJlabel();
-        blockVol = new LCJlabel();
-        precentLabel = new LCJlabel();
+        blockLabel = new LCJlabel("BlockSize:",11);
+        linksSizeLabel = new LCJlabel("LinksSize:",11);
+        dataSizeLabel = new LCJlabel("DataSize:",11);
+
+
+        sizeVol = new LCJlabel(10);
+        numLinksVol = new LCJlabel(10);
+        blockVol = new LCJlabel(10);
+        linksSizeVol = new LCJlabel(10);
+        dataSizeVol = new LCJlabel(10);
 
         buildDataInFo();
 
@@ -141,8 +157,16 @@ public class MMRightPanel extends ParentAvailablePanel {
 
         topPanel.add(sizeLabel,"split,span ,gap top 10");
         topPanel.add(sizeVol,"span ,gap top 10");
-        topPanel.add(blockLabel,"span ,gap top 10");
-        topPanel.add(blockVol,"span ,gap top 10,wrap");
+        topPanel.add(numLinksLable,"span ,gap top 10");
+        topPanel.add(numLinksVol,"span ,gap top 10,wrap");
+
+
+        topPanel.add(blockLabel,"split,span ,gap top 10");
+        topPanel.add(blockVol,"span ,gap top 10");
+        topPanel.add(linksSizeLabel,"span ,gap top 10");
+        topPanel.add(linksSizeVol,"span ,gap top 10");
+        topPanel.add(dataSizeLabel,"span ,gap top 10");
+        topPanel.add(dataSizeVol,"span ,gap top 10,wrap");
 
 
 
@@ -155,13 +179,7 @@ public class MMRightPanel extends ParentAvailablePanel {
         }
     }
 
-    private void demoData(){
-        nameArea.setText("lanbery_skjhfskd.png");
-        hashArea.setText("QmT7CXKZ8iy8nYEsUhteA1d9UKWT5CY796qqjvt5ExFFrF");
-        sizeVol.setText("10.22KB");
-        blockVol.setText("2");
-        precentLabel.setText("20%");
-    }
+
 
     private void setListeners() {
 
@@ -195,24 +213,28 @@ public class MMRightPanel extends ParentAvailablePanel {
     }
 
     private void getBlockInfo(AttachmentDataDTO detailInfo){
-
-        try {
-            IPFS ipfs = Launcher.getContext().getIpfs();
-            Multihash multihash = Multihash.fromBase58(detailInfo.getId());
-            Map map = ipfs.object.stat(multihash);
-            if(map!=null){
-                logger.info("stat:{}", JSON.toJSONString(map));
-                if(map.containsKey("NumLinks")){
-
+        Multihash multihash = Multihash.fromBase58(detailInfo.getId());
+        new Thread(()->{
+            try {
+                IPFS ipfs = Launcher.getContext().getIpfs();
+                Map map = ipfs.object.stat(multihash);
+                if(map!=null){
+                    logger.info("stat:{}", JSON.toJSONString(map));
+                    BlockStat stat = JSON.parseObject(JSON.toJSONString(map),BlockStat.class);
+                    if(stat!=null){
+                        numLinksVol.setText(""+stat.getNumLinks());
+                        blockVol.setText(DataSizeFormatUtil.formatDataSize(stat.getBlockSize()==null?0:stat.getBlockSize()));
+                        linksSizeVol.setText(DataSizeFormatUtil.formatDataSize(stat.getLinksSize()==null?0:stat.getLinksSize()));
+                        dataSizeVol.setText(DataSizeFormatUtil.formatDataSize(stat.getDataSize()==null?0:stat.getDataSize()));
+                    }
                 }
+                MerkleNode node = ipfs.object.links(multihash);
+                logger.info("Node:{}", JSON.toJSONString(node));
+                context.updateUI();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            MerkleNode node = ipfs.object.links(multihash);
-            logger.info("Node:{}", JSON.toJSONString(node));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        }).start();
     }
 
 }

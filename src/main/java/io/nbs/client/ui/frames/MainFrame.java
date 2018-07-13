@@ -10,6 +10,7 @@ import io.nbs.client.services.IpfsMessageSender;
 import io.nbs.client.services.MessageSendService;
 import io.nbs.client.ui.panels.info.InfoFooterPanel;
 import io.nbs.client.ui.panels.manage.ManageMasterPanel;
+import io.nbs.client.ui.panels.media.MediaMasterPanel;
 import io.nbs.commons.helper.ConfigurationHelper;
 import io.nbs.sdk.beans.OnlineMessage;
 import io.nbs.sdk.beans.PeerInfo;
@@ -92,6 +93,11 @@ public class MainFrame extends JFrame {
      */
     private ManageMasterPanel manageMasterPanel;
 
+    /**
+     * multimedia
+     */
+    private MediaMasterPanel mediaMasterPanel;
+
 
     private AboutMasterPanel aboutMasterPanel;
 
@@ -165,10 +171,15 @@ public class MainFrame extends JFrame {
         aboutMasterPanel = new AboutMasterPanel();
         manageMasterPanel = new ManageMasterPanel();
 
+        mediaMasterPanel = new MediaMasterPanel();
+
         mainCentetPanel.add(infoMasterPanel,MainFrame.MainCardLayoutTypes.INFO.name());
         mainCentetPanel.add(imMasterPanel,MainCardLayoutTypes.IM.name());
-        mainCentetPanel.add(aboutMasterPanel,MainCardLayoutTypes.ABOUT.name());
         mainCentetPanel.add(manageMasterPanel,MainCardLayoutTypes.DATD.name());
+        mainCentetPanel.add(mediaMasterPanel,MainCardLayoutTypes.MEDIA.name());
+
+
+        mainCentetPanel.add(aboutMasterPanel,MainCardLayoutTypes.ABOUT.name());
     }
 
     private void initView(){

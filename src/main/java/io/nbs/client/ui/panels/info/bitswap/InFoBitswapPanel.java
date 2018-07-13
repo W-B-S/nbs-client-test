@@ -1,12 +1,10 @@
 package io.nbs.client.ui.panels.info.bitswap;
 
-import io.ipfs.api.bitswap.BitSwap;
+import io.ipfs.api.beans.bw.BitSwap;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.cnsts.FontUtil;
 import io.nbs.client.ui.components.GBC;
 import io.nbs.client.ui.components.LCFromLabel;
-import io.nbs.client.ui.components.LCJlabel;
-import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.panels.ParentAvailablePanel;
 import io.nbs.commons.utils.DataSizeFormatUtil;
 
@@ -60,7 +58,7 @@ public class InFoBitswapPanel extends ParentAvailablePanel {
      * @return {[type]} [description]
      */
     private void initComponents() {
-        titleLabel = new JLabel("bitswap 统计");
+        titleLabel = new JLabel("Bitswap 统计");
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
         titleLabel.setFont(FontUtil.getDefaultFont(15));
         titleLabel.setForeground(ColorCnst.FONT_ABOUT_TITLE_BLUE);

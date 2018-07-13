@@ -2,6 +2,7 @@ package io.ipfs.api.bitswap;
 
 import com.alibaba.fastjson.JSON;
 import io.ipfs.api.ResData;
+import io.ipfs.api.beans.bw.BitSwap;
 import io.ipfs.api.repo.RepoStat;
 import io.nbs.commons.helper.ConfigurationHelper;
 import io.nbs.commons.utils.HttpUtils;

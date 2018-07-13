@@ -34,7 +34,7 @@ public class AttachmentInfoService extends BasicService<AttachmentInfoDao,Attach
      * @return
      */
     public PageModel<AttachmentInfoEntity> queryPage(int pageNo,String searchHash){
-        PageCondition condition = new PageCondition("ctime","DESC");
+        PageCondition condition = new PageCondition("ctime");
         condition.setPageConition(pageNo);
         condition.setSearchStr(searchHash);
         int total = dao.pageTotal(condition);

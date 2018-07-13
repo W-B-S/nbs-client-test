@@ -60,7 +60,7 @@ public class BLKAttachDataViewHolder extends AttachDataViewHolder {
          * 消息布局
          */
         attachmentPanel.setLayout(new MigLayout("","[left]"));
-        attachmentPanel.add(hashTitle,"growx ,gap 4,wrap");
+        attachmentPanel.add(hashTitle,"growx ,w :300:,gap 4,wrap");
         attachmentPanel.add(attachmentTitle,"growx,gap 4,wrap");
         attachmentPanel.add(progressBar,"growx,gaptop 0,wrap");
         attachmentPanel.add(sizeLabel,"split,span,growx,gaptop 0");

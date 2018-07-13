@@ -89,13 +89,13 @@
     <select id="pageTotal" parameterType="io.nbs.sdk.page.PageCondition" resultType="integer">
         SELECT count(id) as c from  attac_info
         <if test="searchStr != null and searchStr != ''">
-            WHERE id LIKE '%'||${searchStr}
+            WHERE id LIKE '%'||'${searchStr}'||'%'
         </if>
     </select>
     <select id="pageList" parameterType="io.nbs.sdk.page.PageCondition" resultMap="BaseResultMap">
         SELECT * from attac_info
         <if test="searchStr != null and searchStr !=''">
-            WHERE id LIKE '%'||${searchStr}
+            WHERE id LIKE '%'||'${searchStr}'||'%'
         </if>
         <if test="sidx != null and sidx != ''">
             ORDER BY ${sidx}

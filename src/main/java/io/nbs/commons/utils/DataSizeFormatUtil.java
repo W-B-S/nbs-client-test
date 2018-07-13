@@ -19,7 +19,8 @@ public class DataSizeFormatUtil {
      * @param size
      * @return
      */
-    public static String formatDataSize(long size){
+    public static String formatDataSize(Long size){
+        if(size==null)size=0l;
         if(size<1024){
             return size+"B";
         }else if(size<1024*1024){

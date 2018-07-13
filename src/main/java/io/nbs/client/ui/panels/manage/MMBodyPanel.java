@@ -1,6 +1,5 @@
 package io.nbs.client.ui.panels.manage;
 
-import com.alibaba.fastjson.JSON;
 import com.nbs.biz.service.AttachmentInfoService;
 import io.nbs.client.Launcher;
 import io.nbs.client.cache.AttachmentsViewHolderCacheHelper;
@@ -16,6 +15,7 @@ import io.nbs.sdk.page.PageCondition;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Package : io.nbs.client.ui.panels.manage
@@ -42,7 +42,7 @@ public class MMBodyPanel extends ParentAvailablePanel implements FillDetailInfoL
     private AttachmentInfoService attachmentInfoService;
     private PageCondition pageCondition;
 
-    private OutResultHashPanel outResultHashPanel;
+    private TipResultHashPanel tipResultHashPanel;
 
     /**
      * construction
@@ -72,6 +72,7 @@ public class MMBodyPanel extends ParentAvailablePanel implements FillDetailInfoL
         //文件列表
         dataListPanel = new MMDataListPanel();
         searchResultPanel = new MMSearchResultPanel(pageCondition);
+        tipResultHashPanel = new TipResultHashPanel(this);
         adapter = new AttachmentDataAdapter(attachDatas,dataListPanel.getListView(),viewHolderCacheHelper,context);
         dataListPanel.getListView().setAdapter(adapter);
         rightPanel = new MMRightPanel(this);
@@ -88,6 +89,7 @@ public class MMBodyPanel extends ParentAvailablePanel implements FillDetailInfoL
 
         cardPanel.add(dataListPanel,MMNames.LISTF.name());
         cardPanel.add(searchResultPanel,MMNames.SEARCHE.name());
+        cardPanel.add(tipResultHashPanel,MMNames.TIP.name());
 
         rightPanel.setPreferredSize(new Dimension(310,MainFrame.getContext().currentWindowHeight));
         /* ===================================================================== */
@@ -104,7 +106,7 @@ public class MMBodyPanel extends ParentAvailablePanel implements FillDetailInfoL
      * @param who
      */
     public void showPanel(MMNames who){
-        cardLayout.show(context,who.name());
+        cardLayout.show(cardPanel,who.name());
     }
 
     private void loadInit(){
@@ -119,6 +121,17 @@ public class MMBodyPanel extends ParentAvailablePanel implements FillDetailInfoL
         }
     }
 
+    public void researchLoadView(List<AttachmentDataDTO> dataDTOS){
+        this.attachDatas.clear();
+        if(dataDTOS!=null){
+            for(AttachmentDataDTO dto : dataDTOS){
+                attachDatas.add(dto);
+            }
+        }
+        dataListPanel.getListView().notifyDataSetChanged(false);
+        dataListPanel.getListView().setAutoScrollToBottom();
+    }
+
     /**
      * [getContext description]
      *
@@ -130,7 +143,7 @@ public class MMBodyPanel extends ParentAvailablePanel implements FillDetailInfoL
 
 
     public static enum MMNames{
-        LISTF,SEARCHE;
+        LISTF,SEARCHE,TIP;
     }
 
     @Override
@@ -149,5 +162,17 @@ public class MMBodyPanel extends ParentAvailablePanel implements FillDetailInfoL
 
     public void setPageCondition(PageCondition pageCondition) {
         this.pageCondition = pageCondition;
+    }
+
+    public TipResultHashPanel getTipResultHashPanel() {
+        return tipResultHashPanel;
+    }
+
+    public AttachmentInfoService getAttachmentInfoService() {
+        return attachmentInfoService;
+    }
+
+    public void setAttachmentInfoService(AttachmentInfoService attachmentInfoService) {
+        this.attachmentInfoService = attachmentInfoService;
     }
 }

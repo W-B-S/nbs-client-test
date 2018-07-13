@@ -1,12 +1,6 @@
 package io.nbs.client.ui.panels.manage;
-
-import io.nbs.client.ui.components.GBC;
-import io.nbs.client.ui.components.NBSIconButton;
-import io.nbs.client.ui.components.SearchTextField;
-import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.panels.TitlePanel;
 import io.nbs.commons.helper.ConfigurationHelper;
-import io.nbs.commons.utils.ButtonIconUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,6 +14,7 @@ import java.awt.*;
  * All rights reserved.
  */
 public class ManageMasterPanel extends JPanel {
+    private static ManageMasterPanel context;
 
     private TitlePanel winTitlePanel;
 
@@ -31,6 +26,7 @@ public class ManageMasterPanel extends JPanel {
     private MMSearcherPanel searcherPanel;
 
     public ManageMasterPanel() {
+        context = this;
         initComponents();
         initView();
         setListeners();
@@ -41,9 +37,10 @@ public class ManageMasterPanel extends JPanel {
         winTitlePanel.setTitle(ConfigurationHelper.getInstance().getI18nProperty("nbs.ui.panel.data.label","Data Manager"));
         centerPanel = new JPanel();
         headerPanel = new MMHeaderPanel(this);
+        bodyPanel = new MMBodyPanel(this);
         searcherPanel = new MMSearcherPanel(this);
 
-        bodyPanel = new MMBodyPanel(this);
+
 
     }
 
@@ -68,5 +65,17 @@ public class ManageMasterPanel extends JPanel {
 
     private void setListeners(){
 
+    }
+
+    public static ManageMasterPanel getContext() {
+        return context;
+    }
+
+    public MMBodyPanel getBodyPanel() {
+        return bodyPanel;
+    }
+
+    public MMSearcherPanel getSearcherPanel() {
+        return searcherPanel;
     }
 }

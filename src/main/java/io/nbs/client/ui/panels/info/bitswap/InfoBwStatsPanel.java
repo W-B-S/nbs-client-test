@@ -1,14 +1,12 @@
 package io.nbs.client.ui.panels.info.bitswap;
 
-import io.ipfs.api.bitswap.BwStats;
+import io.ipfs.api.beans.bw.BwStats;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.cnsts.FontUtil;
 import io.nbs.client.ui.components.GBC;
 import io.nbs.client.ui.components.LCFromLabel;
-import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.panels.ParentAvailablePanel;
 import io.nbs.commons.utils.DataSizeFormatUtil;
-import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;

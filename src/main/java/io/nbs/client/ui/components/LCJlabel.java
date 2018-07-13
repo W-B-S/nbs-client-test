@@ -28,6 +28,12 @@ public class LCJlabel extends JLabel {
         initDefault();
         setForeground(defForeground);
     }
+    public LCJlabel(String text,int size) {
+        super(text);
+        setFont(FontUtil.getDefaultFont(size));
+        initDefault();
+        setForeground(defForeground);
+    }
 
     public LCJlabel(int size) {
         initDefault();

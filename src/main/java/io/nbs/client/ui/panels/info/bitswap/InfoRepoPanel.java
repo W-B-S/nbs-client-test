@@ -1,12 +1,10 @@
 package io.nbs.client.ui.panels.info.bitswap;
 
-import io.ipfs.api.bitswap.BwStats;
 import io.ipfs.api.repo.RepoStat;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.cnsts.FontUtil;
 import io.nbs.client.ui.components.GBC;
 import io.nbs.client.ui.components.LCFromLabel;
-import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.panels.ParentAvailablePanel;
 import io.nbs.commons.utils.DataSizeFormatUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -108,7 +106,7 @@ public class InfoRepoPanel extends ParentAvailablePanel {
     public void setVolume(RepoStat stat,String downloadPath){
         if(StringUtils.isNotBlank(downloadPath)) tempPathVol.setText(downloadPath);
         if(stat==null)return;
-        objectsVol.setText(DataSizeFormatUtil.formatDataSize(stat.getNumObjects()));
+        objectsVol.setText(stat.getNumObjects()+"");
         objectDataVol.setText(DataSizeFormatUtil.formatDataSize(stat.getRepoSize()));
 
         repoPathVol.setText(stat.getRepoPath());

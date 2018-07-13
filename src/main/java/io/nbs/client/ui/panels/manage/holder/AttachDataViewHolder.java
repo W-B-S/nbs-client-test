@@ -70,7 +70,7 @@ public abstract class AttachDataViewHolder extends ViewHolder {
 
         //iconInfoPanel.setBackground(ColorCnst.MAIN_COLOR);
         iconInfoPanel.setBackground(ColorCnst.WINDOW_BACKGROUND_LIGHT);
-        iconInfoPanel.setMinimumSize(new Dimension(80,100));
+        iconInfoPanel.setMinimumSize(new Dimension(60,100));
 
         ImageIcon lnormal =  IconUtil.getIcon(Launcher.getContext(),"/icons/link.png",iconSize,iconSize);
         ImageIcon lactived =  IconUtil.getIcon(Launcher.getContext(),"/icons/link_actived.png",iconSize,iconSize);

@@ -190,7 +190,7 @@ public class ToolbarPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 selectedBTN(musicBTN);
-                mainCtx.mainWinShow(MainFrame.MainCardLayoutTypes.ABOUT);
+                mainCtx.mainWinShow(MainFrame.MainCardLayoutTypes.MEDIA);
             }
         });
     }
