@@ -175,7 +175,8 @@ public class MessageEditorPanel extends ParentAvailablePanel {
             fileIcon.addActionListener(imFileActionListener);
         }
 
-        fileIcon.addMouseListener(new MouseAdapter() {
+        fileIcon.addMouseListener(new MouseAdapter()
+        {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
@@ -193,7 +194,11 @@ public class MessageEditorPanel extends ParentAvailablePanel {
         });
 
 
-        expressionLabel.addMouseListener(new MouseAdapter() {
+        /**
+         *
+         */
+        expressionLabel.addMouseListener(new MouseAdapter()
+        {
             @Override
             public void mouseClicked(MouseEvent e) {
                // expressionLabel.setIcon();
@@ -213,7 +218,8 @@ public class MessageEditorPanel extends ParentAvailablePanel {
             }
         });
 
-        textEditor.addMouseListener(new MouseAdapter() {
+        textEditor.addMouseListener(new MouseAdapter()
+        {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);

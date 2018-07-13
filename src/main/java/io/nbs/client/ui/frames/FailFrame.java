@@ -8,6 +8,7 @@ import io.nbs.client.cnsts.FontUtil;
 import io.nbs.client.cnsts.OSUtil;
 import io.nbs.client.ui.components.GBC;
 import io.nbs.client.ui.components.NBSButton;
+import io.nbs.commons.helper.ConfigurationHelper;
 import io.nbs.commons.utils.IconUtil;
 
 import javax.swing.*;
@@ -81,7 +82,7 @@ public class FailFrame extends JFrame {
         buttonPanel.setLayout(new GridBagLayout());
         buttonPanel.add(exitButton,new GBC(0,0)
                 .setFill(GBC.BOTH).setWeight(1,1).setInsets(10,0,0,0));
-
+        boolean integrated = ConfigurationHelper.getInstance().integratedServer();
         if(OSUtil.getOsType() != OSUtil.Mac_OS){
             setUndecorated(true);
             contentPanel.add(controlPanel
@@ -90,7 +91,7 @@ public class FailFrame extends JFrame {
                             .setWeight(1,1)
                             .setInsets(10,0,0,0));
 
-            buttonPanel.add(startIPFSBtn,new GBC(1,0)
+            if(integrated)buttonPanel.add(startIPFSBtn,new GBC(1,0)
                     .setFill(GBC.BOTH).setWeight(1,1).setInsets(10,10,0,0));
         }
         JPanel titlePanel = new JPanel();
@@ -121,6 +122,10 @@ public class FailFrame extends JFrame {
         );
     }
 
+    /**
+     *
+     * @throws HeadlessException
+     */
     public FailFrame() throws HeadlessException {
         super();
     }

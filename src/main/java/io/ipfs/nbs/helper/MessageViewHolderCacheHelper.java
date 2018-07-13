@@ -4,6 +4,7 @@ import io.nbs.client.ui.components.adapters.MessageMouseListener;
 import io.nbs.client.ui.panels.im.messages.MessageLeftTextViewHolder;
 import io.nbs.client.ui.panels.im.messages.MessageRightTextViewHolder;
 import io.nbs.client.ui.panels.im.messages.MessageSystemMessageViewHolder;
+import io.nbs.client.ui.panels.im.messages.RightAttachmentMessageViewHolder;
 
 import javax.swing.*;
 import java.awt.event.MouseListener;
@@ -32,6 +33,8 @@ public class MessageViewHolderCacheHelper {
 
     private List<MessageSystemMessageViewHolder> systemMessageViewHolders = new ArrayList<>();
 
+    private List<RightAttachmentMessageViewHolder> ramViewHolders = new ArrayList<>();
+
     private int rightTextPosition = 0;
     private int rightImagePosition = 0;
     private int rightAttachmentPosition = 0;
@@ -49,7 +52,14 @@ public class MessageViewHolderCacheHelper {
             long startTime = System.currentTimeMillis();
             initLeftTextViewHolder();
             initRightTextViewHolder();
+            initRightAttaViewHolders();
         }).start();
+    }
+
+    private void initRightAttaViewHolders(){
+        for(int i=0;i<CACHE_CAPACITY;i++){
+            ramViewHolders.add(new RightAttachmentMessageViewHolder());
+        }
     }
 
     private void initRightTextViewHolder(){
@@ -114,6 +124,17 @@ public class MessageViewHolderCacheHelper {
         return holder;
     }
 
+    public synchronized RightAttachmentMessageViewHolder tryGetRightAttachmentViewHolder()
+    {
+        RightAttachmentMessageViewHolder holder = null;
+        if(rightAttachmentPosition<CACHE_CAPACITY && ramViewHolders.size()>0){
+            holder = ramViewHolders.get(rightAttachmentPosition);
+            rightAttachmentPosition++;
+        }
+        return holder;
+    }
+
+
     public synchronized void reset(){
         for (int i = 0; i < rightTextPosition; i++)
         {
@@ -130,6 +151,12 @@ public class MessageViewHolderCacheHelper {
             clearMouseListener(viewHolder.text);
             clearMouseListener(viewHolder.messageBubble);
             clearMouseListener(viewHolder.avatar);
+        }
+
+        for(int i = 0; i < leftTextPosition; i++){
+            RightAttachmentMessageViewHolder viewHolder = ramViewHolders.get(i);
+
+           // clearMouseListener(viewHolder.);
         }
 
         rightTextPosition = 0;
