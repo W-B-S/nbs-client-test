@@ -115,8 +115,6 @@ public class ChatPanel extends ParentAvailablePanel {
         add(messagePanel,new GBC(0,0).setFill(GBC.BOTH).setWeight(1,7));
         add(messageEditorPanel,new GBC(0,1).setFill(GBC.BOTH).setWeight(1,2).setInsets(0,0,0,0));
 
-
-
     }
 
     /**
