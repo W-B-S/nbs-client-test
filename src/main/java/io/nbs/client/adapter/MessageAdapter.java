@@ -236,7 +236,7 @@ public class MessageAdapter extends BaseAdapter<BaseMessageViewHolder> {
                 PeerInfo currentPeer = MainFrame.getContext().getCurrentPeer();
                 try {
                     image =  AvatarUtil.getPeerAvatar(currentPeer);
-                    AvatarUtil.updateCacheIamge(currentPeer.getAvatarName(),image);
+                    AvatarUtil.updateCacheIamge(currentPeer.getAvatar(),image);
                 } catch (IOException e) {
 
                 }

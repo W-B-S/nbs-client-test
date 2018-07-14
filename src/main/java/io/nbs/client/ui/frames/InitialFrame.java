@@ -387,6 +387,8 @@ public class InitialFrame extends JFrame {
                 if(b){
                     complete = operatorService.initSaveSelf(tempInfo,"首次登陆初始化");
                 }
+                //更新缓存
+
                 if(complete){
                     openMainFrame();
                 }else {
@@ -450,7 +452,8 @@ public class InitialFrame extends JFrame {
         try {
             String nick = IPMParser.urlEncode(tempInfo.getNick());
             ipfs.config.set(ConfigurationHelper.JSON_NICKNAME_KEY,nick);
-            ipfs.config.set(ConfigurationHelper.JSON_CFG_FROMID_KEY,tempInfo.getFrom());
+            String enFromId =IPMParser.urlEncode(tempInfo.getFrom());
+            ipfs.config.set(ConfigurationHelper.JSON_CFG_FROMID_KEY,enFromId);
             ipfs.config.set(ConfigurationHelper.JSON_AVATAR_KEY,tempInfo.getAvatar());
             ipfs.config.set(ConfigurationHelper.JSON_AVATAR_SUFFIX_KEY,tempInfo.getAvatarSuffix());
             if(StringUtils.isNotBlank(originAvatarName)){
@@ -511,7 +514,8 @@ public class InitialFrame extends JFrame {
             List<Map<String, Object>> lst = subs.limit(1).collect(Collectors.toList());
             Object fromidObj = JSONParser.getValue(lst.get(0),"from");
             if(fromidObj!=null){
-                info.setFrom((String)fromidObj);
+                String fromid = (String)fromidObj;
+                info.setFrom(fromid);
             }
         } catch (Exception e) {
             logger.error("获取消息失败,{}",e.getMessage());
@@ -575,6 +579,7 @@ public class InitialFrame extends JFrame {
 
                     tempInfo.setAvatar(fileHash);
                     tempInfo.setAvatarSuffix(name.substring(name.lastIndexOf(".")));
+                    tempInfo.setAvatarName(name);
                     //TODO 存数据库upload
                     String avatarFileName = fileHash+".png";
                     try {
@@ -582,7 +587,6 @@ public class InitialFrame extends JFrame {
                         ImageIcon icon = AvatarImageHandler.getInstance().getImageIconFromOrigin(file128,100);
                         if(icon!=null){
                             logger.info(fileHash);
-
                             avatarLabel.setIcon(icon);
                             avatarLabel.updateUI();
                             upFileName = file.getName();

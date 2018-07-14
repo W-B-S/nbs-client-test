@@ -16,6 +16,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -177,6 +178,7 @@ public class AvatarUtil {
                             AvatarImageHandler.getInstance().getFileFromIPFS(url,temCacheFile);
                             Image nAvatar = ImageIO.read(url);
                             avatarCache.put(identify,nAvatar);
+
                         } catch (MalformedURLException e) {
                             e.printStackTrace();
                         } catch (Exception e) {
@@ -204,13 +206,15 @@ public class AvatarUtil {
      * @throws IOException
      */
     public static Image getPeerAvatar(PeerInfo info) throws IOException {
-        if(info==null||StringUtils.isBlank(info.getAvatarName())){
+        if(info==null||StringUtils.isBlank(info.getAvatar())){
             return null;
         }
-        if(avatarCache.containsKey(info.getAvatarName()))return avatarCache.get(info.getAvatarName());
+        if(avatarCache.containsKey(info.getAvatar()))return avatarCache.get(info.getAvatar());
         File infoFile = new File(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),info.getAvatarName()));
         if(infoFile.exists()&&infoFile.isFile()){
-            return ImageIO.read(infoFile);
+            BufferedImage bimage = ImageIO.read(infoFile);
+            avatarCache.put(info.getAvatar(),bimage);
+            return bimage;
         }
         return null;
     }
