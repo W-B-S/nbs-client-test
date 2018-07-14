@@ -230,7 +230,7 @@
                     <encoding>UTF-8</encoding>
                     <logsDirectory>logs</logsDirectory>
                     <tempDirectory>tmp</tempDirectory>
-                    <extraJvmArguments>-Xms256m</extraJvmArguments>
+                    <extraJvmArguments>-Xms512m</extraJvmArguments>
                     <binFileExtensions><unix>.sh</unix></binFileExtensions>
                     <platforms>
                         <platform>windows</platform>
@@ -245,7 +245,7 @@
                                 <extraArguments>
                                     <extraArgument>-Dfile.encoding=utf-8</extraArgument>
                                     <extraArgument>-server</extraArgument>
-                                    <extraArgument>-Xms256m</extraArgument>
+                                    <extraArgument>-Xms512m</extraArgument>
                                 </extraArguments>
                             </jvmSettings>
                         </program>
