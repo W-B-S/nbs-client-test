@@ -3,6 +3,7 @@ package io.nbs.client.ui.panels.manage;
 import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.panels.ParentAvailablePanel;
 import io.nbs.commons.utils.DataSizeFormatUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -35,6 +36,29 @@ public class MMCubePanel extends JPanel {
 
     public MMCubePanel(String hash,Long size,boolean pined) {
         init(hash,size,pined);
+    }
+
+    public MMCubePanel(String hash,Integer size,boolean pined) {
+        long lSize = size==null?0L : size.longValue();
+        init(hash,lSize,pined);
+    }
+
+    /**
+     *
+     * @param hash
+     * @param size
+     * @param pined
+     */
+    public MMCubePanel(String hash, String size,boolean pined) {
+        long lSize = 0l;
+        if(StringUtils.isNotBlank(size)){
+            try{
+                lSize = Long.parseLong(size);
+            }catch (RuntimeException e){
+
+            }
+        }
+        init(hash,lSize,pined);
     }
 
     private void init(String hash,Long size,boolean pined){

@@ -127,13 +127,6 @@ public class AttachmentDataAdapter extends BaseAdapter<AttachDataViewHolder> {
         String title = StringUtils.isNotBlank(dataDTO.getFname()) ? dataDTO.getFname() : dataDTO.getId();
         BLKAttachDataViewHolder holder = (BLKAttachDataViewHolder)viewHolder;
         holder.attachmentTitle.setText(title);
-
-        Map<String,Object> map = new HashMap<>();
-        map.put("attachmentHash",dataDTO.getId());
-        map.put("fname",dataDTO.getCachedfile());
-        map.put("inlocal",dataDTO.getInlocal());
-        map.put("messageId",dataDTO.getSeqno());//messageId uuid
-
         holder.attachmentPanel.setTag(dataDTO);
         ImageIcon icon = IconUtil.getIcon(this,"/icons/data-works.png",80,80);
         holder.attachIcon.setIcon(icon);

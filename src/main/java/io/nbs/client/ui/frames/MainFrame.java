@@ -258,7 +258,7 @@ public class MainFrame extends JFrame {
      *
      */
     private void notifyWorldOnline(){
-        PeerInfo info = Launcher.currentPeer;
+        PeerInfo info = getCurrentPeer();
         if(info==null)return;
 
         //IP 解析

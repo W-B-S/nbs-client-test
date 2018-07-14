@@ -74,7 +74,7 @@ public class BLKAttachDataViewHolder extends AttachDataViewHolder {
         //iconInfoPanel.add(new JLabel(),"split,span 2,growx,gaptop 20");
         iconInfoPanel.add(openBtn,"split,span,growx,gaptop 20");
         iconInfoPanel.add(downloadBtn,"span,growx,gapright 20,wrap");
-
+        downloadBtn.setVisible(false);
 
         messageBubble.add(attachmentPanel,BorderLayout.CENTER);
         messageBubble.add(iconInfoPanel,BorderLayout.EAST);

@@ -47,7 +47,7 @@ public class IPFSFileUploader {
     public IPFSFileUploader(IPFS ipfs, SqlSession sqlSession,MessagePanel panel,List<MessageItem> messageItems) {
         this.ipfs = ipfs;
         this.service = new AttachmentInfoService(sqlSession);
-        cureent = Launcher.currentPeer;
+        cureent = MainFrame.getContext().getCurrentPeer();
         this.messagePanel = panel;
         this.messageItems = messageItems;
     }

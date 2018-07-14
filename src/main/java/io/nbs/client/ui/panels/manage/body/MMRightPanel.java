@@ -16,6 +16,7 @@ import io.nbs.client.ui.panels.ParentAvailablePanel;
 import io.nbs.client.ui.panels.manage.MMCubePanel;
 import io.nbs.client.ui.panels.manage.listener.FillDetailInfoListener;
 import io.nbs.client.vo.AttachmentDataDTO;
+import io.nbs.commons.helper.RadomCharactersHelper;
 import io.nbs.commons.utils.DataSizeFormatUtil;
 import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +25,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -170,13 +172,7 @@ public class MMRightPanel extends ParentAvailablePanel {
 
 
 
-       for(int i = 0;i<30;i++){
-            boolean pined = i%5==1 ? true : false;
-            String hash="Hash_"+i;
-            long ds = i*1000l;
-            MMCubePanel cubePanel = new MMCubePanel(hash,ds,pined);
-            middlePanel.add(cubePanel);
-        }
+
     }
 
 
@@ -212,6 +208,8 @@ public class MMRightPanel extends ParentAvailablePanel {
         context.updateUI();
     }
 
+
+
     private void getBlockInfo(AttachmentDataDTO detailInfo){
         Multihash multihash = Multihash.fromBase58(detailInfo.getId());
         new Thread(()->{
@@ -230,6 +228,7 @@ public class MMRightPanel extends ParentAvailablePanel {
                 }
                 MerkleNode node = ipfs.object.links(multihash);
                 logger.info("Node:{}", JSON.toJSONString(node));
+                radomDramCube(node);
                 context.updateUI();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -237,4 +236,28 @@ public class MMRightPanel extends ParentAvailablePanel {
         }).start();
     }
 
+
+    private void radomDramCube(MerkleNode node){
+        if(node==null)return;
+        List<MerkleNode> list = node.links;
+        String hash = node.hash.toBase58();
+        RadomCharactersHelper helper = RadomCharactersHelper.getInstance();
+        middlePanel.removeAll();
+        if(list.size()==0){
+            Integer largeSize = node.size.isPresent() ? node.size.get() : 0;
+            MMCubePanel cubePanel = new MMCubePanel(hash,largeSize.longValue(),true);
+            middlePanel.add(cubePanel);
+        }else {
+            int num = list.size();
+            int i=0;
+            for(MerkleNode mn: list){
+                i++;
+                int radom = helper.getRadom(i);
+                System.out.println(radom);
+                boolean pined = (radom%2==1 );
+                MMCubePanel cubePanel = new MMCubePanel(hash,mn.size.get(),pined);
+                middlePanel.add(cubePanel);
+            }
+        }
+    }
 }

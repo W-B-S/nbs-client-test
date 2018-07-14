@@ -90,8 +90,9 @@ public class RadomCharactersHelper {
         result.append(suffix);
         return result.toString();
     }
-    private int getRadom(int len){
+    public int getRadom(int len){
         return (int)Math.round(Math.random()*len);
     }
+
 
 }
