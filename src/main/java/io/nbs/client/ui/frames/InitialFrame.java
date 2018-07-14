@@ -2,6 +2,7 @@ package io.nbs.client.ui.frames;
 
 import com.nbs.biz.PeersOperatorService;
 import com.nbs.biz.service.TableService;
+import io.ipfs.multibase.Base16;
 import io.nbs.client.ui.components.VerticalFlowLayout;
 import io.nbs.client.listener.AbstractMouseListener;
 import io.ipfs.api.IPFS;
@@ -16,6 +17,7 @@ import io.nbs.client.cnsts.OSUtil;
 import io.nbs.client.ui.filters.ImagesFiltFilter;
 import io.nbs.client.helper.AvatarImageHandler;
 import io.nbs.commons.helper.ConfigurationHelper;
+import io.nbs.commons.utils.Base64CodecUtil;
 import io.nbs.sdk.beans.PeerInfo;
 import io.nbs.client.ui.components.GBC;
 import io.nbs.client.ui.components.NBSButton;
@@ -452,14 +454,17 @@ public class InitialFrame extends JFrame {
         try {
             String nick = IPMParser.urlEncode(tempInfo.getNick());
             ipfs.config.set(ConfigurationHelper.JSON_NICKNAME_KEY,nick);
-            String enFromId =IPMParser.urlEncode(tempInfo.getFrom());
-            ipfs.config.set(ConfigurationHelper.JSON_CFG_FROMID_KEY,enFromId);
+            //String enFromId =IPMParser.urlEncode(tempInfo.getFrom());
+            ipfs.config.set(ConfigurationHelper.JSON_CFG_FROMID_KEY,tempInfo.getFrom());
             ipfs.config.set(ConfigurationHelper.JSON_AVATAR_KEY,tempInfo.getAvatar());
             ipfs.config.set(ConfigurationHelper.JSON_AVATAR_SUFFIX_KEY,tempInfo.getAvatarSuffix());
             if(StringUtils.isNotBlank(originAvatarName)){
                 String enFileName =  IPMParser.urlEncode(originAvatarName);
                 ipfs.config.set(ConfigurationHelper.JSON_AVATAR_NAME_KEY,enFileName);
             }
+            Object oFrom = ipfs.config.get(ConfigurationHelper.JSON_CFG_FROMID_KEY) ;
+            logger.info("peer from={},cfgFrom={}",tempInfo.getFrom(),oFrom.toString());
+
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -512,8 +517,14 @@ public class InitialFrame extends JFrame {
 
             List<Map<String, Object>> lst = subs.limit(1).collect(Collectors.toList());
             Object fromidObj = JSONParser.getValue(lst.get(0),"from");
+
             if(fromidObj!=null){
+
                 String fromid = (String)fromidObj;
+                String ss= Base16.encode(fromid.getBytes());
+                logger.info("base16={}",ss);
+                logger.info("tostring>>{},String>>{},decode>>{}",fromidObj.toString(),fromid,IPMParser.urlDecode(fromid));
+                fromid = Base64CodecUtil.base64From(fromid);
                 info.setFrom(fromid);
             }
         } catch (Exception e) {

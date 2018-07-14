@@ -116,7 +116,6 @@ public class IpfsMessageReceiver{
                     logger.warn("消息JSON ：{}解析失败，忽略.可能原因:{}",json,e.getMessage());
                     continue;
                 } catch (UnsupportedEncodingException e) {
-
                     logger.warn("消息JSON ：{}解析失败，忽略.可能原因:{}",json,e.getMessage());
                     continue;
                 }

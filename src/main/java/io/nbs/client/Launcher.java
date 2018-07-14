@@ -7,6 +7,7 @@ import io.nbs.client.cnsts.AppGlobalCnst;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.cnsts.OSUtil;
 import io.nbs.commons.helper.ConfigurationHelper;
+import io.nbs.commons.utils.Base64CodecUtil;
 import io.nbs.commons.utils.TimeUtil;
 import io.nbs.sdk.beans.PeerInfo;
 import io.nbs.client.ui.frames.FailFrame;
@@ -229,6 +230,8 @@ public class Launcher {
             currentPeer = new PeerInfo();
             currentPeer.setId(peerid);
             currentPeer.setNick(nick);
+            //
+            fromid = Base64CodecUtil.base64From(fromid);
             currentPeer.setFrom(fromid);
 
             Object avatar = cfg.get(ConfigurationHelper.JSON_AVATAR_KEY);
