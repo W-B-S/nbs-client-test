@@ -36,7 +36,7 @@ public class MessageLeftTextViewHolder extends BaseMessageViewHolder {
 
     private void initComponents()
     {
-        int maxWidth = (int) (MainFrame.getContext().currentWindowWidth * 0.5);
+        int maxWidth = (int) (MainFrame.getContext().currentWindowWidth * 0.385);
         text = new SizeAutoAdjustTextArea(maxWidth);
         text.setParseUrl(true);
 

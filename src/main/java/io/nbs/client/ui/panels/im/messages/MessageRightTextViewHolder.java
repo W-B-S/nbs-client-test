@@ -48,7 +48,7 @@ public class MessageRightTextViewHolder extends BaseMessageViewHolder {
         timePanel.setBackground(ColorCnst.WINDOW_BACKGROUND);
         messageAvatarPanel.setBackground(ColorCnst.WINDOW_BACKGROUND);
 
-        int maxWidth = (int)(MainFrame.getContext().currentWindowWidth*0.5);
+        int maxWidth = (int)(MainFrame.getContext().currentWindowWidth*0.385);
         text = new SizeAutoAdjustTextArea(maxWidth);
         text.setParseUrl(true);
 
