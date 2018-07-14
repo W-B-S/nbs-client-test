@@ -169,4 +169,5 @@ public class IpfsMessageReceiver{
     public void setOnlineNotifier(OnlineNotifier onlineNotifier) {
         this.onlineNotifier = onlineNotifier;
     }
+
 }
