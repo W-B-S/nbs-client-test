@@ -468,7 +468,6 @@ public class InitialFrame extends JFrame {
 
     }
 
-
     /**
      *
      */
