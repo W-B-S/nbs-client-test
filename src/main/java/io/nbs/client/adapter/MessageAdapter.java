@@ -115,11 +115,11 @@ public class MessageAdapter extends BaseAdapter<BaseMessageViewHolder> {
                 }
                 return holder;
             case MessageItem.RIGHT_ATTACHMENT:
-                RightAttachmentMessageViewHolder rightAttachViewHolder = messageViewHolderCacheHelper.tryGetRightAttachmentViewHolder();
+/*                RightAttachmentMessageViewHolder rightAttachViewHolder = messageViewHolderCacheHelper.tryGetRightAttachmentViewHolder();
                 if(rightAttachViewHolder==null){
                     rightAttachViewHolder = new RightAttachmentMessageViewHolder();
                 }
-                return rightAttachViewHolder;
+                return rightAttachViewHolder;*/
             case MessageItem.RIGHT_TEXT:
 
             case MessageItem.RIGHT_IMAGE:
