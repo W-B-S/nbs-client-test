@@ -35,8 +35,8 @@ import java.util.Map;
 public abstract class AttachDataViewHolder extends ViewHolder {
     private static final Logger logger = LoggerFactory.getLogger(AttachDataViewHolder.class);
     private int iconSize = 28;
-    public JIMSendTextPane attachmentTitle;
-    public JIMSendTextPane hashTitle;
+    public SizeAutoAdjustTextArea attachmentTitle;
+    public SizeAutoAdjustTextArea hashTitle;
     public LCProgressBar progressBar = new LCProgressBar();//进度条
     public JPanel timePanel = new JPanel();//时间面板
     public JPanel iconInfoPanel = new JPanel();//图标 组合面板
@@ -62,15 +62,15 @@ public abstract class AttachDataViewHolder extends ViewHolder {
      *
      */
     private void initComponents(){
-        int maxWidth = (int)(MainFrame.getContext().currentWindowWidth*0.15);
-        attachmentTitle = new JIMSendTextPane();
-        hashTitle = new JIMSendTextPane();
+        int maxWidth = (int)(MainFrame.getContext().currentWindowWidth*0.35);
+        attachmentTitle = new SizeAutoAdjustTextArea(maxWidth);
+        hashTitle = new SizeAutoAdjustTextArea(maxWidth);
         attachmentTitle.setEditable(false);
         hashTitle.setEditable(false);
 
         //iconInfoPanel.setBackground(ColorCnst.MAIN_COLOR);
         iconInfoPanel.setBackground(ColorCnst.WINDOW_BACKGROUND_LIGHT);
-        iconInfoPanel.setMinimumSize(new Dimension(60,100));
+       // iconInfoPanel.setMinimumSize(new Dimension(45,90));
 
         ImageIcon lnormal =  IconUtil.getIcon(Launcher.getContext(),"/icons/link.png",iconSize,iconSize);
         ImageIcon lactived =  IconUtil.getIcon(Launcher.getContext(),"/icons/link_actived.png",iconSize,iconSize);
