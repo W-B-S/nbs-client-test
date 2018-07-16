@@ -231,7 +231,6 @@ public class Launcher {
             currentPeer.setId(peerid);
             currentPeer.setNick(nick);
             //
-            fromid = Base64CodecUtil.base64From(fromid);
             currentPeer.setFrom(fromid);
 
             Object avatar = cfg.get(ConfigurationHelper.JSON_AVATAR_KEY);

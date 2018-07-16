@@ -133,6 +133,8 @@ public class AttachmentDataAdapter extends BaseAdapter<AttachDataViewHolder> {
         holder.srcPanel.setText(dataDTO.getPeername()==null ? "" : dataDTO.getPeername());
         holder.hashTitle.setText(dataDTO.getId());
 
+        holder.downloadBtn.setVisible(true);
+
         String sizeShow = DataSizeFormatUtil.formatDataSize(dataDTO.getFsize());
         holder.sizeLabel.setText(sizeShow);
 

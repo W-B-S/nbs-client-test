@@ -138,7 +138,7 @@ public class IPMParser {
 
         String fromid = Base64CodecUtil.base64From(simsg.getFrom());
                 //URLDecoder.decode(simsg.getFrom(),DEFAULT_ENCODING);
-        simsg.setFrom(fromid);
+        //simsg.setFrom(fromid);
         String endata = simsg.getData();
         String deData = Base64CodecUtil.decode(endata);
         IPMTypes types = IPMTypes.parserProtocol(deData);

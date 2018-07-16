@@ -7,6 +7,7 @@
         <result column="peername" property="peername" jdbcType="VARCHAR"/>
         <result column="peerhash" property="peerhash" jdbcType="VARCHAR"/>
         <result column="prehash" property="prehash" jdbcType="VARCHAR"/>
+        <result column="whash" property="whash" jdbcType="VARCHAR"/>
         <result column="fname" property="fname" jdbcType="VARCHAR"/>
         <result column="fsize" property="fsize" jdbcType="BIGINT"/>
         <result column="fsuffix" property="fsuffix" jdbcType="VARCHAR"/>
@@ -22,8 +23,8 @@
     </resultMap>
 
     <insert id="insert">
-        INSERT INTO attac_info (id, peername,peerhash,prehash, fname,fsize,fsuffix,fromid,seqno,cached,cachedfile,inlocal,ftype,sortno)
-        VALUES (#{id},#{peername},#{peerhash}, #{prehash}, #{fname}, #{fsize}, #{fsuffix}, #{fromid}, #{seqno}, #{cached}, #{cachedfile}, #{inlocal},#{ftype},#{sortno})
+        INSERT INTO attac_info (id, peername,peerhash,prehash,whash, fname,fsize,fsuffix,fromid,seqno,cached,cachedfile,inlocal,ftype,sortno)
+        VALUES (#{id},#{peername},#{peerhash}, #{prehash},#{whash}, #{fname}, #{fsize}, #{fsuffix}, #{fromid}, #{seqno}, #{cached}, #{cachedfile}, #{inlocal},#{ftype},#{sortno})
     </insert>
 
     <select id="findById" resultMap="BaseResultMap">
@@ -60,6 +61,7 @@
         <set>
             fname=#{fname},
             fsize=#{fsize},
+            whash=#{whash},
             fsuffix=#{fsuffix},
             seqno=#{seqno},
             cached=#{cached},
@@ -78,6 +80,7 @@
             <if test="fname!= null">fname=#{fname},</if>
             <if test="peername!= null">peername=#{peername},</if>
             <if test="cachedfile!= null">cachedfile=#{cachedfile},</if>
+            <if test="whash!= null">whash=#{whash},</if>
             <if test="cached!= null">cached=#{cached},</if>
             <if test="inlocal!= null">inlocal=#{inlocal},</if>
             <if test="fsize!= null">fsize=#{fsize},</if>

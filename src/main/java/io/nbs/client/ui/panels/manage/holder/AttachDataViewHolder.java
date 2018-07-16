@@ -47,7 +47,7 @@ public abstract class AttachDataViewHolder extends ViewHolder {
     public JLabel time = new JLabel();
     protected FillDetailInfoListener listener;
     protected NBSIconButton openBtn;
-    protected NBSIconButton downloadBtn;
+    public NBSIconButton downloadBtn;
 
     public LCAttachMessageBubble messageBubble;
 
@@ -63,8 +63,9 @@ public abstract class AttachDataViewHolder extends ViewHolder {
      */
     private void initComponents(){
         int maxWidth = (int)(MainFrame.getContext().currentWindowWidth*0.35);
-        attachmentTitle = new SizeAutoAdjustTextArea(maxWidth);
-        hashTitle = new SizeAutoAdjustTextArea(maxWidth);
+        int pmaxWidth = (int)(getWidth()*0.65);
+        attachmentTitle = new SizeAutoAdjustTextArea(pmaxWidth);
+        hashTitle = new SizeAutoAdjustTextArea(pmaxWidth);
         attachmentTitle.setEditable(false);
         hashTitle.setEditable(false);
 
@@ -76,7 +77,7 @@ public abstract class AttachDataViewHolder extends ViewHolder {
         ImageIcon lactived =  IconUtil.getIcon(Launcher.getContext(),"/icons/link_actived.png",iconSize,iconSize);
         openBtn = new NBSIconButton(lnormal,lactived, "查看");
         downloadBtn = new NBSIconButton(
-                IconUtil.getIcon(Launcher.getContext(),"/icons/download_normal.png",iconSize,iconSize),
+                IconUtil.getIcon(Launcher.getContext(),"/icons/download.png",iconSize,iconSize),
                 IconUtil.getIcon(Launcher.getContext(),"/icons/download_actived.png",iconSize,iconSize),
                 "下载到本地");
 
@@ -131,6 +132,8 @@ public abstract class AttachDataViewHolder extends ViewHolder {
         attachmentPanel.addMouseListener(adapter);
         attachmentTitle.addMouseListener(adapter);
 
+
+
         /**
          *
          */
@@ -158,5 +161,23 @@ public abstract class AttachDataViewHolder extends ViewHolder {
                 }
             }
         });
+
+        downloadBtn.addMouseListener(new BaseBtnMouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                logger.info(">>>>>>>>>>>>>>>>>>>>>>>>");
+            }
+        });
+
+    }
+
+
+
+    private class BaseBtnMouseAdapter extends MouseAdapter{
+        @Override
+        public void mouseEntered(MouseEvent e) {
+            super.mouseEntered(e);
+            e.getComponent().setCursor(MainFrame.handCursor);
+        }
     }
 }

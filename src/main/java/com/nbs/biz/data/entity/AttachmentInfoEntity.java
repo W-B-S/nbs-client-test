@@ -17,6 +17,7 @@ public class AttachmentInfoEntity extends BasicEntity {
     private String peername;
     private String peerhash;
     private String prehash;
+    private String whash;
     private String fname;
     private Long fsize;
     private String fsuffix;
@@ -60,6 +61,14 @@ public class AttachmentInfoEntity extends BasicEntity {
 
     public void setPrehash(String prehash) {
         this.prehash = prehash;
+    }
+
+    public String getWhash() {
+        return whash;
+    }
+
+    public void setWhash(String whash) {
+        this.whash = whash;
     }
 
     public String getFname() {

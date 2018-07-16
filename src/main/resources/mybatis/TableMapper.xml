@@ -85,6 +85,7 @@
         peername varchar(128),
         peerhash varchar(64),
         prehash varchar(64),
+        whash varchar(64),
         fname varchar (128),
         fsize bigint,
         fsuffix varchar (32),

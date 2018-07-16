@@ -454,8 +454,8 @@ public class InitialFrame extends JFrame {
         try {
             String nick = IPMParser.urlEncode(tempInfo.getNick());
             ipfs.config.set(ConfigurationHelper.JSON_NICKNAME_KEY,nick);
-            //String enFromId =IPMParser.urlEncode(tempInfo.getFrom());
-            ipfs.config.set(ConfigurationHelper.JSON_CFG_FROMID_KEY,tempInfo.getFrom());
+            String enFromId =IPMParser.urlEncode(tempInfo.getFrom());
+            ipfs.config.set(ConfigurationHelper.JSON_CFG_FROMID_KEY,enFromId);
             ipfs.config.set(ConfigurationHelper.JSON_AVATAR_KEY,tempInfo.getAvatar());
             ipfs.config.set(ConfigurationHelper.JSON_AVATAR_SUFFIX_KEY,tempInfo.getAvatarSuffix());
             if(StringUtils.isNotBlank(originAvatarName)){
@@ -506,6 +506,10 @@ public class InitialFrame extends JFrame {
 
     }
 
+    /**
+     * 获取fromid
+     * @param info
+     */
     private void getFromid(PeerInfo info){
         String tmpTopic = RadomCharactersHelper.getInstance().generated(8);
 
@@ -519,12 +523,11 @@ public class InitialFrame extends JFrame {
             Object fromidObj = JSONParser.getValue(lst.get(0),"from");
 
             if(fromidObj!=null){
-
                 String fromid = (String)fromidObj;
                 String ss= Base16.encode(fromid.getBytes());
                 logger.info("base16={}",ss);
                 logger.info("tostring>>{},String>>{},decode>>{}",fromidObj.toString(),fromid,IPMParser.urlDecode(fromid));
-                fromid = Base64CodecUtil.base64From(fromid);
+                //fromid = Base64CodecUtil.base64From(fromid);
                 info.setFrom(fromid);
             }
         } catch (Exception e) {
