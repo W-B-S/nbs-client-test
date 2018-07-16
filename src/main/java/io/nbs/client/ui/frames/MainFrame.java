@@ -57,7 +57,7 @@ public class MainFrame extends JFrame {
     public static  int RIGHT_EIDTH = 540;
     private static boolean heartMonitor = true;
 
-    public static final  int TOOLBAR_WIDTH = 80;
+    public static final int TOOLBAR_WIDTH = 80;
 
     /**
      * 右侧窗口

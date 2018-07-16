@@ -25,6 +25,7 @@ public class ColorCnst {
     public static Color FONT_WHITE = new Color(255, 255, 255);
     public static Color FONT_GRAY = new Color(152, 152, 152);
     public static Color FONT_GRAY_DARKER = new Color(152, 152, 152);
+    public static Color FONT_URL_BLUE = new Color(51,153,255);
     public static Color DARKER = new Color(38, 41, 46);
     public static Color ITEM_SELECTED_DARK = new Color(57, 63, 68);
     public static Color ITEM_SELECTED = new Color(65, 71, 78);
