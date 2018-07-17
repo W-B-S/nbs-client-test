@@ -1,12 +1,13 @@
 package io.nbs.client.ui.panels.im;
 
-import UI.AppMainWindow;
 import com.nbs.biz.data.entity.AttachmentInfoEntity;
 import com.nbs.biz.service.AttachmentInfoService;
 import io.ipfs.api.MerkleNode;
 import io.nbs.client.Launcher;
+import io.nbs.client.exceptions.FileTooLargeException;
 import io.nbs.client.listener.IPFSFileUploader;
 import io.nbs.client.ui.frames.MainFrame;
+import io.nbs.commons.utils.DataSizeFormatUtil;
 import io.nbs.sdk.beans.PeerInfo;
 import io.nbs.sdk.prot.IPMParser;
 import org.apache.ibatis.session.SqlSession;
@@ -17,7 +18,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.List;
 
 /**
  * @Package : io.nbs.client.ui.panels.im
@@ -47,9 +47,18 @@ public class IMFileActionListener implements ActionListener {
         File selection = jFileChooser.getSelectedFile();
         if(selection==null)return;
         logger.info(selection.getAbsolutePath());
-        MerkleNode node = fileUploader.addFileToIPFS(selection);
+
         new Thread(()->{
-            saveUploadFileInfo2DB(node);
+            try {
+                MerkleNode node = fileUploader.addFileToIPFS(selection);
+                new Thread(()->{
+                    saveUploadFileInfo2DB(node);
+                }).start();
+            } catch (FileTooLargeException e1) {
+                logger.error("删除文件失败，{}-{}",e1.getMessage(),e1.getCause());
+                JOptionPane.showMessageDialog(MainFrame.getContext(),"文件太大,最大只能上传["+DataSizeFormatUtil.formatDataSize((long)IPFSFileUploader.MAX_SIZE)+"]文件。");
+
+            }
         }).start();
     }
 

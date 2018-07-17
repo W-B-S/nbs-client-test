@@ -7,9 +7,11 @@ import io.ipfs.api.MerkleNode;
 import io.ipfs.api.NamedStreamable;
 import io.nbs.client.Launcher;
 import io.nbs.client.cnsts.AppGlobalCnst;
+import io.nbs.client.exceptions.FileTooLargeException;
 import io.nbs.client.services.IpfsMessageSender;
 import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.panels.im.messages.MessagePanel;
+import io.nbs.commons.utils.DataSizeFormatUtil;
 import io.nbs.commons.utils.UUIDGenerator;
 import io.nbs.sdk.beans.MessageItem;
 import io.nbs.sdk.beans.PeerInfo;
@@ -19,6 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.List;
@@ -35,6 +39,7 @@ public class IPFSFileUploader {
     private static Logger logger = LoggerFactory.getLogger(IPFSFileUploader.class);
     private static IPFS ipfs;
     private AttachmentInfoService service;
+    public static int MAX_SIZE = 1000*1024*1024;
     private PeerInfo cureent;
     private MessagePanel messagePanel;
     private List<MessageItem> messageItems;
@@ -56,9 +61,13 @@ public class IPFSFileUploader {
      *
      * @param file
      */
-    public MerkleNode addFileToIPFS(File file){
+    public MerkleNode addFileToIPFS(File file) throws FileTooLargeException {
         if(!file.exists()||file.isDirectory())return null;
         String name = file.getName();
+        long size = file.length();
+        if(size>MAX_SIZE){
+            throw  new FileTooLargeException("上传文件【"+name+"】超过"+DataSizeFormatUtil.formatDataSize((long)MAX_SIZE)+"限制.");
+        }
         try {
             NamedStreamable.FileWrapper fileWrapper = new NamedStreamable.FileWrapper(file);
             List<MerkleNode> list = ipfs.add(fileWrapper,false,false);
@@ -70,6 +79,26 @@ public class IPFSFileUploader {
             logger.error("文件{}上传失败,{}",name,e.getMessage());
             return null;
         }
+    }
+
+    public MerkleNode addByteFileToIPFS(File file) throws FileTooLargeException {
+        if(!file.exists()||file.isDirectory())return null;
+        String fname = file.getName();
+        long size = file.length();
+        if(size>MAX_SIZE){
+            throw  new FileTooLargeException("上传文件【"+fname+"】超过"+DataSizeFormatUtil.formatDataSize((long)MAX_SIZE)+"限制.");
+        }
+        int len = (int)size;
+        byte[] lagerBytes = new byte[len];
+        try {
+            FileInputStream inputStream = new FileInputStream(file);
+           // NamedStreamable.ByteArrayWrapper byteArrayWrapper = new NamedStreamable.ByteArrayWrapper(inputStream.);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+        return null;
     }
 
 
