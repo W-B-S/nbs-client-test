@@ -252,10 +252,11 @@ public class MMRightPanel extends ParentAvailablePanel {
             int i=0;
             for(MerkleNode mn: list){
                 i++;
+                String rhash58 = mn.hash.toBase58();
                 int radom = helper.getRadom(i);
                 System.out.println(radom);
                 boolean pined = (radom%2==1 );
-                MMCubePanel cubePanel = new MMCubePanel(hash,mn.size.get(),pined);
+                MMCubePanel cubePanel = new MMCubePanel(rhash58,mn.size.get(),pined);
                 middlePanel.add(cubePanel);
             }
         }

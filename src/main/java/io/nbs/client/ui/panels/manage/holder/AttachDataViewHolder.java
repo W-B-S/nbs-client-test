@@ -17,12 +17,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * @Package : io.nbs.client.ui.panels.manage.holder
@@ -102,6 +98,17 @@ public abstract class AttachDataViewHolder extends ViewHolder {
     }
 
     private void setListeners(){
+
+        //remove listener
+        MouseListener[] mouseAdapters = attachmentTitle.getMouseListeners();
+        for(MouseListener adapter: mouseAdapters){
+            attachmentTitle.removeMouseListener(adapter);
+        }
+        MouseListener[] htListeners = hashTitle.getMouseListeners();
+        for(MouseListener adapter: htListeners){
+            hashTitle.removeMouseListener(adapter);
+        }
+
         MouseAdapter adapter = new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {

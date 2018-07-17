@@ -16,6 +16,8 @@ import io.nbs.client.ui.components.GBC;
 import io.nbs.client.ui.components.NBSIconButton;
 import io.nbs.client.ui.components.SearchButtonPanel;
 import io.nbs.client.ui.components.SearchTextField;
+import io.nbs.client.ui.components.common.DownLoadTipIconPanel;
+import io.nbs.client.ui.components.common.JCirclePanel;
 import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.panels.ParentAvailablePanel;
 import io.nbs.client.ui.panels.manage.body.TipResultHashPanel;
@@ -52,6 +54,10 @@ public class MMSearcherPanel extends ParentAvailablePanel {
 
     private SearchButtonPanel buttonPanel;
 
+    private DownLoadTipIconPanel tipIconPanel;
+
+    private JCirclePanel circlePanel;
+
     public MMSearcherPanel(JPanel parent ) {
         super(parent);
         context = this;
@@ -77,6 +83,14 @@ public class MMSearcherPanel extends ParentAvailablePanel {
         searchTextField.setFont(FontUtil.getDefaultFont(14));
         //searchTextField.setBorder(MainFrame.redBorder);
         searchTextField.setForeground(ColorCnst.DARK);
+        circlePanel = new JCirclePanel(8);
+        circlePanel.setOpaque(true);
+        tipIconPanel = new DownLoadTipIconPanel(circlePanel);
+        tipIconPanel.setOpaque(true);
+
+
+
+
     }
 
     /**
@@ -98,8 +112,11 @@ public class MMSearcherPanel extends ParentAvailablePanel {
                 new GBC(1,0).setFill(GBC.BOTH).setWeight(18,1).setInsets(15,0,15,0));
         this.add(buttonPanel,
                 new GBC(2,0).setFill(GBC.BOTH).setWeight(3,1).setInsets(15,0,15,0));
-        this.add(tailer,
-                new GBC(3,0).setFill(GBC.BOTH).setWeight(1,1).setInsets(15));
+
+        this.add(circlePanel,
+                new GBC(3,0).setWeight(2,1).setInsets(15,0,15,0).setFill(GBC.BOTH));
+       this.add(tailer,
+                new GBC(4,0).setFill(GBC.BOTH).setWeight(1,1).setInsets(15));
     }
 
     private void setListeners() {

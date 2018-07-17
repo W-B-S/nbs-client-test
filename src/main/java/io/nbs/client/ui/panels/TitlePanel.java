@@ -1,12 +1,14 @@
 package io.nbs.client.ui.panels;
 
 import io.nbs.client.Launcher;
-import io.nbs.client.listener.AbstractMouseListener;
 import io.nbs.client.cnsts.ColorCnst;
+import io.nbs.client.listener.AbstractMouseListener;
+
 import io.nbs.client.cnsts.FontUtil;
 import io.nbs.client.cnsts.OSUtil;
 import io.nbs.client.ui.components.GBC;
 import io.nbs.client.ui.frames.MainFrame;
+
 
 import javax.swing.*;
 import java.awt.*;

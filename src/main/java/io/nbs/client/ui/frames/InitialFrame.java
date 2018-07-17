@@ -163,12 +163,17 @@ public class InitialFrame extends JFrame {
         JPanel editLeft = new JPanel(){
             @Override
             protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if(getIconImage()==null)
+                    return;
                 Image icon = getIconImage();
                 ImageIcon imageIcon = new ImageIcon(icon);
                 if(icon != null){
                    g.drawImage(icon,0,0,getWidth(),getHeight(),imageIcon.getImageObserver());
                 }
-                super.paintComponent(g);
+            }
+
+            public void setIcon(ImageIcon icon){
 
             }
         };
