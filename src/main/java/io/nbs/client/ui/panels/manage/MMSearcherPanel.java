@@ -103,9 +103,9 @@ public class MMSearcherPanel extends ParentAvailablePanel {
         prevous.setBackground(ColorCnst.SEEARCH_ITEM_GRAY_LIGHT);
         tailer.setBackground(ColorCnst.SEEARCH_ITEM_GRAY_LIGHT);
         setLayout(new GridBagLayout());
-        //setLayout(new FlowLayout(FlowLayout.CENTER,10,0));
-        //add(this.searchTextField);
-        //add(this.searchBtn);
+
+        //
+        circlePanel.setVisible(false);
         this.add(prevous,
                 new GBC(0,0).setFill(GBC.BOTH).setWeight(1,1).setInsets(15));
         this.add(searchTextField,
