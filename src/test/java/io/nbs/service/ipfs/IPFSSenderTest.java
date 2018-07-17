@@ -3,7 +3,12 @@ package io.nbs.service.ipfs;
 import com.alibaba.fastjson.JSON;
 import com.nbs.biz.model.ContactsEntity;
 import io.ipfs.api.IPFS;
+import io.ipfs.api.exceptions.IllegalIPFSMessageException;
+import io.nbs.sdk.beans.OnlineMessage;
+import io.nbs.sdk.prot.IPMParser;
+import io.nbs.sdk.prot.IPMTypes;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 /**
@@ -25,7 +30,8 @@ public class IPFSSenderTest {
 
     public static void main(String[] agrs){
         IPFSSenderTest it = new IPFSSenderTest();
-        it.send();
+       // it.send();
+        it.generateOnlineMessage234();
     }
 
     public void send(){
@@ -46,5 +52,28 @@ public class IPFSSenderTest {
 
     public void log(String s){
         System.out.println(s);
+    }
+
+    public void generateOnlineMessage234(){
+        OnlineMessage message = new OnlineMessage();
+        message.setIp("172.0.0.0");
+        message.setTs(System.currentTimeMillis());
+        message.setId("QmbykDm5MJ8Z3wKe2aEMWzCs5cwGNswa9WsBVTSsyiMeNp");//QmbykDm5MJ8Z3wKe2aEMWzCs5cwGNswa9WsBVTSsyiMeNp
+        message.setAvatarFile("lambor234.png");
+        message.setNick("lamsvr");
+        message.setAvatar("QmT7CXKZ8iy8nYEsUhteA1d9UKWT5CY796qqjvt5ExFFrF");
+        message.setAvatarSuffix(".png");
+        message.setLocations("西班牙·巴塞罗那");
+        message.setFrom("EiDKqKbPOx9T1DWfwylESVSD59WhKb5m7UHwW/uy8xQB1Q==");
+
+        try {
+            String svText = IPMParser.encode(message,IPMTypes.online);
+            svText = IPMParser.urlDecode(svText);
+            System.out.println(svText);
+        } catch (IllegalIPFSMessageException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 }
