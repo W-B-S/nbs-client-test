@@ -8,7 +8,9 @@ import io.nbs.client.cnsts.FontUtil;
 import io.nbs.client.cnsts.OSUtil;
 import io.nbs.client.services.IpfsMessageSender;
 import io.nbs.client.services.MessageSendService;
+import io.nbs.client.ui.panels.info.InfoFooterPanel;
 import io.nbs.client.ui.panels.manage.ManageMasterPanel;
+import io.nbs.client.ui.panels.media.MediaMasterPanel;
 import io.nbs.commons.helper.ConfigurationHelper;
 import io.nbs.sdk.beans.OnlineMessage;
 import io.nbs.sdk.beans.PeerInfo;
@@ -21,9 +23,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.print.DocFlavor;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -52,7 +57,7 @@ public class MainFrame extends JFrame {
     public static  int RIGHT_EIDTH = 540;
     private static boolean heartMonitor = true;
 
-    public static final  int TOOLBAR_WIDTH = 80;
+    public static final int TOOLBAR_WIDTH = 80;
 
     /**
      * 右侧窗口
@@ -65,6 +70,7 @@ public class MainFrame extends JFrame {
     private CardLayout cardLayout;
 
     private static JPanel mainJPanel;
+    public static boolean INFO_REFREHING = false;
 
     /**
      *
@@ -86,6 +92,11 @@ public class MainFrame extends JFrame {
      *
      */
     private ManageMasterPanel manageMasterPanel;
+
+    /**
+     * multimedia
+     */
+    private MediaMasterPanel mediaMasterPanel;
 
 
     private AboutMasterPanel aboutMasterPanel;
@@ -160,10 +171,15 @@ public class MainFrame extends JFrame {
         aboutMasterPanel = new AboutMasterPanel();
         manageMasterPanel = new ManageMasterPanel();
 
+        mediaMasterPanel = new MediaMasterPanel();
+
         mainCentetPanel.add(infoMasterPanel,MainFrame.MainCardLayoutTypes.INFO.name());
         mainCentetPanel.add(imMasterPanel,MainCardLayoutTypes.IM.name());
-        mainCentetPanel.add(aboutMasterPanel,MainCardLayoutTypes.ABOUT.name());
         mainCentetPanel.add(manageMasterPanel,MainCardLayoutTypes.DATD.name());
+        mainCentetPanel.add(mediaMasterPanel,MainCardLayoutTypes.MEDIA.name());
+
+
+        mainCentetPanel.add(aboutMasterPanel,MainCardLayoutTypes.ABOUT.name());
     }
 
     private void initView(){
@@ -190,6 +206,16 @@ public class MainFrame extends JFrame {
      */
     private void  setListeners(){
 
+        /**
+         *
+         */
+        this.addComponentListener(new ComponentAdapter (){
+            @Override
+            public void componentResized(ComponentEvent e) {
+                currentWindowWidth = (int)e.getComponent().getBounds().getWidth();
+                currentWindowWidth = (int)e.getComponent().getBounds().getHeight();
+            }
+        });
     }
 
     /**
@@ -232,17 +258,18 @@ public class MainFrame extends JFrame {
      *
      */
     private void notifyWorldOnline(){
-        PeerInfo info = Launcher.currentPeer;
+        PeerInfo info = getCurrentPeer();
         if(info==null)return;
-        OnlineMessage message = convertByPeerInfo(info);
+
         //IP 解析
         //nbs.client.heart.monitor.seconds
         final int seconds = ConfigurationHelper.getInstance().getHeartMonitorSleep();
         new Thread(()->{
             while (heartMonitor){
+                OnlineMessage message = convertByPeerInfo(info);
                 try {
                     if(message!=null)messageSender.sendOnline(message);
-                    logger.info("heart monitor {}",System.currentTimeMillis());
+                    logger.info("{} heart monitor {}",System.currentTimeMillis());
                 } catch (Exception e) {
                     logger.warn(e.getMessage(),e.getCause());
                 }
@@ -251,10 +278,9 @@ public class MainFrame extends JFrame {
                 } catch (InterruptedException e) {
                 }
             }
+            //刷新数据库登录
+            peerLoginService.refreshLoginInfo(info);
         }).start();
-
-        //刷新数据库登录
-        peerLoginService.refreshLoginInfo(info);
     }
 
     /**
@@ -267,7 +293,8 @@ public class MainFrame extends JFrame {
             message.setAvatar(info.getAvatar());
             message.setAvatarFile(info.getAvatarName());
             message.setAvatarSuffix(info.getAvatarSuffix());
-            message.setLocations("");
+            message.setLocations(info.getLocations());
+            message.setIp(info.getIp());
         }
         return message;
     }
@@ -280,4 +307,9 @@ public class MainFrame extends JFrame {
     public MessageSendService getMessageSendService() {
         return messageSendService;
     }
+
+    public void stopInfoRefresh(){
+        INFO_REFREHING = false;
+    }
+
 }

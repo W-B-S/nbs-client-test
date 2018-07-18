@@ -6,7 +6,6 @@ import io.nbs.commons.utils.Base64CodecUtil;
 import io.nbs.commons.utils.UUIDGenerator;
 import io.nbs.sdk.beans.*;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.Base64Utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -136,8 +135,10 @@ public class IPMParser {
     public static StandardIPFSMessage decodeStandardIPFSMessage(String json) throws IllegalIPFSMessageException, UnsupportedEncodingException {
         if(json==null||json.length()==0)throw new IllegalIPFSMessageException("json 数据为null或空串.");
         StandardIPFSMessage simsg = JSON.parseObject(json,StandardIPFSMessage.class);
-        String fromid = URLDecoder.decode(simsg.getFrom(),DEFAULT_ENCODING);
-        simsg.setFrom(fromid);
+
+        String fromid = Base64CodecUtil.base64From(simsg.getFrom());
+                //URLDecoder.decode(simsg.getFrom(),DEFAULT_ENCODING);
+        //simsg.setFrom(fromid);
         String endata = simsg.getData();
         String deData = Base64CodecUtil.decode(endata);
         IPMTypes types = IPMTypes.parserProtocol(deData);

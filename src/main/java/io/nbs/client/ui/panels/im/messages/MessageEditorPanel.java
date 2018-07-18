@@ -2,6 +2,7 @@ package io.nbs.client.ui.panels.im.messages;
 
 import UI.AppMainWindow;
 import UI.ConstantsUI;
+import io.nbs.client.Launcher;
 import io.nbs.client.listener.IPFSFileUploader;
 import io.nbs.client.ui.components.NBSIconButton;
 import io.nbs.client.ui.components.NBSButton;
@@ -65,7 +66,7 @@ public class MessageEditorPanel extends ParentAvailablePanel {
     public MessageEditorPanel(JPanel parent, IPFSFileUploader uploader) {
         super(parent);
         jFileChooser = new JFileChooser();
-        imFileActionListener = new IMFileActionListener(uploader,jFileChooser);
+        imFileActionListener = new IMFileActionListener(uploader,jFileChooser,Launcher.getSqlSession());
         initComponents();
         initView();
         setListeners();
@@ -156,7 +157,8 @@ public class MessageEditorPanel extends ParentAvailablePanel {
         this.setLayout(new GridBagLayout());
         controlLabel.add(expressionLabel);
         controlLabel.add(fileIcon);
-        controlLabel.add(cutIcon);
+        //隐藏截图
+        //controlLabel.add(cutIcon);
 
         add(controlLabel,new GBC(0,0).setFill(GBC.HORIZONTAL).setWeight(1,1));
         add(textScrollPane,new GBC(0,1).setFill(GBC.BOTH).setWeight(1,15));
@@ -173,7 +175,8 @@ public class MessageEditorPanel extends ParentAvailablePanel {
             fileIcon.addActionListener(imFileActionListener);
         }
 
-        fileIcon.addMouseListener(new MouseAdapter() {
+        fileIcon.addMouseListener(new MouseAdapter()
+        {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
@@ -181,7 +184,6 @@ public class MessageEditorPanel extends ParentAvailablePanel {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-
                 super.mouseEntered(e);
             }
 
@@ -192,7 +194,11 @@ public class MessageEditorPanel extends ParentAvailablePanel {
         });
 
 
-        expressionLabel.addMouseListener(new MouseAdapter() {
+        /**
+         *
+         */
+        expressionLabel.addMouseListener(new MouseAdapter()
+        {
             @Override
             public void mouseClicked(MouseEvent e) {
                // expressionLabel.setIcon();
@@ -212,7 +218,8 @@ public class MessageEditorPanel extends ParentAvailablePanel {
             }
         });
 
-        textEditor.addMouseListener(new MouseAdapter() {
+        textEditor.addMouseListener(new MouseAdapter()
+        {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);

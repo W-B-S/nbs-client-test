@@ -115,8 +115,6 @@ public class ChatPanel extends ParentAvailablePanel {
         add(messagePanel,new GBC(0,0).setFill(GBC.BOTH).setWeight(1,7));
         add(messageEditorPanel,new GBC(0,1).setFill(GBC.BOTH).setWeight(1,2).setInsets(0,0,0,0));
 
-
-
     }
 
     /**
@@ -168,49 +166,7 @@ public class ChatPanel extends ParentAvailablePanel {
     }
 
 
-    /**
-     *
-     */
-    private void autoLoadMessage(){
-        String congtent = "";
-        long ts = System.currentTimeMillis();
-        RadomCharactersHelper randonHelper = RadomCharactersHelper.getInstance();
-        int mtype = 1;
-        for(int i = 0;i<30;i++){
-            if(i%3==0&&i%5!=0){
-                mtype = -1;
-            }else if(i%7==0&&i%3!=0&&i%5!=0){
-                mtype =0;
-            }else {
-                mtype = 1;
-            }
-            MessageItem item = new MessageItem();
-            item.setFrom("sfsdfsdf"+i);
-            item.setTimestamp(ts+30*1000);
-            switch (mtype){
-                case 1:
-                    item.setSenderUsername("NBSChain_9527");
-                    congtent = randonHelper.generated("NBS ",15);
-                    break;
-                case -1:
-                    item.setSenderUsername(current.getNick());
-                    congtent = randonHelper.generated("欢迎 ",5);
-                    break;
-                case 0:
-                    congtent = "系统提示你上线.";
-                    break;
-            }
-            item.setMessageContent(congtent);
-            item.setRoomId("111");
-            item.setMessageType(mtype);
-            int j = i/10;
-            item.setSenderId("ID"+j);
-
-            messages.add(item);
-        }
-        messagePanel.getListView().notifyItemRangeInserted(0,messages.size());
-        messagePanel.getListView().setAutoScrollToBottom();
-    }
+   
 
     /**
      * 发送消息

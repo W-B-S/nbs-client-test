@@ -56,14 +56,14 @@ public class ContactOnlineAdapter implements OnlineNotifier {
                     logger.info("收到自己的上线消息:{}",JSON.toJSONString(messageBean));
                     return;
                 }
-               /**
+                /**
                 *  存库TODO
                 *  刷新contacts
                 *  异步刷新数据库
                 */
-               new Thread(()->{
+                new Thread(()->{
                    inssetOrUpdateOnlineDB(messageBean);
-               }).start();
+                }).start();
 
                 ContactsItem item  = new ContactsItem();
                 item.setFormid(messageBean.getFrom());
@@ -98,11 +98,12 @@ public class ContactOnlineAdapter implements OnlineNotifier {
         if(peerList==null){
             peerList = new ArrayList<>();
             peerList.add(item);
+            exists = false;
             return 0;
         }
         int i=0;
         for(ContactsItem peer : peerList){
-            if(peer.getId()!=null&&peer.getId().equals(item.getId())){
+            if(peer.getId()!=null&&peer.getId().equals(item.getId())&& StringUtils.isNotBlank(peer.getFormid())){
                 exists = true;
                 peer = item;
                 return i;

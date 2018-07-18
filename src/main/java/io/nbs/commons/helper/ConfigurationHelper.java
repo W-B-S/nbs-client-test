@@ -223,4 +223,18 @@ public class ConfigurationHelper {
                 || stats.equalsIgnoreCase("1")
         )  ? true : false;
     }
+
+    public boolean exitStopIPFS(){
+        String v = cfgProps.getProperty("nbs.server.exit.stop","true");
+        return v.equalsIgnoreCase("true")||v.equals("1")||v.equalsIgnoreCase("y");
+    }
+
+    /**
+     * 集成服务
+     * @return
+     */
+    public boolean integratedServer(){
+        String integrated = cfgProps.getProperty("nbs.server.integrated.enabled","disabled");
+        return integrated.equalsIgnoreCase("true")||integrated.equals("1")||integrated.equalsIgnoreCase("y");
+    }
 }

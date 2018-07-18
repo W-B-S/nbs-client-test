@@ -9,6 +9,8 @@ import io.nbs.client.ui.holders.ViewHolder;
 import io.nbs.client.ui.panels.im.messages.MessageLeftTextViewHolder;
 import io.nbs.client.ui.panels.im.messages.MessageRightTextViewHolder;
 import io.nbs.client.ui.panels.im.messages.MessageSystemMessageViewHolder;
+import io.nbs.client.ui.panels.im.messages.RightAttachmentMessageViewHolder;
+import io.nbs.client.vo.AttachmentDataDTO;
 import io.nbs.commons.utils.AvatarUtil;
 import io.nbs.commons.utils.TimeUtil;
 import io.nbs.sdk.beans.MessageItem;
@@ -84,7 +86,14 @@ public class MessageAdapter extends BaseAdapter<BaseMessageViewHolder> {
         }
         else if(viewHolder instanceof MessageLeftTextViewHolder){
             processLeftTextMessage(viewHolder, item);
+        }else if(viewHolder instanceof RightAttachmentMessageViewHolder){
+            processRightAttachMessage(viewHolder,item);
         }
+    }
+
+    private void processRightAttachMessage(ViewHolder viewHolder,MessageItem item){
+        AttachmentDataDTO dto = new AttachmentDataDTO();
+
     }
 
     /**
@@ -105,8 +114,14 @@ public class MessageAdapter extends BaseAdapter<BaseMessageViewHolder> {
                     holder = new MessageSystemMessageViewHolder();
                 }
                 return holder;
-            case MessageItem.RIGHT_TEXT:
             case MessageItem.RIGHT_ATTACHMENT:
+/*                RightAttachmentMessageViewHolder rightAttachViewHolder = messageViewHolderCacheHelper.tryGetRightAttachmentViewHolder();
+                if(rightAttachViewHolder==null){
+                    rightAttachViewHolder = new RightAttachmentMessageViewHolder();
+                }
+                return rightAttachViewHolder;*/
+            case MessageItem.RIGHT_TEXT:
+
             case MessageItem.RIGHT_IMAGE:
                 MessageRightTextViewHolder rHolder = messageViewHolderCacheHelper.tryGetRightTextViewHolder();
                 if(rHolder==null){
@@ -146,6 +161,7 @@ public class MessageAdapter extends BaseAdapter<BaseMessageViewHolder> {
 
     private void processRightTextMessage(ViewHolder viewHolder,final MessageItem item){
         MessageRightTextViewHolder holder = (MessageRightTextViewHolder)viewHolder;
+
         holder.text.setText(item.getMessageContent());
         holder.text.setTag(item.getId());
 
@@ -220,7 +236,7 @@ public class MessageAdapter extends BaseAdapter<BaseMessageViewHolder> {
                 PeerInfo currentPeer = MainFrame.getContext().getCurrentPeer();
                 try {
                     image =  AvatarUtil.getPeerAvatar(currentPeer);
-                    AvatarUtil.updateCacheIamge(currentPeer.getAvatarName(),image);
+                    AvatarUtil.updateCacheIamge(currentPeer.getAvatar(),image);
                 } catch (IOException e) {
 
                 }

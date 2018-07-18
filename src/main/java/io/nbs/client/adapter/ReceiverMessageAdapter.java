@@ -19,6 +19,8 @@ import io.nbs.sdk.beans.OnlineMessage;
 import io.nbs.sdk.beans.PeerInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -31,6 +33,7 @@ import java.util.List;
  * All rights reserved.
  */
 public class ReceiverMessageAdapter implements IPFSSubscribeListener {
+    private static Logger logger = LoggerFactory.getLogger(ReceiverMessageAdapter.class);
 
     private List<MessageItem> items;
     private NbsListView listView;
@@ -109,6 +112,10 @@ public class ReceiverMessageAdapter implements IPFSSubscribeListener {
         peerMessageService.insert(entity);
     }
 
+    /**
+     *
+     * @param name
+     */
     private void autoRepaly(final String name){
         IpfsMessageSender sender = MainFrame.getContext().getMessageSender();
         String text = "你好"+name+"收到！";

@@ -1,5 +1,6 @@
 package com.nbs.biz.data.entity;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -13,11 +14,12 @@ import java.util.Date;
 public class AttachmentInfoEntity extends BasicEntity {
 
     private String id;
-    private String peerid;
-    private String phash;
-    private String hash58;
+    private String peername;
+    private String peerhash;
+    private String prehash;
+    private String whash;
     private String fname;
-    private String fsize;
+    private Long fsize;
     private String fsuffix;
     private String fromid;
     private String seqno;
@@ -26,7 +28,7 @@ public class AttachmentInfoEntity extends BasicEntity {
     private Integer inlocal;
     private String ftype;
     private Integer sortno;
-    private Date ctime;
+    private String ctime;
     private Long lmtime;
 
     public String getId() {
@@ -37,12 +39,36 @@ public class AttachmentInfoEntity extends BasicEntity {
         this.id = id;
     }
 
-    public String getHash58() {
-        return hash58;
+    public String getPeername() {
+        return peername;
     }
 
-    public void setHash58(String hash58) {
-        this.hash58 = hash58;
+    public void setPeername(String peername) {
+        this.peername = peername;
+    }
+
+    public String getPeerhash() {
+        return peerhash;
+    }
+
+    public void setPeerhash(String peerhash) {
+        this.peerhash = peerhash;
+    }
+
+    public String getPrehash() {
+        return prehash;
+    }
+
+    public void setPrehash(String prehash) {
+        this.prehash = prehash;
+    }
+
+    public String getWhash() {
+        return whash;
+    }
+
+    public void setWhash(String whash) {
+        this.whash = whash;
     }
 
     public String getFname() {
@@ -53,11 +79,11 @@ public class AttachmentInfoEntity extends BasicEntity {
         this.fname = fname;
     }
 
-    public String getFsize() {
+    public Long getFsize() {
         return fsize;
     }
 
-    public void setFsize(String fsize) {
+    public void setFsize(Long fsize) {
         this.fsize = fsize;
     }
 
@@ -117,11 +143,11 @@ public class AttachmentInfoEntity extends BasicEntity {
         this.ftype = ftype;
     }
 
-    public Date getCtime() {
+    public String getCtime() {
         return ctime;
     }
 
-    public void setCtime(Date ctime) {
+    public void setCtime(String ctime) {
         this.ctime = ctime;
     }
 
@@ -131,22 +157,6 @@ public class AttachmentInfoEntity extends BasicEntity {
 
     public void setLmtime(Long lmtime) {
         this.lmtime = lmtime;
-    }
-
-    public String getPeerid() {
-        return peerid;
-    }
-
-    public void setPeerid(String peerid) {
-        this.peerid = peerid;
-    }
-
-    public String getPhash() {
-        return phash;
-    }
-
-    public void setPhash(String phash) {
-        this.phash = phash;
     }
 
     public Integer getSortno() {

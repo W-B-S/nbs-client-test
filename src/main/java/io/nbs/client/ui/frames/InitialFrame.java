@@ -2,6 +2,7 @@ package io.nbs.client.ui.frames;
 
 import com.nbs.biz.PeersOperatorService;
 import com.nbs.biz.service.TableService;
+import io.ipfs.multibase.Base16;
 import io.nbs.client.ui.components.VerticalFlowLayout;
 import io.nbs.client.listener.AbstractMouseListener;
 import io.ipfs.api.IPFS;
@@ -16,6 +17,7 @@ import io.nbs.client.cnsts.OSUtil;
 import io.nbs.client.ui.filters.ImagesFiltFilter;
 import io.nbs.client.helper.AvatarImageHandler;
 import io.nbs.commons.helper.ConfigurationHelper;
+import io.nbs.commons.utils.Base64CodecUtil;
 import io.nbs.sdk.beans.PeerInfo;
 import io.nbs.client.ui.components.GBC;
 import io.nbs.client.ui.components.NBSButton;
@@ -161,12 +163,17 @@ public class InitialFrame extends JFrame {
         JPanel editLeft = new JPanel(){
             @Override
             protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if(getIconImage()==null)
+                    return;
                 Image icon = getIconImage();
                 ImageIcon imageIcon = new ImageIcon(icon);
                 if(icon != null){
                    g.drawImage(icon,0,0,getWidth(),getHeight(),imageIcon.getImageObserver());
                 }
-                super.paintComponent(g);
+            }
+
+            public void setIcon(ImageIcon icon){
 
             }
         };
@@ -387,6 +394,8 @@ public class InitialFrame extends JFrame {
                 if(b){
                     complete = operatorService.initSaveSelf(tempInfo,"首次登陆初始化");
                 }
+                //更新缓存
+
                 if(complete){
                     openMainFrame();
                 }else {
@@ -450,13 +459,17 @@ public class InitialFrame extends JFrame {
         try {
             String nick = IPMParser.urlEncode(tempInfo.getNick());
             ipfs.config.set(ConfigurationHelper.JSON_NICKNAME_KEY,nick);
-            ipfs.config.set(ConfigurationHelper.JSON_CFG_FROMID_KEY,tempInfo.getFrom());
+            String enFromId =IPMParser.urlEncode(tempInfo.getFrom());
+            ipfs.config.set(ConfigurationHelper.JSON_CFG_FROMID_KEY,enFromId);
             ipfs.config.set(ConfigurationHelper.JSON_AVATAR_KEY,tempInfo.getAvatar());
             ipfs.config.set(ConfigurationHelper.JSON_AVATAR_SUFFIX_KEY,tempInfo.getAvatarSuffix());
             if(StringUtils.isNotBlank(originAvatarName)){
                 String enFileName =  IPMParser.urlEncode(originAvatarName);
                 ipfs.config.set(ConfigurationHelper.JSON_AVATAR_NAME_KEY,enFileName);
             }
+            Object oFrom = ipfs.config.get(ConfigurationHelper.JSON_CFG_FROMID_KEY) ;
+            logger.info("peer from={},cfgFrom={}",tempInfo.getFrom(),oFrom.toString());
+
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -464,7 +477,6 @@ public class InitialFrame extends JFrame {
         }
 
     }
-
 
     /**
      *
@@ -499,6 +511,10 @@ public class InitialFrame extends JFrame {
 
     }
 
+    /**
+     * 获取fromid
+     * @param info
+     */
     private void getFromid(PeerInfo info){
         String tmpTopic = RadomCharactersHelper.getInstance().generated(8);
 
@@ -510,8 +526,14 @@ public class InitialFrame extends JFrame {
 
             List<Map<String, Object>> lst = subs.limit(1).collect(Collectors.toList());
             Object fromidObj = JSONParser.getValue(lst.get(0),"from");
+
             if(fromidObj!=null){
-                info.setFrom((String)fromidObj);
+                String fromid = (String)fromidObj;
+                String ss= Base16.encode(fromid.getBytes());
+                logger.info("base16={}",ss);
+                logger.info("tostring>>{},String>>{},decode>>{}",fromidObj.toString(),fromid,IPMParser.urlDecode(fromid));
+                //fromid = Base64CodecUtil.base64From(fromid);
+                info.setFrom(fromid);
             }
         } catch (Exception e) {
             logger.error("获取消息失败,{}",e.getMessage());
@@ -555,11 +577,14 @@ public class InitialFrame extends JFrame {
         File file = fileChooser.getSelectedFile();
         if(file!=null)
         {
-            String name = file.getName();//源文件名
-            String avatarPeerName = tempInfo.getId() + name.substring(name.lastIndexOf("."));
             new Thread(()->{
                 List<MerkleNode> nodes;
+                String name = file.getName();//源文件名
+                logger.info(name);
+                name = name.substring(0,name.lastIndexOf("."));
 
+                name = name+".png";
+                String avatarPeerName = tempInfo.getId() + name.substring(name.lastIndexOf("."));
                 FileOutputStream fos = null;
                 try {
                     //上传前先压缩
@@ -572,11 +597,12 @@ public class InitialFrame extends JFrame {
 
                     tempInfo.setAvatar(fileHash);
                     tempInfo.setAvatarSuffix(name.substring(name.lastIndexOf(".")));
+                    tempInfo.setAvatarName(name);
                     //TODO 存数据库upload
                     String avatarFileName = fileHash+".png";
                     try {
                         imageHandler.createContactsAvatar(file,avatarFileName);
-                        ImageIcon icon = new ImageIcon(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),name));
+                        ImageIcon icon = AvatarImageHandler.getInstance().getImageIconFromOrigin(file128,100);
                         if(icon!=null){
                             logger.info(fileHash);
                             avatarLabel.setIcon(icon);

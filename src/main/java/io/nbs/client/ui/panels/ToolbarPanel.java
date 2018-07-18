@@ -4,6 +4,7 @@ import io.nbs.client.ui.components.VerticalFlowLayout;
 import io.nbs.client.cnsts.AppGlobalCnst;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.helper.AvatarImageHandler;
+import io.nbs.client.ui.panels.info.InfoFooterPanel;
 import io.nbs.sdk.beans.PeerInfo;
 import io.nbs.client.ui.components.GBC;
 import io.nbs.client.ui.components.NBSIconButton;
@@ -66,7 +67,7 @@ public class ToolbarPanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+        //super.paintComponent(g);
         if(!isOpaque())return;
         int width = getWidth();
         int height = getHeight();
@@ -79,7 +80,7 @@ public class ToolbarPanel extends JPanel {
     private void initComponents(){
 
         upButtonPanel = new JPanel();
-        upButtonPanel.setLayout(new VerticalFlowLayout(VerticalFlowLayout.TOP,0,15,false,false));
+        upButtonPanel.setLayout(new VerticalFlowLayout(VerticalFlowLayout.TOP,0,30,false,false));
 
         avatarLabel = new JLabel();
         PeerInfo peer = MainFrame.getContext().getCurrentPeer();
@@ -108,18 +109,18 @@ public class ToolbarPanel extends JPanel {
     private ImageIcon getAvatarIcon(PeerInfo peer){
         ImageIcon icon;
         if(peer!=null&&StringUtils.isNotBlank(peer.getId())
-                &&StringUtils.isNotBlank(peer.getAvatarSuffix())){
+                &&StringUtils.isNotBlank(peer.getAvatarName())){
             String a48Path = AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),peer.getAvatarName());
             //System.out.println(a48Path);
             if((new File(a48Path)).exists()){
                 icon = new ImageIcon(a48Path);
-                Image image = icon.getImage().getScaledInstance(42,48,Image.SCALE_SMOOTH);
+                Image image = icon.getImage().getScaledInstance(48,48,Image.SCALE_SMOOTH);
                 icon.setImage(image);
             }else {
-                icon = IconUtil.getIcon(this,"/icons/lambor48.png");
+                icon = IconUtil.getIcon(this,"/icons/logo48.png");
             }
         }else {
-            icon = IconUtil.getIcon(this,"/icons/lambor48.png");
+            icon = IconUtil.getIcon(this,"/icons/logo48.png");
         }
         return icon;
     }
@@ -189,7 +190,7 @@ public class ToolbarPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 selectedBTN(musicBTN);
-                mainCtx.mainWinShow(MainFrame.MainCardLayoutTypes.ABOUT);
+                mainCtx.mainWinShow(MainFrame.MainCardLayoutTypes.MEDIA);
             }
         });
     }
@@ -206,17 +207,19 @@ public class ToolbarPanel extends JPanel {
     private void selectedBTN(NBSIconButton btn){
         NBSIconButton[] btns = {infoBTN,imBTN,dataBTN,musicBTN,aboutBTN};
         for(NBSIconButton button : btns){
+            if(btn != infoBTN)MainFrame.INFO_REFREHING = false;
             if(btn==button){
                 button.actived();
             }else {
                 button.normal();
             }
+
         }
     }
 
     public void setDefaultSelected(){
-        selectedBTN(dataBTN);
-        mainCtx.mainWinShow(MainFrame.MainCardLayoutTypes.DATD);
+        selectedBTN(infoBTN);
+        mainCtx.mainWinShow(MainFrame.MainCardLayoutTypes.INFO);
     }
     private void initialButton(){
         infoBTN = ButtonIconUtil.infoBTN;

@@ -16,9 +16,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -142,6 +144,8 @@ public class AvatarUtil {
         return avatar;
     }
 
+    
+
     /**
      * 获取联系人头像,如果是hash则先从IPFS获取
      * @param identify
@@ -163,13 +167,24 @@ public class AvatarUtil {
                     avatar = ImageIO.read(temFile);
                     avatarCache.put(identify,avatar);
                     return avatar;
-                }else {//不存在下载
-                    File temCacheFile = new File(AppGlobalCnst.consturactPath(AVATAR_CACHE_ROOT,identify+suffix));
-                    URL url = new URL(ConfigurationHelper.getInstance().getGateWayURL()+identify);
-                    AvatarImageHandler.getInstance().getFileFromIPFS(url,temCacheFile);
-                    avatar = ImageIO.read(url);
-                    avatarCache.put(identify,avatar);
-                    return avatar;
+                }else {
+                    //不存在下载线程区下载
+                    new Thread(()->{
+                        URL url = null;
+                        try {
+                            File temCacheFile = new File(AppGlobalCnst.consturactPath(AVATAR_CACHE_ROOT,identify+suffix));
+                            logger.info("avatar download:{}",identify);
+                            url = new URL(ConfigurationHelper.getInstance().getGateWayURL()+identify);
+                            AvatarImageHandler.getInstance().getFileFromIPFS(url,temCacheFile);
+                            Image nAvatar = ImageIO.read(url);
+                            avatarCache.put(identify,nAvatar);
+
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }).start();
                 }
             } catch (Exception e) {
                 logger.warn(e.getMessage(),e.getCause());
@@ -191,13 +206,15 @@ public class AvatarUtil {
      * @throws IOException
      */
     public static Image getPeerAvatar(PeerInfo info) throws IOException {
-        if(info==null||StringUtils.isBlank(info.getAvatarName())){
+        if(info==null||StringUtils.isBlank(info.getAvatar())){
             return null;
         }
-        if(avatarCache.containsKey(info.getAvatarName()))return avatarCache.get(info.getAvatarName());
+        if(avatarCache.containsKey(info.getAvatar()))return avatarCache.get(info.getAvatar());
         File infoFile = new File(AppGlobalCnst.consturactPath(AvatarImageHandler.getAvatarProfileHome(),info.getAvatarName()));
         if(infoFile.exists()&&infoFile.isFile()){
-            return ImageIO.read(infoFile);
+            BufferedImage bimage = ImageIO.read(infoFile);
+            avatarCache.put(info.getAvatar(),bimage);
+            return bimage;
         }
         return null;
     }
@@ -239,7 +256,7 @@ public class AvatarUtil {
     private static Image createAvatar(String sign, String name)
     {
         String drawString;
-        if (sign.length() > 1)
+        if (sign!=null&&sign.length() > 1)
         {
             drawString = sign.substring(0, 1).toUpperCase() + sign.substring(1, 2).toLowerCase();
         }

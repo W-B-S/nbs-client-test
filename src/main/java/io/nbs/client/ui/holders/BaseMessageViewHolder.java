@@ -1,6 +1,5 @@
 package io.nbs.client.ui.holders;
 
-import io.nbs.client.ui.holders.ViewHolder;
 
 import javax.swing.*;
 

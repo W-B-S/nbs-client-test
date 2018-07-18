@@ -15,6 +15,7 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 
 public class DateHelper {
     public static final String FORMAT_STANDARD_TIME = "yyyy-MM-dd HH:mm:ss";
+    public static final String FORMAT_STANDARD_DATE = "yyyy-MM-dd";
 
     /**
      * @Date    : 2018/6/21 16:29
@@ -28,6 +29,10 @@ public class DateHelper {
     public static String currentTime(){
         return DateFormatUtils.format(System.currentTimeMillis(),FORMAT_STANDARD_TIME);
     }
+    public static String currentDate(){
+        return DateFormatUtils.format(System.currentTimeMillis(),FORMAT_STANDARD_DATE);
+    }
+
 
     /**
      * int

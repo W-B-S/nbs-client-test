@@ -1,6 +1,7 @@
 package io.nbs.client.ui.components;
 
 import io.nbs.client.cnsts.ColorCnst;
+import io.nbs.client.cnsts.FontUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,6 +26,18 @@ public class LCJlabel extends JLabel {
     public LCJlabel(String text) {
         super(text);
         initDefault();
+        setForeground(defForeground);
+    }
+    public LCJlabel(String text,int size) {
+        super(text);
+        setFont(FontUtil.getDefaultFont(size));
+        initDefault();
+        setForeground(defForeground);
+    }
+
+    public LCJlabel(int size) {
+        initDefault();
+        setFont(FontUtil.getDefaultFont(size));
         setForeground(defForeground);
     }
 

@@ -48,7 +48,7 @@ public class IpfsMessageSender {
      */
     public String sendOnline(OnlineMessage message) throws Exception {
         String encodeData = IPMParser.encode(message,IPMTypes.online);
-        logger.info("NBS Client 发送上线消息{}:{}",NBSWORLD_IMS_TOPIC,encodeData);
+        //logger.info("NBS Client 发送上线消息{}:{}",NBSWORLD_IMS_TOPIC,encodeData);
         ipfs.pubsub.pub(NBSWORLD_IMS_TOPIC,encodeData);
         return encodeData;
     }

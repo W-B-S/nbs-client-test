@@ -2,6 +2,7 @@ package io.nbs.client.ui.components;
 
 import io.nbs.client.cnsts.FontUtil;
 import io.nbs.client.cnsts.OSUtil;
+import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.commons.utils.EmojiUtil;
 import com.vdurmont.emoji.EmojiParser;
 
@@ -66,8 +67,10 @@ public class SizeAutoAdjustTextArea extends JIMSendTextPane {
 
     @Override
     public void setText(String t) {
+
+
         // 对emoji的Unicode编码转别名
-        t = EmojiParser.parseToAliases(t);
+       // t = EmojiParser.parseToAliases(t);
         if (t == null)
         {
             return;

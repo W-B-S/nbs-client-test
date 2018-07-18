@@ -1,5 +1,6 @@
 package io.nbs.client.adapter;
 
+import com.alibaba.fastjson.JSON;
 import io.nbs.client.vo.ContactsItem;
 import io.nbs.client.ui.holders.AvatarViewHolder;
 import io.nbs.client.ui.panels.im.views.ContactsItemViewHolder;
@@ -10,6 +11,8 @@ import io.nbs.client.listener.AbstractMouseListener;
 import io.nbs.commons.utils.AvatarUtil;
 import io.nbs.commons.helper.CharacterParser;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,6 +29,7 @@ import java.util.List;
  * All rights reserved.
  */
 public class ContactsItemAdapter extends BaseAdapter<ContactsItemViewHolder> {
+    private static final Logger logger = LoggerFactory.getLogger(ContactsItemAdapter.class);
     private List<ContactsItem> contactsItems;
     private List<ContactsItemViewHolder> viewHolders = new ArrayList<>();
 
@@ -104,6 +108,7 @@ public class ContactsItemAdapter extends BaseAdapter<ContactsItemViewHolder> {
     public void onBindViewHolder(ContactsItemViewHolder viewHolder, int position) {
         viewHolders.add(position, viewHolder);
         ContactsItem item = contactsItems.get(position);
+        //logger.info("Item {} - JSON:{}",position, JSON.toJSONString(item));
         String avatarFile = StringUtils.isBlank(item.getFormid()) ? item.getName() : item.getFormid();
         Image image;
         if(StringUtils.isNotBlank(item.getAvatar())){
@@ -148,7 +153,7 @@ public class ContactsItemAdapter extends BaseAdapter<ContactsItemViewHolder> {
             {
                 if (selectedViewHolder != viewHolder)
                 {
-                    setBackground(viewHolder, ColorCnst.ITEM_SELECTED_LIGHT);
+                    setBackground(viewHolder, ColorCnst.CONTACTS_ITEM_LINE_GRAY);
                 }
             }
 

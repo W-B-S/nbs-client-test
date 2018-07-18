@@ -1,6 +1,7 @@
 package io.nbs.sdk.beans;
 
 import com.nbs.ipfs.entity.IpfsMessage;
+import io.nbs.client.vo.AttachmentDataDTO;
 import io.nbs.client.vo.ContactsItem;
 
 /**
@@ -67,6 +68,8 @@ public class MessageItem implements Comparable<MessageItem> {
     private String avatar;
 
     private String suffix;
+
+    private AttachmentDataDTO dataDTO;
 
     public MessageItem() {
     }
@@ -201,5 +204,13 @@ public class MessageItem implements Comparable<MessageItem> {
 
     public void setSuffix(String suffix) {
         this.suffix = suffix;
+    }
+
+    public AttachmentDataDTO getDataDTO() {
+        return dataDTO;
+    }
+
+    public void setDataDTO(AttachmentDataDTO dataDTO) {
+        this.dataDTO = dataDTO;
     }
 }

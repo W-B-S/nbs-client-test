@@ -64,6 +64,10 @@ public class NBSTableDao {
     public void createAttachmentInfo(){
         session.update("createAttachmentInfo");
     }
+
+    public void createHashLinks(){
+        session.update("createHashLinks");
+    }
     public List<NBSTest> findAll(){
         return session.selectList("findAll");
     }

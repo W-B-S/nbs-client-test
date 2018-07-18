@@ -18,7 +18,7 @@ import java.util.Map;
  * Copyright (c) 2018, NBS , lambor.c<lanbery@gmail.com>.
  * All rights reserved.
  */
-public class BasicDao {
+public class BasicDao<E> {
     private Logger logger = LoggerFactory.getLogger(BasicDao.class);
     protected SqlSession session;
     private String className;
@@ -35,13 +35,13 @@ public class BasicDao {
         return session.insert(className + ".insert", model);
     }
 
-    public List findAll()
+    public List<E> findAll()
     {
         //return session.selectList(className + ".findAll");
         return _findAll(0);
     }
 
-    private List _findAll(int time)
+    private List<E> _findAll(int time)
     {
         if (time > 10)
         {
@@ -69,7 +69,7 @@ public class BasicDao {
     {
         if (time > 10)
         {
-            System.out.println("查询到 BasicModel 对象失败次数>10，放弃查询");
+            System.out.println("查询到 BasicModel 对象失败次数>10，放弃查询 id："+id);
             return null;
         }
 
@@ -78,12 +78,12 @@ public class BasicDao {
             return (BasicEntity) session.selectOne(className + ".findById", id);
         } catch (PersistenceException exception)
         {
-            System.out.println("没有查询到 BasicModel 对象，继续查询");
+            System.out.println("没有查询到 BasicModel 对象，继续查询:"+className+".findById");
             return _findById(id, ++time);
         }
     }
 
-    public List find(String field, Object val)
+    public List<E> find(String field, Object val)
     {
         Map map = new HashMap();
         map.put("field", field);

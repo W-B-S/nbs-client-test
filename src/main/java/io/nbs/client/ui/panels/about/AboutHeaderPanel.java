@@ -72,7 +72,7 @@ public class AboutHeaderPanel extends ParentAvailablePanel {
         titleLabel.setText(title);
         titleLabel.setFont(FontUtil.getDefaultFont(32));
         titleLabel.setForeground(ColorCnst.FONT_ABOUT_TITLE_BLUE);
-        String verText =  AboutMasterPanel.cfgProps.getProperty("nbs.ui.panel.about.label.ver-value","v0.2.2");
+        String verText =  AboutMasterPanel.cfgProps.getProperty("nbs.ui.panel.about.label.ver-value","v2.0.2");
         versionLabel.setText(verText);
         versionLabel.setFont(FontUtil.getDefaultFont(12));
 

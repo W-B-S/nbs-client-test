@@ -1,11 +1,14 @@
 package io.nbs.client.ui.panels;
 
-import io.nbs.client.listener.AbstractMouseListener;
+import io.nbs.client.Launcher;
 import io.nbs.client.cnsts.ColorCnst;
+import io.nbs.client.listener.AbstractMouseListener;
+
 import io.nbs.client.cnsts.FontUtil;
 import io.nbs.client.cnsts.OSUtil;
 import io.nbs.client.ui.components.GBC;
 import io.nbs.client.ui.frames.MainFrame;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -56,6 +59,7 @@ public class TitlePanel extends ParentAvailablePanel {
     }
 
     private void initComponents(){
+        setBackground(ColorCnst.WINDOW_BACKGROUND);
         Cursor handCursor = new Cursor(Cursor.HAND_CURSOR);
         Dimension ctrlItemSize = new Dimension(30,30);
 
@@ -64,10 +68,10 @@ public class TitlePanel extends ParentAvailablePanel {
         restoreIcon =  new ImageIcon(getClass().getResource("/icons/window_restore.png"));
         titlePanel = new JPanel();
         titlePanel.setLayout(new GridBagLayout());
+        titlePanel.setBackground(ColorCnst.WINDOW_BACKGROUND);
 
         titleLabel = new JLabel();
         titleLabel.setFont(FontUtil.getDefaultFont(15));
-        //titleLabel.setText("NBS Chain 世界频道");
 
 
         CtrlLabelMouseListener listener = new CtrlLabelMouseListener();
@@ -108,7 +112,6 @@ public class TitlePanel extends ParentAvailablePanel {
      *
      */
     private void initView(){
-        //setLayout(new VerticalFlowLayout(VerticalFlowLayout.TOP,0,0,true,true));
         setLayout(new GridBagLayout());
         setLayout(new GridBagLayout());
         JPanel left = new JPanel();
@@ -116,12 +119,7 @@ public class TitlePanel extends ParentAvailablePanel {
         JPanel right = new JPanel();
         right.setLayout(new FlowLayout(FlowLayout.RIGHT,0,0));
 
-        //add(left,BorderLayout.CENTER);
-        //add(right,BorderLayout.EAST);
-
-        //setLayout(new GridBagLayout());
         setBorder(null);
-        //this.setBorder(new LamBorder(LamBorder.BOTTOM,ColorCnst.LIGHT_GRAY));
 
         ctrlPanel.add(minLabel);
         ctrlPanel.add(maxLabel);
@@ -245,6 +243,7 @@ public class TitlePanel extends ParentAvailablePanel {
         public void mouseClicked(MouseEvent e) {
             if(e.getComponent()==closeLabel){
                 //MainFrame.getContext().setVisible(false);
+                Launcher.destoryIPFS();
                 System.exit(1);
             }else if(e.getComponent() == maxLabel){
                 maxOrRestoreWindow();

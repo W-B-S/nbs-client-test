@@ -17,6 +17,22 @@ public class Base64CodecUtil {
 
     /**
      *
+     * @param from
+     * @return
+     */
+    public static String base64From(String from){
+        if(from==null||from.length()==0)return from;
+        try {
+            byte[] encodeByte = from.getBytes(CharEncoding.UTF_8);
+            return base64.encodeToString(encodeByte);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     *
      * @param origin
      * @return
      */

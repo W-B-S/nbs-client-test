@@ -1,7 +1,5 @@
 package io.nbs.client.cnsts;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * @Package : io.ipfs.nbs.cnsts
  * @Description : <p></p>
@@ -29,6 +27,11 @@ public class AppGlobalCnst {
      * 图标根
      */
     public static String TOOL_ICON_PATH = "/icons/tools/";
+
+    /**
+     * 临时文件目录
+     */
+    public static final String IPFS_BASE = "nbssvr";
 
     /**
      * 非NBS客户端区分

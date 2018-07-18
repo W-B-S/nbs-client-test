@@ -6,6 +6,7 @@ import io.ipfs.api.exceptions.IllegalIPFSMessageException;
 import io.nbs.client.Launcher;
 import io.nbs.client.listener.IPFSSubscribeListener;
 import io.nbs.client.listener.OnlineNotifier;
+import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.panels.im.ChatPanel;
 import io.nbs.commons.helper.ConfigurationHelper;
 
@@ -115,7 +116,6 @@ public class IpfsMessageReceiver{
                     logger.warn("消息JSON ：{}解析失败，忽略.可能原因:{}",json,e.getMessage());
                     continue;
                 } catch (UnsupportedEncodingException e) {
-
                     logger.warn("消息JSON ：{}解析失败，忽略.可能原因:{}",json,e.getMessage());
                     continue;
                 }
@@ -128,7 +128,7 @@ public class IpfsMessageReceiver{
                     if(subscribeListener==null)continue;
                     MessageItem item = IPMParser.convertMessageItem(standardIPFSMessage);
                     item.setMessageType(1);
-                    PeerInfo info =Launcher.currentPeer;
+                    PeerInfo info =MainFrame.getContext().getCurrentPeer();
                     logger.info("{}<=====>{}",info.getId(),item.getFrom());
                     item.setId(UUIDGenerator.getUUID());
                     subscribeListener.notifyRecvMessage(item);
@@ -168,4 +168,5 @@ public class IpfsMessageReceiver{
     public void setOnlineNotifier(OnlineNotifier onlineNotifier) {
         this.onlineNotifier = onlineNotifier;
     }
+
 }

@@ -1,11 +1,14 @@
 package io.nbs.client.ui.frames;
 
+import io.ipfs.api.exceptions.IllegalIPFSMessageException;
+import io.nbs.client.Launcher;
 import io.nbs.client.listener.AbstractMouseListener;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.cnsts.FontUtil;
 import io.nbs.client.cnsts.OSUtil;
 import io.nbs.client.ui.components.GBC;
 import io.nbs.client.ui.components.NBSButton;
+import io.nbs.commons.helper.ConfigurationHelper;
 import io.nbs.commons.utils.IconUtil;
 
 import javax.swing.*;
@@ -30,9 +33,12 @@ public class FailFrame extends JFrame {
     private JLabel messageLabel;
     private JLabel titleLabel;
     private NBSButton exitButton;
+    private NBSButton startIPFSBtn;
     private static Point origin = new Point();
+    private FailFrame failFrame;
 
     public FailFrame(String errorMsg){
+        failFrame = this;
         initComponents();
         centerScreen();
         initView(errorMsg);
@@ -56,7 +62,10 @@ public class FailFrame extends JFrame {
         titleLabel.setFont(FontUtil.getDefaultFont(18));
 
         exitButton = new NBSButton("退出",ColorCnst.MAIN_COLOR,ColorCnst.MAIN_COLOR_DARKER);
-        exitButton.setPreferredSize(new Dimension(200,40));
+        exitButton.setPreferredSize(new Dimension(100,40));
+
+        startIPFSBtn = new NBSButton("启动服务",ColorCnst.MAIN_COLOR,ColorCnst.MAIN_COLOR_DARKER);
+        startIPFSBtn.setPreferredSize(new Dimension(100,40));
 
         messageLabel = new JLabel();
         messageLabel.setFont(FontUtil.getDefaultFont(16));
@@ -69,7 +78,11 @@ public class FailFrame extends JFrame {
        // contentPanel.setBackground(ColorCnst.WINDOW_BACKGROUND);
 
         controlPanel.add(closeLabel);
-
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridBagLayout());
+        buttonPanel.add(exitButton,new GBC(0,0)
+                .setFill(GBC.BOTH).setWeight(1,1).setInsets(10,0,0,0));
+        boolean integrated = ConfigurationHelper.getInstance().integratedServer();
         if(OSUtil.getOsType() != OSUtil.Mac_OS){
             setUndecorated(true);
             contentPanel.add(controlPanel
@@ -77,14 +90,13 @@ public class FailFrame extends JFrame {
                             .setFill(GBC.BOTH)
                             .setWeight(1,1)
                             .setInsets(10,0,0,0));
+
+            if(integrated)buttonPanel.add(startIPFSBtn,new GBC(1,0)
+                    .setFill(GBC.BOTH).setWeight(1,1).setInsets(10,10,0,0));
         }
         JPanel titlePanel = new JPanel();
         titlePanel.add(titleLabel);
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridBagLayout());
-        buttonPanel.add(exitButton,new GBC(0,0)
-        .setFill(GBC.BOTH).setWeight(1,1).setInsets(10,0,0,0));
 
         JPanel messagePanel = new JPanel();
         messageLabel.setText(message);
@@ -110,6 +122,10 @@ public class FailFrame extends JFrame {
         );
     }
 
+    /**
+     *
+     * @throws HeadlessException
+     */
     public FailFrame() throws HeadlessException {
         super();
     }
@@ -151,11 +167,50 @@ public class FailFrame extends JFrame {
                 }
             });
 
+
+            startIPFSBtn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    failFrame.dispose();
+                    boolean b = false;
+                    try {
+                        b = Launcher.getContext().startIPFS();
+                    } catch (IllegalIPFSMessageException e1) {
+                        JOptionPane.showMessageDialog(failFrame,e1.getMessage());
+                        System.exit(1);
+                    }
+
+                    if(!b){
+                        Launcher.getContext().reStartMain();
+                    }else {
+                        String message = "NBS 服务启动失败.可能你还没有初始化服务";
+                        int r = JOptionPane.showConfirmDialog(failFrame,message);
+                        switch (r){
+                            case JOptionPane.YES_OPTION:
+                                try {
+                                    boolean bInit  = Launcher.getContext().initNBSSvr();
+                                    if(bInit)Launcher.getContext().startIPFS();
+                                } catch (IllegalIPFSMessageException e1) {
+                                    e1.printStackTrace();
+                                    System.exit(1);
+                                }
+                                break;
+                            case JOptionPane.NO_OPTION:
+                            case JOptionPane.CANCEL_OPTION:
+                            case JOptionPane.CLOSED_OPTION:
+                            default:
+                                System.exit(1);
+                                break;
+                        }
+                    }
+                }
+            });
         }
 
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Launcher.destoryIPFS();
                 System.exit(1);
             }
         });

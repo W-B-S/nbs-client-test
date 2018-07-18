@@ -64,7 +64,7 @@ public class NBSButton extends JButton {
      */
     public NBSButton(String text) {
         this.setText(text);
-        setFont(FontUtil.getDefaultFont(14));
+        setFont(FontUtil.getDefaultFont(12));
         setBorderPainted(false);
         setForeground(BUTTON_FOREGROUND_COLOR);
         setFocusPainted(false);

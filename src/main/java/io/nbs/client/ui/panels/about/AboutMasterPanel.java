@@ -1,6 +1,7 @@
 package io.nbs.client.ui.panels.about;
 
 import io.nbs.client.cnsts.ColorCnst;
+import io.nbs.client.ui.components.SizeAutoAdjustTextArea;
 import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.panels.TitlePanel;
 
@@ -27,6 +28,7 @@ public class AboutMasterPanel extends JPanel {
     private AboutFooterPanel footerPanel;
     protected static Properties cfgProps;
 
+
     public AboutMasterPanel() {
         this.cfgProps = ConfigurationHelper.getInstance().getCfgProps();
         initComponents();
@@ -45,6 +47,9 @@ public class AboutMasterPanel extends JPanel {
 
        // headerPanel.setOpaque(false);
         headerPanel.setBackground(ColorCnst.WINDOW_BACKGROUND_LIGHT);
+        bodyPanel.setBackground(ColorCnst.WINDOW_BACKGROUND_LIGHT);
+        footerPanel.setBackground(ColorCnst.WINDOW_BACKGROUND_LIGHT);
+
        // headerPanel.setBorder(MainFrame.redBorder);
 
     }
@@ -54,6 +59,8 @@ public class AboutMasterPanel extends JPanel {
         /* ======================= 构造内部Start =====================*/
         centerPanel.setLayout(new BorderLayout());
         centerPanel.add(headerPanel,BorderLayout.NORTH);
+
+
         centerPanel.add(bodyPanel,BorderLayout.CENTER);
         centerPanel.add(footerPanel,BorderLayout.SOUTH);
 
