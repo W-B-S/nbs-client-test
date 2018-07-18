@@ -39,7 +39,7 @@ public class IPFSFileUploader {
     private static Logger logger = LoggerFactory.getLogger(IPFSFileUploader.class);
     private static IPFS ipfs;
     private AttachmentInfoService service;
-    public static int MAX_SIZE = 1000*1024*1024;
+    public static int MAX_SIZE = 2000*1024*1024;
     private PeerInfo cureent;
     private MessagePanel messagePanel;
     private List<MessageItem> messageItems;
