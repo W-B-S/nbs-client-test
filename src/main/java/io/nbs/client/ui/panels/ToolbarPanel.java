@@ -117,10 +117,10 @@ public class ToolbarPanel extends JPanel {
                 Image image = icon.getImage().getScaledInstance(48,48,Image.SCALE_SMOOTH);
                 icon.setImage(image);
             }else {
-                icon = IconUtil.getIcon(this,"/icons/lambor48.png");
+                icon = IconUtil.getIcon(this,"/icons/logo48.png");
             }
         }else {
-            icon = IconUtil.getIcon(this,"/icons/lambor48.png");
+            icon = IconUtil.getIcon(this,"/icons/logo48.png");
         }
         return icon;
     }
