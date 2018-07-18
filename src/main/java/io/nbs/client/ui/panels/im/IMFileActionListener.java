@@ -7,6 +7,7 @@ import io.nbs.client.Launcher;
 import io.nbs.client.exceptions.FileTooLargeException;
 import io.nbs.client.listener.IPFSFileUploader;
 import io.nbs.client.ui.frames.MainFrame;
+import io.nbs.commons.helper.DateHelper;
 import io.nbs.commons.utils.DataSizeFormatUtil;
 import io.nbs.sdk.beans.PeerInfo;
 import io.nbs.sdk.prot.IPMParser;
@@ -46,7 +47,7 @@ public class IMFileActionListener implements ActionListener {
         this.jFileChooser.showDialog(Launcher.getContext().getCurrentFrame(),"选择");
         File selection = jFileChooser.getSelectedFile();
         if(selection==null)return;
-        logger.info(selection.getAbsolutePath());
+        logger.info("{}在{}分享了{}",MainFrame.getContext().getCurrentPeer().getNick(),DateHelper.currentTime(),selection.getAbsolutePath());
         if(selection.length()>200*1024*1024){
             JOptionPane.showMessageDialog(MainFrame.getContext(),"成功加入分享任务，由于文件较大需要稍等一会儿返回唯一串码.");
         }

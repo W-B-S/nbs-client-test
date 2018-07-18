@@ -122,7 +122,8 @@ public class TipResultHashPanel extends ParentAvailablePanel {
         /**
          *
          */
-        searchUsed = new LCFormLabel("搜索到文件用时");
+        searchUsed = new LCFormLabel("搜索到文件用时:");
+        searchUsed.setHorizontalAlignment(JLabel.LEFT);
         operPanel = new JPanel();
         operPanel.setLayout(new FlowLayout(FlowLayout.RIGHT,20,5));
         operPanel.setVisible(false);
@@ -180,6 +181,9 @@ public class TipResultHashPanel extends ParentAvailablePanel {
         openBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+
+
                 BrowserOperationHelper.getInstance().openURL(hash58);
             }
         });
@@ -197,6 +201,8 @@ public class TipResultHashPanel extends ParentAvailablePanel {
         hashLabel.setText(hash);
         this.updateUI();
     }
+
+
 
     public void setBlkStat(BlockStat stat,String errorMSG,long usedSecd){
         String timeUsed = DateHelper.calcUsedTime(usedSecd);

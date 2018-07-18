@@ -23,6 +23,7 @@ import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.panels.ParentAvailablePanel;
 import io.nbs.client.ui.panels.manage.body.TipResultHashPanel;
 import io.nbs.client.vo.AttachmentDataDTO;
+import io.nbs.commons.helper.DateHelper;
 import io.nbs.commons.utils.ButtonIconUtil;
 import io.nbs.commons.utils.IconUtil;
 import io.nbs.sdk.page.PageModel;
@@ -184,10 +185,12 @@ public class MMSearcherPanel extends ParentAvailablePanel {
                Multihash multihash1= Multihash.fromBase58(text);
                long start = System.currentTimeMillis();
                try {
+                   tipResultHashPanel.searchingFromIntelnet();
                    Object o =ipfs.object.stat(multihash1);
                    String json = JSONParser.toString(o);
                    BlockStat stat = JSON.parseObject(json,BlockStat.class);
                    long usedsecd = System.currentTimeMillis()-start;
+                   logger.info("TESTLOG>>>查找文件:{},用时{}",text,DateHelper.calcUsedTime(usedsecd));
                    tipResultHashPanel.setBlkStat(stat,null,usedsecd);
                } catch (IOException e) {
                    e.printStackTrace();

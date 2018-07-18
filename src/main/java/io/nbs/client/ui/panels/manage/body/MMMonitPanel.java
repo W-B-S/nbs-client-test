@@ -1,10 +1,7 @@
 package io.nbs.client.ui.panels.manage.body;
 
 import com.alibaba.fastjson.JSON;
-import io.ipfs.api.IPFS;
-import io.ipfs.api.JSONParser;
-import io.ipfs.api.MerkleNode;
-import io.ipfs.api.ResData;
+import io.ipfs.api.*;
 import io.ipfs.api.beans.blk.BlockStat;
 import io.ipfs.api.beans.bw.BitSwap;
 import io.ipfs.api.bitswap.BitSwapService;
@@ -160,11 +157,13 @@ public class MMMonitPanel extends JPanel {
         statusLabel.setText("浏览器打开，正在加载数据...");
 
         new Thread(()->{
+            int sec = 0;
             while (completeSize.get()<fsize){
-                seconds += seconds;
+                sec++;
                 try {
                     TimeUnit.SECONDS.sleep(1);
-                    timelabel.setText(seconds+"s");
+                    timelabel.setText(sec+"s");
+                    timelabel.updateUI();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -178,8 +177,8 @@ public class MMMonitPanel extends JPanel {
             generateHash(multihash);
         }).start();
 
-        boosterPined();
         monitorList();
+        boosterPined();
         this.setVisible(true);
     }
 
@@ -219,6 +218,9 @@ public class MMMonitPanel extends JPanel {
                     long nl = completeSize.longValue()+stat.getCumulativeSize();
                     completeSize.addAndGet(nl);
                     ipfs.pin.add(multihash);
+                    byte[] data =ipfs.object.data(multihash);
+                    NamedStreamable.ByteArrayWrapper byteArrayWrapper = new NamedStreamable.ByteArrayWrapper(data);
+                    ipfs.add(byteArrayWrapper);
                     Map blkMap = ipfs.block.stat(multihash);
                     logger.info("{}>>block :{}",multihash.toBase58(),JSON.toJSON(blkMap));
                 } catch (InterruptedException e) {
