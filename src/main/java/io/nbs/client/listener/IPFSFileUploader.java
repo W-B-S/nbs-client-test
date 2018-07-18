@@ -39,7 +39,7 @@ public class IPFSFileUploader {
     private static Logger logger = LoggerFactory.getLogger(IPFSFileUploader.class);
     private static IPFS ipfs;
     private AttachmentInfoService service;
-    public static int MAX_SIZE = 3000*1024*1024;
+    public static long MAX_SIZE = 3000*1024*1024;
     private PeerInfo cureent;
     private MessagePanel messagePanel;
     private List<MessageItem> messageItems;
@@ -86,7 +86,7 @@ public class IPFSFileUploader {
         String fname = file.getName();
         long size = file.length();
         if(size>MAX_SIZE){
-            throw  new FileTooLargeException("上传文件【"+fname+"】超过"+DataSizeFormatUtil.formatDataSize((long)MAX_SIZE)+"限制.");
+            throw  new FileTooLargeException("上传文件【"+fname+"】超过"+DataSizeFormatUtil.formatDataSize(MAX_SIZE)+"限制.");
         }
         int len = (int)size;
         byte[] lagerBytes = new byte[len];
