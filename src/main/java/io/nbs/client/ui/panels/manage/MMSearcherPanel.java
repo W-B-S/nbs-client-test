@@ -18,6 +18,7 @@ import io.nbs.client.ui.components.SearchButtonPanel;
 import io.nbs.client.ui.components.SearchTextField;
 import io.nbs.client.ui.components.common.DownLoadTipIconPanel;
 import io.nbs.client.ui.components.common.JCirclePanel;
+import io.nbs.client.ui.components.forms.LCFormLabel;
 import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.panels.ParentAvailablePanel;
 import io.nbs.client.ui.panels.manage.body.TipResultHashPanel;
@@ -181,16 +182,19 @@ public class MMSearcherPanel extends ParentAvailablePanel {
             tipResultHashPanel.setHash(multihash.toBase58());
             new Thread(()->{
                Multihash multihash1= Multihash.fromBase58(text);
+               long start = System.currentTimeMillis();
                try {
                    Object o =ipfs.object.stat(multihash1);
                    String json = JSONParser.toString(o);
                    BlockStat stat = JSON.parseObject(json,BlockStat.class);
-                   tipResultHashPanel.setBlkStat(stat,null);
+                   long usedsecd = System.currentTimeMillis()-start;
+                   tipResultHashPanel.setBlkStat(stat,null,usedsecd);
                } catch (IOException e) {
                    e.printStackTrace();
                    logger.error(e.getMessage());
                    String error = "没有在NBS网络世界查到你要的数据["+multihash1.toBase58()+"]";
-                   tipResultHashPanel.setBlkStat(null,error);
+                   long usedsecd = System.currentTimeMillis()-start;
+                   tipResultHashPanel.setBlkStat(null,error,usedsecd);
                }
             }).start();
         }else {
