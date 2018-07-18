@@ -47,16 +47,19 @@ public class IMFileActionListener implements ActionListener {
         File selection = jFileChooser.getSelectedFile();
         if(selection==null)return;
         logger.info(selection.getAbsolutePath());
-
+        if(selection.length()>200*1024*1024){
+            JOptionPane.showMessageDialog(MainFrame.getContext(),"成功加入分享任务，由于文件较大需要稍等一会儿返回唯一串码.");
+        }
         new Thread(()->{
             try {
                 MerkleNode node = fileUploader.addFileToIPFS(selection);
+                logger.info("添加文件成功.{}",selection.getName());
                 new Thread(()->{
                     saveUploadFileInfo2DB(node);
                 }).start();
             } catch (FileTooLargeException e1) {
                 logger.error("删除文件失败，{}-{}",e1.getMessage(),e1.getCause());
-                JOptionPane.showMessageDialog(MainFrame.getContext(),"文件太大,最大只能上传["+DataSizeFormatUtil.formatDataSize((long)IPFSFileUploader.MAX_SIZE)+"]文件。");
+                JOptionPane.showMessageDialog(MainFrame.getContext(),"文件太大,最大只能上传["+DataSizeFormatUtil.formatDataSize(IPFSFileUploader.MAX_SIZE)+"]文件。");
 
             }
         }).start();
