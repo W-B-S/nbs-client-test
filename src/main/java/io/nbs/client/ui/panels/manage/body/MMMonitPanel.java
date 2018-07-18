@@ -156,19 +156,7 @@ public class MMMonitPanel extends JPanel {
         Multihash multihash = Multihash.fromBase58(stat.getHash());
 
 
-        new Thread(()->{
-            int sec = 0;
-            while (completeSize.get()<fsize){
-                sec++;
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                    timelabel.setText(sec+"s");
-                    timelabel.updateUI();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+
 
 
         blkmap.clear();
@@ -206,10 +194,8 @@ public class MMMonitPanel extends JPanel {
      *
      */
     public void boosterPined(){
-        if(CtrlSign)return;
         new Thread(()->{
-            while (completeSize.get()<fsize){
-                CtrlSign = true;
+            while (CtrlSign){
                 try {
                     Multihash multihash = pinedBooster.take();
 
@@ -231,7 +217,6 @@ public class MMMonitPanel extends JPanel {
                     e.printStackTrace();
                 }
             }
-            CtrlSign = false;
         }).start();
     }
 
@@ -239,12 +224,28 @@ public class MMMonitPanel extends JPanel {
      *
      */
     public void monitorList(){
+        this.setVisible(true);
+        new Thread(()->{
+            int sec = 0;
+            statusLabel.setText("浏览器打开，正在加载数据...");
+            while (CtrlSign){
+                sec++;
+                timelabel.setText(sec+"s");
+                timelabel.updateUI();
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
 
         new Thread(()->{
-            while (!CtrlSign){
+            while (CtrlSign){
                 ResData<BitSwap> resData = bitSwapService.getBitSwapStat();
                 if(resData.getCode()==0){
-                    statusLabel.setText("浏览器打开，正在加载数据...");
+
+
                     BitSwap bitSwap = resData.getData();
                     if(bitSwap!=null&&bitSwap.getWantlist().size()>0){
                         wantListPanel.removeAll();
@@ -265,6 +266,7 @@ public class MMMonitPanel extends JPanel {
                                     super.addMouseListener(adapter);
                                 }
                             });
+
                             wantListPanel.updateUI();
                         }
 

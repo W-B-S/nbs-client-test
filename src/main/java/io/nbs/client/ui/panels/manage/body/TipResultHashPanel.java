@@ -279,4 +279,8 @@ public class TipResultHashPanel extends ParentAvailablePanel {
     public MerkleNode getLinks() {
         return null;
     }
+
+    public void hideMMMonitor(){
+        monitPanel.setVisible(false);
+    }
 }
