@@ -174,16 +174,15 @@ public class TipResultHashPanel extends ParentAvailablePanel {
         contentPanel.add(dataSize,"split,span ,growx ,gaptop 5");
         contentPanel.add(dataSizeVol,"span ,growx ,gaptop 5");
         contentPanel.add(numLinks,"span ,growx ,gaptop 5");
-        contentPanel.add(numLinksVol,"span ,growx ,gaptop 5");
+        contentPanel.add(numLinksVol,"span ,growx ,gaptop 5,wrap");
+        contentPanel.add(errorLabel,"split ,span 1 ,wrap,grow");
     }
 
     private void setListeners() {
         openBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-
-
+                monitPanel.monitorList();
                 BrowserOperationHelper.getInstance().openURL(hash58);
             }
         });
@@ -207,6 +206,7 @@ public class TipResultHashPanel extends ParentAvailablePanel {
     public void setBlkStat(BlockStat stat,String errorMSG,long usedSecd){
         String timeUsed = DateHelper.calcUsedTime(usedSecd);
         searchUsed.setVolumeText(timeUsed);
+        searchUsed.getTextArea().setBackground(ColorCnst.WINDOW_BACKGROUND);
         if(errorMSG==null&&stat!=null){
             this.stat = stat;
             errorLabel.setVisible(false);

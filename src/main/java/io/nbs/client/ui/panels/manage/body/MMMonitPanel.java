@@ -53,7 +53,7 @@ public class MMMonitPanel extends JPanel {
     //private SizeAutoAdjustTextArea textArea;
     private JPanel wantListPanel;
 
-    private static boolean CtrlSign = false;
+    public static boolean CtrlSign = false;
     private long fsize = 0l;
     private String rhash;
     private IPFS ipfs;
@@ -154,7 +154,7 @@ public class MMMonitPanel extends JPanel {
         this.rhash = rhash;
         this.fsize = stat.getCumulativeSize();
         Multihash multihash = Multihash.fromBase58(stat.getHash());
-        statusLabel.setText("浏览器打开，正在加载数据...");
+
 
         new Thread(()->{
             int sec = 0;
@@ -177,7 +177,7 @@ public class MMMonitPanel extends JPanel {
             generateHash(multihash);
         }).start();
 
-        monitorList();
+        //monitorList();
         boosterPined();
         this.setVisible(true);
     }
@@ -205,9 +205,11 @@ public class MMMonitPanel extends JPanel {
     /**
      *
      */
-    private void boosterPined(){
+    public void boosterPined(){
+        if(CtrlSign)return;
         new Thread(()->{
             while (completeSize.get()<fsize){
+                CtrlSign = true;
                 try {
                     Multihash multihash = pinedBooster.take();
 
@@ -229,14 +231,20 @@ public class MMMonitPanel extends JPanel {
                     e.printStackTrace();
                 }
             }
+            CtrlSign = false;
         }).start();
     }
 
-    private void monitorList(){
+    /**
+     *
+     */
+    public void monitorList(){
+
         new Thread(()->{
-            while (completeSize.get()<fsize){
+            while (!CtrlSign){
                 ResData<BitSwap> resData = bitSwapService.getBitSwapStat();
                 if(resData.getCode()==0){
+                    statusLabel.setText("浏览器打开，正在加载数据...");
                     BitSwap bitSwap = resData.getData();
                     if(bitSwap!=null&&bitSwap.getWantlist().size()>0){
                         wantListPanel.removeAll();
@@ -261,7 +269,7 @@ public class MMMonitPanel extends JPanel {
                         }
 
                         try {
-                            TimeUnit.SECONDS.sleep(2);
+                            TimeUnit.SECONDS.sleep(5);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -271,4 +279,6 @@ public class MMMonitPanel extends JPanel {
         }).start();
 
     }
+
+
 }

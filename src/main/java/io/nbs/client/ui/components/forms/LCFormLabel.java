@@ -49,4 +49,12 @@ public class LCFormLabel extends JPanel {
     public void setHorizontalAlignment(int horizontalAlignment){
         this.label.setHorizontalAlignment(horizontalAlignment);
     }
+
+    public JLabel getLabel() {
+        return label;
+    }
+
+    public LCJTextArea getTextArea() {
+        return textArea;
+    }
 }

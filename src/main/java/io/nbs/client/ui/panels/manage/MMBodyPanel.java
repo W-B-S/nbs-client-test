@@ -106,6 +106,11 @@ public class MMBodyPanel extends ParentAvailablePanel implements FillDetailInfoL
      * @param who
      */
     public void showPanel(MMNames who){
+        if(who==MMNames.TIP){
+            MMMonitPanel.CtrlSign = false;
+        }else {
+            MMMonitPanel.CtrlSign = true;
+        }
         cardLayout.show(cardPanel,who.name());
     }
 
