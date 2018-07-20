@@ -182,6 +182,9 @@ public class MMSearcherPanel extends ParentAvailablePanel {
             if(tipResultHashPanel.prevousHash().equals(text))return;
             tipResultHashPanel.setHash(multihash.toBase58());
             new Thread(()->{
+                if( tipResultHashPanel.getMonitPanel()!=null){
+                    tipResultHashPanel.getMonitPanel().stopMonitor();
+                }
                Multihash multihash1= Multihash.fromBase58(text);
                long start = System.currentTimeMillis();
                try {
@@ -190,13 +193,15 @@ public class MMSearcherPanel extends ParentAvailablePanel {
                    String json = JSONParser.toString(o);
                    BlockStat stat = JSON.parseObject(json,BlockStat.class);
                    long usedsecd = System.currentTimeMillis()-start;
-                   logger.info("TESTLOG>>>查找文件:{},用时{}",text,DateHelper.calcUsedTime(usedsecd));
+                   logger.info("客户端IP{}用时{}ms",MainFrame.getContext().getCurrentPeer().getIp(),usedsecd);
+                   logger.info("TESTLOG:{}>>>查找文件:{},用时{}",Launcher.getSysUser(),text,DateHelper.calcUsedTime(usedsecd));
                    tipResultHashPanel.setBlkStat(stat,null,usedsecd);
                } catch (IOException e) {
                    e.printStackTrace();
                    logger.error(e.getMessage());
                    String error = "没有在NBS网络世界查到你要的数据["+multihash1.toBase58()+"]";
                    long usedsecd = System.currentTimeMillis()-start;
+                   logger.info("TESTLOG:{}>>>查找文件:{}没有查到,用时{}",Launcher.getSysUser(),text,DateHelper.calcUsedTime(usedsecd));
                    tipResultHashPanel.setBlkStat(null,error,usedsecd);
                }
             }).start();

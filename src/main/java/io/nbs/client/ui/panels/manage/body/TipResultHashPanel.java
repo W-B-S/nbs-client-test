@@ -11,6 +11,7 @@ import io.nbs.client.ui.components.LCJlabel;
 import io.nbs.client.ui.components.NBSButton;
 import io.nbs.client.ui.components.VerticalFlowLayout;
 import io.nbs.client.ui.components.forms.LCFormLabel;
+import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.panels.ParentAvailablePanel;
 import io.nbs.commons.helper.DateHelper;
 import io.nbs.commons.utils.DataSizeFormatUtil;
@@ -72,6 +73,8 @@ public class TipResultHashPanel extends ParentAvailablePanel {
     private BlockStat stat;
 
     private MMMonitPanel monitPanel;
+
+
 
 
     private IPFS ipfs;
@@ -183,6 +186,7 @@ public class TipResultHashPanel extends ParentAvailablePanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 monitPanel.monitorList();
+                logger.info("客户端IP:{}打开浏览器时间:{},浏览HASH:{}",MainFrame.getContext().getCurrentPeer().getIp(),DateHelper.currentTime(),hash58);
                 BrowserOperationHelper.getInstance().openURL(hash58);
             }
         });
@@ -278,6 +282,10 @@ public class TipResultHashPanel extends ParentAvailablePanel {
 
     public MerkleNode getLinks() {
         return null;
+    }
+
+    public MMMonitPanel getMonitPanel() {
+        return monitPanel;
     }
 
     public void hideMMMonitor(){

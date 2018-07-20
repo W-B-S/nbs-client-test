@@ -59,7 +59,7 @@ public class DateHelper {
      * @return
      */
     public static String calcUsedTime(long time){
-        if(time<=999)return "0秒";
+        if(time<=999)return time+"毫秒";
         StringBuffer sb = new StringBuffer();
         calc(sb,time);
         return sb.toString();

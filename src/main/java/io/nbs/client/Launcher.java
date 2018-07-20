@@ -385,4 +385,8 @@ public class Launcher {
     public static boolean isIpfsRuning() {
         return ipfsRuning;
     }
+
+    public static String getSysUser(){
+        return System.getProperty("user.name","");
+    }
 }

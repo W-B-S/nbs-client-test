@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -48,12 +49,14 @@ public class MMMonitPanel extends JPanel {
     private JLabel statusLabel = new JLabel();
     private int seconds = 0;//用时
     private Color wantHashColor;
-
+    private int timeout = 20*60;
 
     //private SizeAutoAdjustTextArea textArea;
     private JPanel wantListPanel;
 
-    public static boolean CtrlSign = false;
+    private Thread thread;
+
+    public static AtomicInteger CtrlSign = new AtomicInteger(0);
     private long fsize = 0l;
     private String rhash;
     private IPFS ipfs;
@@ -63,10 +66,16 @@ public class MMMonitPanel extends JPanel {
     private BitSwapService bitSwapService;
     private JPanel middlePanel ;
     private LCJlabel timelabel;
+
+    private static int sec =0;
     /**
      *
      */
     private BlockingQueue<Multihash> pinedBooster = new ArrayBlockingQueue<>(20);
+
+    private Thread timeThread;
+
+    private Thread wantThread;
     /**
      * construction
      */
@@ -141,8 +150,12 @@ public class MMMonitPanel extends JPanel {
         return context;
     }
 
-    public static void setCtrlSign(boolean ctrlSign) {
-        CtrlSign = ctrlSign;
+    public static void setCtrlSign(boolean sign) {
+        if(sign){
+            CtrlSign.set(0);
+        }else {
+            CtrlSign.set(1);
+        }
     }
 
     /**
@@ -154,10 +167,6 @@ public class MMMonitPanel extends JPanel {
         this.rhash = rhash;
         this.fsize = stat.getCumulativeSize();
         Multihash multihash = Multihash.fromBase58(stat.getHash());
-
-
-
-
 
         blkmap.clear();
         //start
@@ -195,7 +204,7 @@ public class MMMonitPanel extends JPanel {
      */
     public void boosterPined(){
         new Thread(()->{
-            while (CtrlSign){
+            while (CtrlSign.intValue()==0){
                 try {
                     Multihash multihash = pinedBooster.take();
 
@@ -221,66 +230,100 @@ public class MMMonitPanel extends JPanel {
     }
 
     /**
-     *
+     * 启动监控刷新
      */
-    public void monitorList(){
+    public void monitorList()
+    {
+        CtrlSign.set(0);
         this.setVisible(true);
-        new Thread(()->{
-            int sec = 0;
-            statusLabel.setText("浏览器打开，正在加载数据...");
-            while (CtrlSign){
-                sec++;
-                timelabel.setText(sec+"s");
-                timelabel.updateUI();
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
-        new Thread(()->{
-            while (CtrlSign){
-                ResData<BitSwap> resData = bitSwapService.getBitSwapStat();
-                if(resData.getCode()==0){
-
-
-                    BitSwap bitSwap = resData.getData();
-                    if(bitSwap!=null&&bitSwap.getWantlist().size()>0){
-                        wantListPanel.removeAll();
-                        for(String hash58 : bitSwap.getWantlist()){
-                            wantListPanel.add(new LCJlabel(hash58,wantHashColor){
-                                @Override
-                                public void setToolTipText(String text) {
-                                    super.setToolTipText(hash58);
-                                }
-                                @Override
-                                public synchronized void addMouseListener(MouseListener l) {
-                                    MouseAdapter adapter = new MouseAdapter() {
-                                        @Override
-                                        public void mouseEntered(MouseEvent e) {
-                                            e.getComponent().setCursor(MainFrame.handCursor);
-                                        }
-                                    };
-                                    super.addMouseListener(adapter);
-                                }
-                            });
-
-                            wantListPanel.updateUI();
-                        }
-
+        sec = 0;
+        if(timeThread == null){
+            timeThread = new Thread(){
+                @Override
+                public void run() {
+                    statusLabel.setText("浏览器打开，正在加载数据...");
+                    while (CtrlSign.intValue()==0&& sec<=timeout){
+                        sec++;
+                        timelabel.setText(sec+"s");
+                        timelabel.updateUI();
                         try {
-                            TimeUnit.SECONDS.sleep(5);
+                            TimeUnit.SECONDS.sleep(1);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
+
                 }
+            };
+            timeThread.start();
+        }
+        else
+        {
+            Thread.State state =timeThread.getState();
+            if(state==Thread.State.TERMINATED)timeThread.start();
+        }
+
+        if(wantThread == null){
+            wantThread = new Thread()
+            {
+                @Override
+                public void run() {
+                    while (CtrlSign.intValue()==0&& sec<=timeout) {
+                        ResData<BitSwap> resData = bitSwapService.getBitSwapStat();
+                        if (resData.getCode() == 0) {
+                            BitSwap bitSwap = resData.getData();
+                            if (bitSwap != null && bitSwap.getWantlist().size() > 0) {
+                                wantListPanel.removeAll();
+                                for (String hash58 : bitSwap.getWantlist()) {
+                                    wantListPanel.add(new LCJlabel(hash58, wantHashColor) {
+                                        @Override
+                                        public void setToolTipText(String text) {
+                                            super.setToolTipText(hash58);
+                                        }
+
+                                        @Override
+                                        public synchronized void addMouseListener(MouseListener l) {
+                                            MouseAdapter adapter = new MouseAdapter() {
+                                                @Override
+                                                public void mouseEntered(MouseEvent e) {
+                                                    e.getComponent().setCursor(MainFrame.handCursor);
+                                                }
+                                            };
+                                            super.addMouseListener(adapter);
+                                        }
+                                    });
+
+                                    wantListPanel.updateUI();
+                                }
+
+                                try {
+                                    TimeUnit.SECONDS.sleep(3);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+
+                }
+            };
+            wantThread.start();
+            //wantThread = null;
+        }
+        else
+        {
+            if(wantThread.getState()==Thread.State.TERMINATED){
+                wantThread.start();
             }
-        }).start();
+        }
 
     }
 
+    /**
+     *
+     */
+    public void stopMonitor(){
+        CtrlSign.set(1);
+    }
 
 }
