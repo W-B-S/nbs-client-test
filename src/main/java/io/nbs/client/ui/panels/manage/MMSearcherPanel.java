@@ -178,8 +178,8 @@ public class MMSearcherPanel extends ParentAvailablePanel {
             bodyPanel.showPanel(MMBodyPanel.MMNames.TIP);
             IPFS ipfs = Launcher.getContext().getIpfs();
             TipResultHashPanel tipResultHashPanel= MMBodyPanel.getContext().getTipResultHashPanel();
-            tipResultHashPanel.clearVol();
             if(tipResultHashPanel.prevousHash().equals(text))return;
+            tipResultHashPanel.clearVol();
             tipResultHashPanel.setHash(multihash.toBase58());
             new Thread(()->{
                 if( tipResultHashPanel.getMonitPanel()!=null){
@@ -204,6 +204,7 @@ public class MMSearcherPanel extends ParentAvailablePanel {
                    logger.info("TESTLOG:{}>>>查找文件:{}没有查到,用时{}",Launcher.getSysUser(),text,DateHelper.calcUsedTime(usedsecd));
                    tipResultHashPanel.setBlkStat(null,error,usedsecd);
                }
+               tipResultHashPanel.setPreousHash(text);
             }).start();
         }else {
             bodyPanel.showPanel(MMBodyPanel.MMNames.LISTF);

@@ -237,86 +237,93 @@ public class MMMonitPanel extends JPanel {
         CtrlSign.set(0);
         this.setVisible(true);
         sec = 0;
-        if(timeThread == null){
-            timeThread = new Thread(){
-                @Override
-                public void run() {
-                    statusLabel.setText("浏览器打开，正在加载数据...");
-                    while (CtrlSign.intValue()==0&& sec<=timeout){
-                        sec++;
-                        timelabel.setText(sec+"s");
-                        timelabel.updateUI();
-                        try {
-                            TimeUnit.SECONDS.sleep(1);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+        resetTimes();
+        newWantlistThread();
+
+    }
+
+    private void resetTimes(){
+        if(timeThread!=null){
+            try{
+                timeThread.interrupt();
+            }catch (RuntimeException re){
+                re.printStackTrace();
+                logger.warn(re.getMessage());
+            }
+            timeThread=null;
+        }
+        timeThread = new Thread(){
+            @Override
+            public void run() {
+                statusLabel.setText("浏览器打开，正在加载数据...");
+                while (CtrlSign.intValue()==0&& sec<=timeout){
+                    sec++;
+                    timelabel.setText(sec+"s");
+                    timelabel.updateUI();
+                    try {
+                        TimeUnit.SECONDS.sleep(1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-
                 }
-            };
-            timeThread.start();
+
+            }
+        };
+        timeThread.start();
+    }
+
+    private void newWantlistThread(){
+        if(wantThread!=null){
+            try{
+                wantThread.interrupt();
+            }catch (RuntimeException re){
+                logger.warn(re.getMessage());
+            }
+            wantThread=null;
         }
-        else
+        wantThread = new Thread()
         {
-            Thread.State state =timeThread.getState();
-            if(state==Thread.State.TERMINATED)timeThread.start();
-        }
+            @Override
+            public void run() {
+                while (CtrlSign.intValue()==0&& sec<=timeout) {
+                    ResData<BitSwap> resData = bitSwapService.getBitSwapStat();
+                    if (resData.getCode() == 0) {
+                        BitSwap bitSwap = resData.getData();
+                        if (bitSwap != null && bitSwap.getWantlist().size() > 0) {
+                            wantListPanel.removeAll();
+                            for (String hash58 : bitSwap.getWantlist()) {
+                                wantListPanel.add(new LCJlabel(hash58, wantHashColor) {
+                                    @Override
+                                    public void setToolTipText(String text) {
+                                        super.setToolTipText(hash58);
+                                    }
 
-        if(wantThread == null){
-            wantThread = new Thread()
-            {
-                @Override
-                public void run() {
-                    while (CtrlSign.intValue()==0&& sec<=timeout) {
-                        ResData<BitSwap> resData = bitSwapService.getBitSwapStat();
-                        if (resData.getCode() == 0) {
-                            BitSwap bitSwap = resData.getData();
-                            if (bitSwap != null && bitSwap.getWantlist().size() > 0) {
-                                wantListPanel.removeAll();
-                                for (String hash58 : bitSwap.getWantlist()) {
-                                    wantListPanel.add(new LCJlabel(hash58, wantHashColor) {
-                                        @Override
-                                        public void setToolTipText(String text) {
-                                            super.setToolTipText(hash58);
-                                        }
+                                    @Override
+                                    public synchronized void addMouseListener(MouseListener l) {
+                                        MouseAdapter adapter = new MouseAdapter() {
+                                            @Override
+                                            public void mouseEntered(MouseEvent e) {
+                                                e.getComponent().setCursor(MainFrame.handCursor);
+                                            }
+                                        };
+                                        super.addMouseListener(adapter);
+                                    }
+                                });
 
-                                        @Override
-                                        public synchronized void addMouseListener(MouseListener l) {
-                                            MouseAdapter adapter = new MouseAdapter() {
-                                                @Override
-                                                public void mouseEntered(MouseEvent e) {
-                                                    e.getComponent().setCursor(MainFrame.handCursor);
-                                                }
-                                            };
-                                            super.addMouseListener(adapter);
-                                        }
-                                    });
+                                wantListPanel.updateUI();
+                            }
 
-                                    wantListPanel.updateUI();
-                                }
-
-                                try {
-                                    TimeUnit.SECONDS.sleep(3);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
+                            try {
+                                TimeUnit.SECONDS.sleep(3);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
                             }
                         }
                     }
-
                 }
-            };
-            wantThread.start();
-            //wantThread = null;
-        }
-        else
-        {
-            if(wantThread.getState()==Thread.State.TERMINATED){
-                wantThread.start();
-            }
-        }
 
+            }
+        };
     }
 
     /**

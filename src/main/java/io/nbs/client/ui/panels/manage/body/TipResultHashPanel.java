@@ -71,6 +71,7 @@ public class TipResultHashPanel extends ParentAvailablePanel {
     private NBSButton addBtn;
 
     private BlockStat stat;
+    private String preousHash;
 
     private MMMonitPanel monitPanel;
 
@@ -143,7 +144,7 @@ public class TipResultHashPanel extends ParentAvailablePanel {
 
         this.add(errorLabel);
 
-        errorLabel.setText("lanbery");
+        errorLabel.setText("");
 
         monitPanel = new MMMonitPanel();
 
@@ -260,7 +261,7 @@ public class TipResultHashPanel extends ParentAvailablePanel {
      * @return
      */
     public String prevousHash(){
-        return this.hash58==null?"":this.hash58;
+        return this.preousHash == null ? "":this.hash58;
     }
 
     private void pinedHash(){
@@ -290,5 +291,9 @@ public class TipResultHashPanel extends ParentAvailablePanel {
 
     public void hideMMMonitor(){
         monitPanel.setVisible(false);
+    }
+
+    public void setPreousHash(String preousHash) {
+        this.preousHash = preousHash;
     }
 }
