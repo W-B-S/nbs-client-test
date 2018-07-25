@@ -93,7 +93,7 @@ public class DateHelper {
             less = time%MIN_MILLIONS;
             if(less!=0l)calc(sb,less);
         }else {
-            int s = (int)(time/10000);
+            int s = (int)(time/1000);
             if(s>0){
                 sb.append(s).append("秒");
             }
