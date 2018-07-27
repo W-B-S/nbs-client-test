@@ -16,7 +16,7 @@
     </resultMap>
     <insert id="insert">
         INSERT INTO p_contacts (id, fromid, nick,avatar,avatar_suffix,ip,locations,remark,online)
-        VALUES (#{id}, #{fromid}, #{nick},#{avatar},#{avatarSuffix},#{ip},#{locations},#{remark},#{online})
+        VALUES (#{id}, #{fromid}, #{nick},<if test="avatar == null">''</if><if test="avatar != null">#{avatar}</if>,#{avatarSuffix},#{ip},#{locations},#{remark},#{online})
     </insert>
 
     <select id="findById" resultMap="BaseResultMap">

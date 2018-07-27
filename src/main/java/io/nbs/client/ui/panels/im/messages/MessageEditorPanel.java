@@ -39,6 +39,8 @@ public class MessageEditorPanel extends ParentAvailablePanel {
      */
     private JPanel controlLabel;
 
+    private static MessageEditorPanel context;
+
     private JLabel fileLabel;
     private JLabel expressionLabel;
     private JLabel cutLabel;
@@ -58,6 +60,7 @@ public class MessageEditorPanel extends ParentAvailablePanel {
 
     private JFileChooser jFileChooser;
     private IMFileActionListener imFileActionListener;
+    private JLabel msgTipLabel;
 
     /**
      *
@@ -65,8 +68,9 @@ public class MessageEditorPanel extends ParentAvailablePanel {
      */
     public MessageEditorPanel(JPanel parent, IPFSFileUploader uploader) {
         super(parent);
+        context = this;
         jFileChooser = new JFileChooser();
-        imFileActionListener = new IMFileActionListener(uploader,jFileChooser,Launcher.getSqlSession());
+        imFileActionListener = new IMFileActionListener(uploader,jFileChooser,Launcher.getSqlSession(),context);
         initComponents();
         initView();
         setListeners();
@@ -128,6 +132,9 @@ public class MessageEditorPanel extends ParentAvailablePanel {
                 cutTip
         );
 
+        msgTipLabel = new JLabel();
+
+
         textEditor = new NBSTextEditor();
         textEditor.setBackground(ColorCnst.WINDOW_BACKGROUND);
         textEditor.setFont(FontUtil.getDefaultFont(14));
@@ -155,10 +162,21 @@ public class MessageEditorPanel extends ParentAvailablePanel {
 
     private void initView(){
         this.setLayout(new GridBagLayout());
+        //提示
+        msgTipLabel.setHorizontalAlignment(JLabel.RIGHT);
+        msgTipLabel.setBackground(ColorCnst.WINDOW_BACKGROUND);
+        msgTipLabel.setForeground(ColorCnst.RED);
+        msgTipLabel.setVisible(false);
+
+        msgTipLabel.setFont(FontUtil.getDefaultFont(10));
+
         controlLabel.add(expressionLabel);
         controlLabel.add(fileIcon);
+        controlLabel.add(msgTipLabel);
         //隐藏截图
         //controlLabel.add(cutIcon);
+
+
 
         add(controlLabel,new GBC(0,0).setFill(GBC.HORIZONTAL).setWeight(1,1));
         add(textScrollPane,new GBC(0,1).setFill(GBC.BOTH).setWeight(1,15));
@@ -258,4 +276,10 @@ public class MessageEditorPanel extends ParentAvailablePanel {
     }
 
 
+    public void setTipLabel(String msg,boolean visabled){
+        if(msg==null)msg="";
+        this.msgTipLabel.setText(msg);
+        this.msgTipLabel.setVisible(visabled);
+        this.controlLabel.updateUI();
+    }
 }
