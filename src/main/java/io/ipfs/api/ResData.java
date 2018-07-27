@@ -29,6 +29,10 @@ public class ResData<D> {
         this.message = message;
     }
 
+    /**
+     * 0 success
+     * @return
+     */
     public int getCode() {
         return code;
     }

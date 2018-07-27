@@ -297,6 +297,14 @@ public class Launcher {
     }
 
     public IPFS getIpfs() {
+        if(ipfs ==null){
+            String apiURL = ConfigurationHelper.getInstance().getIPFSAddress();
+            try{
+                ipfs =  new IPFS(apiURL);
+            }catch (RuntimeException e){
+                logger.error("未能链接上IPFS服务，请检查服务是否已停止.");
+            }
+        }
         return ipfs;
     }
 
@@ -376,5 +384,9 @@ public class Launcher {
 
     public static boolean isIpfsRuning() {
         return ipfsRuning;
+    }
+
+    public static String getSysUser(){
+        return System.getProperty("user.name","");
     }
 }

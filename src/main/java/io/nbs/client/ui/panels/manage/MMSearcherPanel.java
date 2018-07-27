@@ -18,10 +18,12 @@ import io.nbs.client.ui.components.SearchButtonPanel;
 import io.nbs.client.ui.components.SearchTextField;
 import io.nbs.client.ui.components.common.DownLoadTipIconPanel;
 import io.nbs.client.ui.components.common.JCirclePanel;
+import io.nbs.client.ui.components.forms.LCFormLabel;
 import io.nbs.client.ui.frames.MainFrame;
 import io.nbs.client.ui.panels.ParentAvailablePanel;
 import io.nbs.client.ui.panels.manage.body.TipResultHashPanel;
 import io.nbs.client.vo.AttachmentDataDTO;
+import io.nbs.commons.helper.DateHelper;
 import io.nbs.commons.utils.ButtonIconUtil;
 import io.nbs.commons.utils.IconUtil;
 import io.nbs.sdk.page.PageModel;
@@ -176,22 +178,33 @@ public class MMSearcherPanel extends ParentAvailablePanel {
             bodyPanel.showPanel(MMBodyPanel.MMNames.TIP);
             IPFS ipfs = Launcher.getContext().getIpfs();
             TipResultHashPanel tipResultHashPanel= MMBodyPanel.getContext().getTipResultHashPanel();
-            tipResultHashPanel.clearVol();
             if(tipResultHashPanel.prevousHash().equals(text))return;
+            tipResultHashPanel.clearVol();
             tipResultHashPanel.setHash(multihash.toBase58());
             new Thread(()->{
+                if( tipResultHashPanel.getMonitPanel()!=null){
+                    tipResultHashPanel.getMonitPanel().stopMonitor();
+                }
                Multihash multihash1= Multihash.fromBase58(text);
+               long start = System.currentTimeMillis();
                try {
+                   tipResultHashPanel.searchingFromIntelnet();
                    Object o =ipfs.object.stat(multihash1);
                    String json = JSONParser.toString(o);
                    BlockStat stat = JSON.parseObject(json,BlockStat.class);
-                   tipResultHashPanel.setBlkStat(stat,null);
+                   long usedsecd = System.currentTimeMillis()-start;
+                   logger.info("客户端IP{}用时{}ms",MainFrame.getContext().getCurrentPeer().getIp(),usedsecd);
+                   logger.info("TESTLOG:{}>>>查找文件:{},用时{}",Launcher.getSysUser(),text,DateHelper.calcUsedTime(usedsecd));
+                   tipResultHashPanel.setBlkStat(stat,null,usedsecd);
                } catch (IOException e) {
                    e.printStackTrace();
                    logger.error(e.getMessage());
                    String error = "没有在NBS网络世界查到你要的数据["+multihash1.toBase58()+"]";
-                   tipResultHashPanel.setBlkStat(null,error);
+                   long usedsecd = System.currentTimeMillis()-start;
+                   logger.info("TESTLOG:{}>>>查找文件:{}没有查到,用时{}",Launcher.getSysUser(),text,DateHelper.calcUsedTime(usedsecd));
+                   tipResultHashPanel.setBlkStat(null,error,usedsecd);
                }
+               tipResultHashPanel.setPreousHash(text);
             }).start();
         }else {
             bodyPanel.showPanel(MMBodyPanel.MMNames.LISTF);

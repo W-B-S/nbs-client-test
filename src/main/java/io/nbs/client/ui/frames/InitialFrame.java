@@ -164,13 +164,13 @@ public class InitialFrame extends JFrame {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                if(getIconImage()==null)
+/*                if(getIconImage()==null)
                     return;
                 Image icon = getIconImage();
                 ImageIcon imageIcon = new ImageIcon(icon);
                 if(icon != null){
                    g.drawImage(icon,0,0,getWidth(),getHeight(),imageIcon.getImageObserver());
-                }
+                }*/
             }
 
             public void setIcon(ImageIcon icon){
