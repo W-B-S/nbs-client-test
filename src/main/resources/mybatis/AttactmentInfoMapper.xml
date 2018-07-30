@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nbs.biz.data.dao.AttachmentInfoDao">
+
+    <resultMap id="BaseResultMap" type="com.nbs.biz.data.entity.AttachmentInfoEntity">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="peername" property="peername" jdbcType="VARCHAR"/>
+        <result column="peerhash" property="peerhash" jdbcType="VARCHAR"/>
+        <result column="prehash" property="prehash" jdbcType="VARCHAR"/>
+        <result column="whash" property="whash" jdbcType="VARCHAR"/>
+        <result column="fname" property="fname" jdbcType="VARCHAR"/>
+        <result column="fsize" property="fsize" jdbcType="BIGINT"/>
+        <result column="fsuffix" property="fsuffix" jdbcType="VARCHAR"/>
+        <result column="fromid" property="fromid" jdbcType="VARCHAR"/>
+        <result column="seqno" property="seqno" jdbcType="VARCHAR"/>
+        <result column="cached" property="cached" jdbcType="INTEGER"/>
+        <result column="cachedfile" property="cachedfile" jdbcType="INTEGER"/>
+        <result column="inlocal" property="inlocal" jdbcType="INTEGER"/>
+        <result column="ftype" property="ftype" jdbcType="VARCHAR"/>
+        <result column="sortno" property="sortno" jdbcType="INTEGER"/>
+        <result column="ctime" property="ctime" jdbcType="VARCHAR"/>
+        <result column="lmtime" property="lmtime" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO attac_info (id, peername,peerhash,prehash,whash, fname,fsize,fsuffix,fromid,seqno,cached,cachedfile,inlocal,ftype,sortno)
+        VALUES (#{id},#{peername},#{peerhash}, #{prehash},#{whash}, #{fname}, #{fsize}, #{fsuffix}, #{fromid}, #{seqno}, #{cached}, #{cachedfile}, #{inlocal},#{ftype},#{sortno})
+    </insert>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT * FROM attac_info where id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT * FROM attac_info
+    </select>
+
+    <select id="find" resultMap="BaseResultMap" statementType="STATEMENT" parameterType="map">
+        SELECT * FROM attac_info where ${field} = ${val}
+    </select>
+
+    <delete id="delete" parameterType="java.lang.String">
+        DELETE * from attac_info WHERE id=#{id}
+    </delete>
+
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(1) FROM attac_info
+    </select>
+
+    <select id="exist" resultType="java.lang.Integer">
+        SELECT count(1) FROM attac_info where id = #{id}
+    </select>
+
+    <delete id="deleteAll">
+        delete from attac_info
+    </delete>
+
+
+    <update id="update">
+        UPDATE attac_info
+        <set>
+            fname=#{fname},
+            fsize=#{fsize},
+            whash=#{whash},
+            fsuffix=#{fsuffix},
+            seqno=#{seqno},
+            cached=#{cached},
+            cachedfile=#{cachedfile},
+            inlocal=#{inlocal},
+            ftype=#{ftype},
+            lmtime=#{lmtime},
+        </set>
+        WHERE id=#{di}
+    </update>
+
+
+    <update id="updateIgnoreNull">
+        UPDATE attac_info
+        <set>
+            <if test="fname!= null">fname=#{fname},</if>
+            <if test="peername!= null">peername=#{peername},</if>
+            <if test="cachedfile!= null">cachedfile=#{cachedfile},</if>
+            <if test="whash!= null">whash=#{whash},</if>
+            <if test="cached!= null">cached=#{cached},</if>
+            <if test="inlocal!= null">inlocal=#{inlocal},</if>
+            <if test="fsize!= null">fsize=#{fsize},</if>
+            <if test="lmtime!= null">lmtime=#{lmtime},</if>
+        </set>
+        WHERE id=#{id}
+    </update>
+
+    <select id="pageTotal" parameterType="io.nbs.sdk.page.PageCondition" resultType="integer">
+        SELECT count(id) as c from  attac_info
+        <if test="searchStr != null and searchStr != ''">
+            WHERE id LIKE '%'||'${searchStr}'||'%'
+        </if>
+    </select>
+    <select id="pageList" parameterType="io.nbs.sdk.page.PageCondition" resultMap="BaseResultMap">
+        SELECT * from attac_info
+        <if test="searchStr != null and searchStr !=''">
+            WHERE id LIKE '%'||'${searchStr}'||'%'
+        </if>
+        <if test="sidx != null and sidx != ''">
+            ORDER BY ${sidx}
+            <if test="sord != null">${sord}</if>
+        </if>
+        limit #{start},#{pageSize}
+    </select>
+</mapper>
