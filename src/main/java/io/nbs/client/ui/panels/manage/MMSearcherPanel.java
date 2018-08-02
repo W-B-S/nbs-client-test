@@ -6,6 +6,7 @@ import com.nbs.biz.service.AttachmentInfoService;
 import com.nbs.ui.panels.ListPanel;
 import io.ipfs.api.IPFS;
 import io.ipfs.api.JSONParser;
+import io.ipfs.api.MerkleNode;
 import io.ipfs.api.beans.blk.BlockStat;
 import io.ipfs.multihash.Multihash;
 import io.nbs.client.Launcher;
@@ -190,7 +191,17 @@ public class MMSearcherPanel extends ParentAvailablePanel {
                try {
                    tipResultHashPanel.searchingFromIntelnet();
                    Object o =ipfs.object.stat(multihash1);
+                   MerkleNode merkleNode = ipfs.object.get(multihash1);
                    String json = JSONParser.toString(o);
+                   if(merkleNode!=null){
+                       String fileName = "";
+                        try{
+                            logger.info( merkleNode.toJSONString());
+                            fileName = merkleNode.name.get();
+                        }catch (RuntimeException e){
+
+                        }
+                   }
                    BlockStat stat = JSON.parseObject(json,BlockStat.class);
                    long usedsecd = System.currentTimeMillis()-start;
                    logger.info("客户端IP{}用时{}ms",MainFrame.getContext().getCurrentPeer().getIp(),usedsecd);

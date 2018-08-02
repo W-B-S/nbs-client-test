@@ -22,6 +22,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -70,10 +71,12 @@ public class TipResultHashPanel extends ParentAvailablePanel {
     private NBSButton openBtn;
     private NBSButton addBtn;
 
-    private BlockStat stat;
+    private BlockStat stat =null;
     private String preousHash;
 
     private MMMonitPanel monitPanel;
+
+    private JFileChooser fileChooser;
 
 
 
@@ -135,7 +138,7 @@ public class TipResultHashPanel extends ParentAvailablePanel {
         openBtn = new NBSButton("浏览器打开",ColorCnst.CONTACTS_ITEM_GRAY,ColorCnst.WINDOW_BACKGROUND_LIGHT);
         openBtn.setForeground(ColorCnst.FONT_ABOUT_TITLE_BLUE);
         addBtn = new NBSButton("下载到本地",ColorCnst.CONTACTS_ITEM_GRAY,ColorCnst.WINDOW_BACKGROUND_LIGHT);
-        addBtn.setVisible(false);//暂未开发完成
+        addBtn.setVisible(true);//暂未开发完成
         addBtn.setForeground(ColorCnst.FONT_ABOUT_TITLE_BLUE);
 
         operPanel.add(openBtn);
@@ -159,6 +162,13 @@ public class TipResultHashPanel extends ParentAvailablePanel {
         errorLabel.setText("正在努力查找中...");
         errorLabel.setVisible(true);
         operPanel.setVisible(false);
+    }
+
+
+    private void openSaveOption(BlockStat stat ){
+        if(stat!=null&&stat.getHash()!=null){
+            //add Queue
+        }
     }
 
     /**
@@ -195,7 +205,7 @@ public class TipResultHashPanel extends ParentAvailablePanel {
         addBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                logger.info("download lanbery");
             }
         });
     }
@@ -215,6 +225,7 @@ public class TipResultHashPanel extends ParentAvailablePanel {
         if(errorMSG==null&&stat!=null){
             this.stat = stat;
             errorLabel.setVisible(false);
+            //showDownload(true);
             operPanel.setVisible(true);
             Long totalSize = stat.getCumulativeSize()==null?0:stat.getCumulativeSize();
             Long blkSize = stat.getBlockSize();
@@ -240,6 +251,7 @@ public class TipResultHashPanel extends ParentAvailablePanel {
      *
      */
     public void clearVol(){
+        this.stat = null;
         cumulativeSizeVol.setText("");
         blockSizeVol.setText("");
         linksSizeVol.setText("");
