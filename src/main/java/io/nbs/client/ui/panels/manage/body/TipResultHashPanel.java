@@ -1,9 +1,11 @@
 package io.nbs.client.ui.panels.manage.body;
 
+import com.nbs.entity.IPFSFileEntity;
 import io.ipfs.api.IPFS;
 import io.ipfs.api.MerkleNode;
 import io.ipfs.api.beans.blk.BlockStat;
 import io.ipfs.multihash.Multihash;
+import io.ipfs.nbs.DownloadThreadBooster;
 import io.nbs.client.Launcher;
 import io.nbs.client.cnsts.ColorCnst;
 import io.nbs.client.helper.BrowserOperationHelper;
@@ -165,9 +167,21 @@ public class TipResultHashPanel extends ParentAvailablePanel {
     }
 
 
-    private void openSaveOption(BlockStat stat ){
+    private void openSaveOption(){
+        BlockStat stat = new BlockStat();
+        stat.setHash(hash58);
         if(stat!=null&&stat.getHash()!=null){
             //add Queue
+            DownloadThreadBooster booster = DownloadThreadBooster.getInstance();
+            //booster.setSavePath();
+            booster.start();
+            IPFSFileEntity entity = new IPFSFileEntity();
+            entity.setHash(stat.getHash());
+            entity.setFullName(stat.getHash());
+            boolean res = booster.addDownloadTask(entity);
+            if(!res){
+                JOptionPane.showMessageDialog(context,"当前已超过"+DownloadThreadBooster.MAX_SIZE+"个下载任务，不能继续添加");
+            }
         }
     }
 
@@ -206,6 +220,7 @@ public class TipResultHashPanel extends ParentAvailablePanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 logger.info("download lanbery");
+                openSaveOption();
             }
         });
     }
@@ -308,4 +323,5 @@ public class TipResultHashPanel extends ParentAvailablePanel {
     public void setPreousHash(String preousHash) {
         this.preousHash = preousHash;
     }
+
 }
