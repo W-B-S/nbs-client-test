@@ -8,7 +8,9 @@ mvn clean package appassembler:assemble -Dmaven.test.skip=true -X
 ## IPFS SERVER FAST 
 ipfs daemon --routing=dhtclient --enable-pubsub-experiment
 <br>
-nohup ipfs daemon --routing=dhtclient --enable-pubsub-experiment >/var/log/ipfs/ipfs.log 2>&1 &
+--routing=dhtclient
+<br>
+nohup ipfs daemon --enable-pubsub-experiment >/var/log/ipfs/ipfs.log 2>&1 &
 <br>
 ipfs pubsub peers bmJzaW8ubmV0 
 # Version History
@@ -18,3 +20,4 @@ ipfs pubsub peers bmJzaW8ubmV0
   - 增加节点信息显示
 ## Version 2.0.2
   - 增加文件下载功能
+  -
